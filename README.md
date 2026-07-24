@@ -57,7 +57,7 @@ SQLite está soportado para demo local rápida y CI, pero MySQL es la base de da
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/mazmi-webops-desk.git
+git clone https://github.com/LucaMZM/mazmi-webops-desk.git
 cd mazmi-webops-desk
 ```
 
