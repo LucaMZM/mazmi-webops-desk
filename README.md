@@ -18,6 +18,7 @@ Mazmi WebOps Desk es una aplicación full-stack construida con Laravel, Vue 3 e 
 ## Índice
 
 - [Descripción](#descripcion)
+- [Capturas](#capturas)
 - [Problema que resuelve](#problema-que-resuelve)
 - [Funcionalidades](#funcionalidades)
 - [Roles](#roles)
@@ -35,6 +36,25 @@ Mazmi WebOps Desk es una aplicación full-stack construida con Laravel, Vue 3 e 
 La aplicación simula el flujo de trabajo de una pequeña agencia web o de un equipo técnico que mantiene sitios de varios clientes. El objetivo es tener una vista clara de qué webs están activas, qué incidencias siguen abiertas, qué tareas están pendientes y qué información puede consultarse en reportes mensuales.
 
 Incluye autenticación, roles, CRUDs, validaciones, filtros persistentes, seeders con datos ficticios y una interfaz responsive con Tailwind CSS.
+
+<a id="capturas"></a>
+## Capturas
+
+### Landing
+
+![Landing de Mazmi WebOps Desk](docs/screenshots/landing.png)
+
+### Dashboard
+
+![Dashboard de Mazmi WebOps Desk](docs/screenshots/dashboard.png)
+
+### Gestión de webs
+
+![Gestión de webs en Mazmi WebOps Desk](docs/screenshots/websites.png)
+
+### Detalle de una web
+
+![Detalle de una web en Mazmi WebOps Desk](docs/screenshots/website-detail.png)
 
 <a id="problema-que-resuelve"></a>
 ## Problema que resuelve
