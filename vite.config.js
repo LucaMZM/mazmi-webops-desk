@@ -4,9 +4,6 @@ import vue from '@vitejs/plugin-vue';
 import { fileURLToPath, URL } from 'node:url';
 
 export default defineConfig({
-    build: {
-        minify: false,
-    },
     resolve: {
         alias: { '@': fileURLToPath(new URL('./resources/js', import.meta.url)) },
     },

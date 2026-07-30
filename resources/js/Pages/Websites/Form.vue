@@ -1,8 +1,147 @@
 <script setup>
-import { computed } from 'vue'; import { Head,Link,useForm } from '@inertiajs/vue3'; import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'; import PageHeader from '@/Components/UI/PageHeader.vue'; import FormField from '@/Components/UI/FormField.vue';
-const props=defineProps({website:Object,clients:Array}); const editing=computed(()=>!!props.website); const form=useForm({client_id:props.website?.client_id||props.clients[0]?.id||'',name:props.website?.name||'',url:props.website?.url||'https://',technology:props.website?.technology||'WordPress',hosting_provider:props.website?.hosting_provider||'',domain_expires_at:props.website?.domain_expires_at?.slice(0,10)||'',hosting_expires_at:props.website?.hosting_expires_at?.slice(0,10)||'',ssl_status:props.website?.ssl_status||'unknown',maintenance_plan:props.website?.maintenance_plan||'standard',status:props.website?.status||'stable',notes:props.website?.notes||''}); const submit=()=>editing.value?form.put(route('websites.update',props.website.id)):form.post(route('websites.store')); const input='w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+import { computed } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import FormField from '@/Components/UI/FormField.vue';
+const props = defineProps({ website: Object, clients: Array });
+const editing = computed(() => !!props.website);
+const form = useForm({
+    client_id: props.website?.client_id || props.clients[0]?.id || '',
+    name: props.website?.name || '',
+    url: props.website?.url || 'https://',
+    technology: props.website?.technology || 'WordPress',
+    hosting_provider: props.website?.hosting_provider || '',
+    domain_expires_at: props.website?.domain_expires_at?.slice(0, 10) || '',
+    hosting_expires_at: props.website?.hosting_expires_at?.slice(0, 10) || '',
+    ssl_status: props.website?.ssl_status || 'unknown',
+    maintenance_plan: props.website?.maintenance_plan || 'standard',
+    status: props.website?.status || 'stable',
+    notes: props.website?.notes || '',
+});
+const submit = () =>
+    editing.value
+        ? form.put(route('websites.update', props.website.id))
+        : form.post(route('websites.store'));
+const input =
+    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
 </script>
-<template><Head :title="editing?'Editar web':'Añadir web'"/><AuthenticatedLayout :title="editing?'Editar web':'Añadir web'"><PageHeader eyebrow="Webs" :title="editing?'Editar ficha técnica':'Registrar nueva web'" description="Datos de servicio, tecnología, estado y vencimientos." :back-href="editing?route('websites.show',website.id):route('websites.index')"/>
-<form class="space-y-6" @submit.prevent="submit"><section class="panel p-5 sm:p-6"><h3 class="font-bold">Identificación</h3><div class="mt-5 grid gap-5 md:grid-cols-2"><FormField label="Cliente" required :error="form.errors.client_id"><select v-model="form.client_id" :class="input"><option v-for="c in clients" :value="c.id">{{c.company_name}}</option></select></FormField><FormField label="Nombre interno" required :error="form.errors.name"><input v-model="form.name" :class="input"></FormField><FormField label="URL" required :error="form.errors.url"><input v-model="form.url" type="url" :class="input"></FormField><FormField label="Tecnología" required :error="form.errors.technology"><select v-model="form.technology" :class="input"><option v-for="x in ['WordPress','PrestaShop','Laravel','PHP custom','Static HTML','Other']">{{x}}</option></select></FormField><FormField label="Proveedor de hosting" :error="form.errors.hosting_provider"><input v-model="form.hosting_provider" :class="input"></FormField><FormField label="Plan de mantenimiento" required :error="form.errors.maintenance_plan"><select v-model="form.maintenance_plan" :class="input"><option v-for="x in ['basic','standard','premium','none']" :value="x">{{x}}</option></select></FormField></div></section>
-<section class="panel p-5 sm:p-6"><h3 class="font-bold">Salud y vencimientos</h3><div class="mt-5 grid gap-5 md:grid-cols-2"><FormField label="Vencimiento del dominio" :error="form.errors.domain_expires_at"><input v-model="form.domain_expires_at" type="date" :class="input"></FormField><FormField label="Vencimiento del hosting" :error="form.errors.hosting_expires_at"><input v-model="form.hosting_expires_at" type="date" :class="input"></FormField><FormField label="Estado SSL" required :error="form.errors.ssl_status"><select v-model="form.ssl_status" :class="input"><option value="active">Activo</option><option value="expiring">Próximo a vencer</option><option value="expired">Caducado</option><option value="unknown">Desconocido</option></select></FormField><FormField label="Estado general" required :error="form.errors.status"><select v-model="form.status" :class="input"><option value="stable">Estable</option><option value="review">Revisión</option><option value="incident">Incidencia</option><option value="critical">Crítico</option></select></FormField></div><FormField class="mt-5" label="Notas técnicas" :error="form.errors.notes" hint="No almacenes contraseñas, tokens ni credenciales reales."><textarea v-model="form.notes" rows="4" :class="input"/></FormField></section><div class="flex justify-end gap-3"><Link :href="editing?route('websites.show',website.id):route('websites.index')" class="btn-secondary">Cancelar</Link><button class="btn-primary" :disabled="form.processing">{{form.processing?'Guardando…':'Guardar web'}}</button></div></form>
-</AuthenticatedLayout></template>
+<template>
+    <Head :title="editing ? 'Editar web' : 'Añadir web'" />
+    <AuthenticatedLayout :title="editing ? 'Editar web' : 'Añadir web'">
+        <PageHeader
+            eyebrow="Webs"
+            :title="editing ? 'Editar ficha técnica' : 'Registrar nueva web'"
+            description="Datos de servicio, tecnología, estado y vencimientos."
+            :back-href="editing ? route('websites.show', website.id) : route('websites.index')"
+        />
+        <form class="space-y-6" @submit.prevent="submit">
+            <section class="panel p-5 sm:p-6">
+                <h3 class="font-bold">Identificación</h3>
+                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                    <FormField label="Cliente" required :error="form.errors.client_id">
+                        <select v-model="form.client_id" :class="input">
+                            <option v-for="c in clients" :key="c.id" :value="c.id">
+                                {{ c.company_name }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField label="Nombre interno" required :error="form.errors.name">
+                        <input v-model="form.name" :class="input" />
+                    </FormField>
+                    <FormField label="URL" required :error="form.errors.url">
+                        <input v-model="form.url" type="url" :class="input" />
+                    </FormField>
+                    <FormField label="Tecnología" required :error="form.errors.technology">
+                        <select v-model="form.technology" :class="input">
+                            <option
+                                v-for="x in [
+                                    'WordPress',
+                                    'PrestaShop',
+                                    'Laravel',
+                                    'PHP custom',
+                                    'Static HTML',
+                                    'Other',
+                                ]"
+                                :key="x"
+                                :value="x"
+                            >
+                                {{ x }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField label="Proveedor de hosting" :error="form.errors.hosting_provider">
+                        <input v-model="form.hosting_provider" :class="input" />
+                    </FormField>
+                    <FormField
+                        label="Plan de mantenimiento"
+                        required
+                        :error="form.errors.maintenance_plan"
+                    >
+                        <select v-model="form.maintenance_plan" :class="input">
+                            <option
+                                v-for="x in ['basic', 'standard', 'premium', 'none']"
+                                :key="x"
+                                :value="x"
+                            >
+                                {{ x }}
+                            </option>
+                        </select>
+                    </FormField>
+                </div>
+            </section>
+            <section class="panel p-5 sm:p-6">
+                <h3 class="font-bold">Salud y vencimientos</h3>
+                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                    <FormField
+                        label="Vencimiento del dominio"
+                        :error="form.errors.domain_expires_at"
+                    >
+                        <input v-model="form.domain_expires_at" type="date" :class="input" />
+                    </FormField>
+                    <FormField
+                        label="Vencimiento del hosting"
+                        :error="form.errors.hosting_expires_at"
+                    >
+                        <input v-model="form.hosting_expires_at" type="date" :class="input" />
+                    </FormField>
+                    <FormField label="Estado SSL" required :error="form.errors.ssl_status">
+                        <select v-model="form.ssl_status" :class="input">
+                            <option value="active">Activo</option>
+                            <option value="expiring">Próximo a vencer</option>
+                            <option value="expired">Caducado</option>
+                            <option value="unknown">Desconocido</option>
+                        </select>
+                    </FormField>
+                    <FormField label="Estado general" required :error="form.errors.status">
+                        <select v-model="form.status" :class="input">
+                            <option value="stable">Estable</option>
+                            <option value="review">Revisión</option>
+                            <option value="incident">Incidencia</option>
+                            <option value="critical">Crítico</option>
+                        </select>
+                    </FormField>
+                </div>
+                <FormField
+                    class="mt-5"
+                    label="Notas técnicas"
+                    :error="form.errors.notes"
+                    hint="No almacenes contraseñas, tokens ni credenciales reales."
+                >
+                    <textarea v-model="form.notes" rows="4" :class="input" />
+                </FormField>
+            </section>
+            <div class="flex justify-end gap-3">
+                <Link
+                    :href="editing ? route('websites.show', website.id) : route('websites.index')"
+                    class="btn-secondary"
+                >
+                    Cancelar
+                </Link>
+                <button class="btn-primary" :disabled="form.processing">
+                    {{ form.processing ? 'Guardando…' : 'Guardar web' }}
+                </button>
+            </div>
+        </form>
+    </AuthenticatedLayout>
+</template>

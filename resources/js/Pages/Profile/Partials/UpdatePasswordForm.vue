@@ -36,9 +36,7 @@ const updatePassword = () => {
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Cambiar contraseña
-            </h2>
+            <h2 class="text-lg font-medium text-gray-900">Cambiar contraseña</h2>
 
             <p class="mt-1 text-sm text-gray-600">
                 Usa una contraseña segura y distinta a la de otros servicios.
@@ -58,10 +56,7 @@ const updatePassword = () => {
                     autocomplete="current-password"
                 />
 
-                <InputError
-                    :message="form.errors.current_password"
-                    class="mt-2"
-                />
+                <InputError :message="form.errors.current_password" class="mt-2" />
             </div>
 
             <div>
@@ -80,10 +75,7 @@ const updatePassword = () => {
             </div>
 
             <div>
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirmar contraseña"
-                />
+                <InputLabel for="password_confirmation" value="Confirmar contraseña" />
 
                 <TextInput
                     id="password_confirmation"
@@ -93,10 +85,7 @@ const updatePassword = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError
-                    :message="form.errors.password_confirmation"
-                    class="mt-2"
-                />
+                <InputError :message="form.errors.password_confirmation" class="mt-2" />
             </div>
 
             <div class="flex items-center gap-4">
@@ -108,12 +97,7 @@ const updatePassword = () => {
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p
-                        v-if="form.recentlySuccessful"
-                        class="text-sm text-gray-600"
-                    >
-                        Guardado.
-                    </p>
+                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Guardado.</p>
                 </Transition>
             </div>
         </form>

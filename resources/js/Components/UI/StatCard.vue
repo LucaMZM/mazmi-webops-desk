@@ -1,2 +1,35 @@
-<script setup>defineProps({ label:String, value:[String,Number], hint:String, tone:{type:String,default:'indigo'}, icon:String }); const tones={indigo:'bg-indigo-50 text-indigo-700',emerald:'bg-emerald-50 text-emerald-700',amber:'bg-amber-50 text-amber-700',red:'bg-red-50 text-red-700',blue:'bg-blue-50 text-blue-700'};</script>
-<template><div class="panel p-5"><div class="flex items-start justify-between"><div><p class="text-sm font-medium text-slate-500">{{ label }}</p><p class="mt-2 text-3xl font-black tracking-tight text-slate-900">{{ value }}</p><p v-if="hint" class="mt-1 text-xs text-slate-400">{{ hint }}</p></div><div :class="['grid h-11 w-11 place-items-center rounded-xl text-lg font-bold', tones[tone]]">{{ icon }}</div></div></div></template>
+<script setup>
+defineProps({
+    label: String,
+    value: [String, Number],
+    hint: String,
+    tone: { type: String, default: 'indigo' },
+    icon: String,
+});
+const tones = {
+    indigo: 'bg-indigo-50 text-indigo-700',
+    emerald: 'bg-emerald-50 text-emerald-700',
+    amber: 'bg-amber-50 text-amber-700',
+    red: 'bg-red-50 text-red-700',
+    blue: 'bg-blue-50 text-blue-700',
+};
+</script>
+<template>
+    <div class="panel p-5">
+        <div class="flex items-start justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-500">{{ label }}</p>
+                <p class="mt-2 text-3xl font-black tracking-tight text-slate-900">{{ value }}</p>
+                <p v-if="hint" class="mt-1 text-xs text-slate-400">{{ hint }}</p>
+            </div>
+            <div
+                :class="[
+                    'grid h-11 w-11 place-items-center rounded-xl text-lg font-bold',
+                    tones[tone],
+                ]"
+            >
+                {{ icon }}
+            </div>
+        </div>
+    </div>
+</template>

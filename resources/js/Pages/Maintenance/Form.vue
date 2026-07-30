@@ -1,8 +1,144 @@
 <script setup>
-import { computed } from 'vue'; import { Head,Link,useForm,usePage } from '@inertiajs/vue3'; import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'; import PageHeader from '@/Components/UI/PageHeader.vue'; import FormField from '@/Components/UI/FormField.vue';
-const props=defineProps({task:Object,websites:Array,technicians:Array}); const user=usePage().props.auth.user; const editing=computed(()=>!!props.task); const query=route().params; const localDate=v=>v?new Date(v).toISOString().slice(0,16):''; const form=useForm({website_id:props.task?.website_id||Number(query.website_id)||props.websites[0]?.id||'',assigned_to:props.task?.assigned_to||'',title:props.task?.title||'',description:props.task?.description||'',category:props.task?.category||'updates',priority:props.task?.priority||'medium',status:props.task?.status||'pending',scheduled_at:localDate(props.task?.scheduled_at)}); const submit=()=>editing.value?form.put(route('maintenance.update',props.task.id)):form.post(route('maintenance.store')); const input='w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+import { computed } from 'vue';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import FormField from '@/Components/UI/FormField.vue';
+const props = defineProps({ task: Object, websites: Array, technicians: Array });
+const user = usePage().props.auth.user;
+const editing = computed(() => !!props.task);
+const query = route().params;
+const localDate = (v) => (v ? new Date(v).toISOString().slice(0, 16) : '');
+const form = useForm({
+    website_id: props.task?.website_id || Number(query.website_id) || props.websites[0]?.id || '',
+    assigned_to: props.task?.assigned_to || '',
+    title: props.task?.title || '',
+    description: props.task?.description || '',
+    category: props.task?.category || 'updates',
+    priority: props.task?.priority || 'medium',
+    status: props.task?.status || 'pending',
+    scheduled_at: localDate(props.task?.scheduled_at),
+});
+const submit = () =>
+    editing.value
+        ? form.put(route('maintenance.update', props.task.id))
+        : form.post(route('maintenance.store'));
+const input =
+    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
 </script>
-<template><Head :title="editing?'Editar tarea':'Nueva tarea'"/><AuthenticatedLayout :title="editing?'Editar tarea':'Nueva tarea'"><PageHeader eyebrow="Mantenimiento" :title="editing?'Editar tarea':'Programar mantenimiento'" description="Define un trabajo concreto, asignable y verificable." :back-href="editing?route('maintenance.show',task.id):route('maintenance.index')"/>
-<form class="space-y-6" @submit.prevent="submit"><section class="panel p-5 sm:p-6"><h3 class="font-bold">Trabajo a realizar</h3><div class="mt-5 grid gap-5 md:grid-cols-2"><FormField label="Web" required :error="form.errors.website_id"><select v-model="form.website_id" :disabled="user.role==='technician'" :class="input"><option v-for="w in websites" :value="w.id">{{w.name}} · {{w.client.company_name}}</option></select></FormField><FormField label="Categoría" required :error="form.errors.category"><select v-model="form.category" :class="input"><option v-for="x in ['backups','updates','security','performance','content','seo','other']" :value="x">{{x}}</option></select></FormField><FormField label="Título" required :error="form.errors.title" class="md:col-span-2"><input v-model="form.title" :class="input" maxlength="180"></FormField><FormField label="Descripción / checklist" :error="form.errors.description" class="md:col-span-2"><textarea v-model="form.description" rows="5" :class="input" maxlength="5000"/></FormField></div></section>
-<section class="panel p-5 sm:p-6"><h3 class="font-bold">Planificación</h3><div class="mt-5 grid gap-5 md:grid-cols-2"><FormField label="Técnico" :error="form.errors.assigned_to"><select v-model="form.assigned_to" :disabled="user.role==='technician'" :class="input"><option value="">Sin asignar</option><option v-for="t in technicians" :value="t.id">{{t.name}}</option></select></FormField><FormField label="Fecha programada" :error="form.errors.scheduled_at"><input v-model="form.scheduled_at" type="datetime-local" :class="input"></FormField><FormField label="Prioridad" required :error="form.errors.priority"><select v-model="form.priority" :class="input"><option value="low">Baja</option><option value="medium">Media</option><option value="high">Alta</option></select></FormField><FormField label="Estado" required :error="form.errors.status"><select v-model="form.status" :class="input"><option value="pending">Pendiente</option><option value="in_progress">En curso</option><option value="completed">Completada</option><option value="blocked">Bloqueada</option></select></FormField></div></section><div class="flex justify-end gap-3"><Link :href="editing?route('maintenance.show',task.id):route('maintenance.index')" class="btn-secondary">Cancelar</Link><button class="btn-primary" :disabled="form.processing">{{form.processing?'Guardando…':'Guardar tarea'}}</button></div></form>
-</AuthenticatedLayout></template>
+<template>
+    <Head :title="editing ? 'Editar tarea' : 'Nueva tarea'" />
+    <AuthenticatedLayout :title="editing ? 'Editar tarea' : 'Nueva tarea'">
+        <PageHeader
+            eyebrow="Mantenimiento"
+            :title="editing ? 'Editar tarea' : 'Programar mantenimiento'"
+            description="Define un trabajo concreto, asignable y verificable."
+            :back-href="editing ? route('maintenance.show', task.id) : route('maintenance.index')"
+        />
+        <form class="space-y-6" @submit.prevent="submit">
+            <section class="panel p-5 sm:p-6">
+                <h3 class="font-bold">Trabajo a realizar</h3>
+                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                    <FormField label="Web" required :error="form.errors.website_id">
+                        <select
+                            v-model="form.website_id"
+                            :disabled="user.role === 'technician'"
+                            :class="input"
+                        >
+                            <option v-for="w in websites" :key="w.id" :value="w.id">
+                                {{ w.name }} · {{ w.client.company_name }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField label="Categoría" required :error="form.errors.category">
+                        <select v-model="form.category" :class="input">
+                            <option
+                                v-for="x in [
+                                    'backups',
+                                    'updates',
+                                    'security',
+                                    'performance',
+                                    'content',
+                                    'seo',
+                                    'other',
+                                ]"
+                                :key="x"
+                                :value="x"
+                            >
+                                {{ x }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField
+                        label="Título"
+                        required
+                        :error="form.errors.title"
+                        class="md:col-span-2"
+                    >
+                        <input v-model="form.title" :class="input" maxlength="180" />
+                    </FormField>
+                    <FormField
+                        label="Descripción / checklist"
+                        :error="form.errors.description"
+                        class="md:col-span-2"
+                    >
+                        <textarea
+                            v-model="form.description"
+                            rows="5"
+                            :class="input"
+                            maxlength="5000"
+                        />
+                    </FormField>
+                </div>
+            </section>
+            <section class="panel p-5 sm:p-6">
+                <h3 class="font-bold">Planificación</h3>
+                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                    <FormField label="Técnico" :error="form.errors.assigned_to">
+                        <select
+                            v-model="form.assigned_to"
+                            :disabled="user.role === 'technician'"
+                            :class="input"
+                        >
+                            <option value="">Sin asignar</option>
+                            <option v-for="t in technicians" :key="t.id" :value="t.id">
+                                {{ t.name }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField label="Fecha programada" :error="form.errors.scheduled_at">
+                        <input v-model="form.scheduled_at" type="datetime-local" :class="input" />
+                    </FormField>
+                    <FormField label="Prioridad" required :error="form.errors.priority">
+                        <select v-model="form.priority" :class="input">
+                            <option value="low">Baja</option>
+                            <option value="medium">Media</option>
+                            <option value="high">Alta</option>
+                        </select>
+                    </FormField>
+                    <FormField label="Estado" required :error="form.errors.status">
+                        <select v-model="form.status" :class="input">
+                            <option value="pending">Pendiente</option>
+                            <option value="in_progress">En curso</option>
+                            <option value="completed">Completada</option>
+                            <option value="blocked">Bloqueada</option>
+                        </select>
+                    </FormField>
+                </div>
+            </section>
+            <div class="flex justify-end gap-3">
+                <Link
+                    :href="
+                        editing ? route('maintenance.show', task.id) : route('maintenance.index')
+                    "
+                    class="btn-secondary"
+                >
+                    Cancelar
+                </Link>
+                <button class="btn-primary" :disabled="form.processing">
+                    {{ form.processing ? 'Guardando…' : 'Guardar tarea' }}
+                </button>
+            </div>
+        </form>
+    </AuthenticatedLayout>
+</template>

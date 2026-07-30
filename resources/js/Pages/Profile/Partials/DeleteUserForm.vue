@@ -41,12 +41,11 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
         <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Eliminar cuenta
-            </h2>
+            <h2 class="text-lg font-medium text-gray-900">Eliminar cuenta</h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                Al eliminar la cuenta se borrarán sus datos asociados. Hazlo solo si estás seguro de que ya no necesitas este acceso.
+                Al eliminar la cuenta se borrarán sus datos asociados. Hazlo solo si estás seguro de
+                que ya no necesitas este acceso.
             </p>
         </header>
 
@@ -54,22 +53,17 @@ const closeModal = () => {
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
-                <h2
-                    class="text-lg font-medium text-gray-900"
-                >
+                <h2 class="text-lg font-medium text-gray-900">
                     ¿Seguro que quieres eliminar tu cuenta?
                 </h2>
 
                 <p class="mt-1 text-sm text-gray-600">
-                    Esta acción no se puede deshacer. Introduce tu contraseña para confirmar la eliminación.
+                    Esta acción no se puede deshacer. Introduce tu contraseña para confirmar la
+                    eliminación.
                 </p>
 
                 <div class="mt-6">
-                    <InputLabel
-                        for="password"
-                        value="Contraseña"
-                        class="sr-only"
-                    />
+                    <InputLabel for="password" value="Contraseña" class="sr-only" />
 
                     <TextInput
                         id="password"
@@ -85,9 +79,7 @@ const closeModal = () => {
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal">
-                        Cancelar
-                    </SecondaryButton>
+                    <SecondaryButton @click="closeModal">Cancelar</SecondaryButton>
 
                     <DangerButton
                         class="ms-3"

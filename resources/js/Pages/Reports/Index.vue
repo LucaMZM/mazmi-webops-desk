@@ -1,8 +1,153 @@
 <script setup>
-import { reactive } from 'vue'; import { Head,Link,router,usePage } from '@inertiajs/vue3'; import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'; import PageHeader from '@/Components/UI/PageHeader.vue'; import StatusBadge from '@/Components/UI/StatusBadge.vue'; import EmptyState from '@/Components/UI/EmptyState.vue'; import Pagination from '@/Components/UI/Pagination.vue';
-const props=defineProps({reports:Object,filters:Object,clients:Array}); const user=usePage().props.auth.user; const months=['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']; const form=reactive({client_id:props.filters.client_id||'',month:props.filters.month||'',year:props.filters.year||'',general_status:props.filters.general_status||''}); const apply=()=>router.get(route('reports.index'),form,{preserveState:true,replace:true});
+import { reactive } from 'vue';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import StatusBadge from '@/Components/UI/StatusBadge.vue';
+import EmptyState from '@/Components/UI/EmptyState.vue';
+import Pagination from '@/Components/UI/Pagination.vue';
+const props = defineProps({ reports: Object, filters: Object, clients: Array });
+const user = usePage().props.auth.user;
+const months = [
+    '',
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+];
+const form = reactive({
+    client_id: props.filters.client_id || '',
+    month: props.filters.month || '',
+    year: props.filters.year || '',
+    general_status: props.filters.general_status || '',
+});
+const apply = () =>
+    router.get(route('reports.index'), form, { preserveState: true, replace: true });
 </script>
-<template><Head title="Reportes"/><AuthenticatedLayout title="Reportes"><PageHeader eyebrow="Seguimiento" title="Reportes mensuales" description="Resumen ejecutivo de actividad, incidencias y recomendaciones para cada cliente."><Link v-if="user.role==='admin'" :href="route('reports.create')" class="btn-primary">+ Crear reporte</Link></PageHeader>
-<form class="panel mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[repeat(4,1fr)_auto]" @submit.prevent="apply"><select v-if="clients.length" v-model="form.client_id" class="rounded-xl border-slate-300 text-sm"><option value="">Todos los clientes</option><option v-for="c in clients" :value="c.id">{{c.company_name}}</option></select><select v-model="form.month" class="rounded-xl border-slate-300 text-sm"><option value="">Todos los meses</option><option v-for="i in 12" :value="i">{{months[i]}}</option></select><input v-model="form.year" type="number" class="rounded-xl border-slate-300 text-sm" placeholder="Año"><select v-model="form.general_status" class="rounded-xl border-slate-300 text-sm"><option value="">Todos los estados</option><option value="good">Correcto</option><option value="attention">Atención</option><option value="critical">Crítico</option></select><button class="btn-secondary">Filtrar</button></form>
-<div v-if="reports.data.length" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3"><Link v-for="report in reports.data" :key="report.id" :href="route('reports.show',report.id)" class="panel group overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md"><div class="h-1.5" :class="report.general_status==='good'?'bg-emerald-500':report.general_status==='attention'?'bg-amber-500':'bg-red-500'"/><div class="p-5"><div class="flex items-start justify-between"><div><p class="text-xs font-bold uppercase tracking-widest text-slate-400">{{months[report.month]}} {{report.year}}</p><h3 class="mt-2 text-lg font-bold group-hover:text-indigo-600">{{report.client.company_name}}</h3></div><StatusBadge :status="report.general_status"/></div><p class="mt-4 line-clamp-2 text-sm leading-6 text-slate-600">{{report.summary}}</p><div class="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center"><div><p class="text-xl font-black">{{report.completed_tasks_count}}</p><p class="text-[10px] uppercase text-slate-400">Tareas</p></div><div><p class="text-xl font-black text-emerald-600">{{report.resolved_tickets_count}}</p><p class="text-[10px] uppercase text-slate-400">Resueltos</p></div><div><p class="text-xl font-black" :class="report.pending_tickets_count?'text-amber-600':''">{{report.pending_tickets_count}}</p><p class="text-[10px] uppercase text-slate-400">Pendientes</p></div></div></div></Link></div><div v-else class="panel"><EmptyState title="No hay reportes con estos filtros" description="Los reportes mensuales aparecerán aquí."><Link v-if="user.role==='admin'" :href="route('reports.create')" class="btn-primary">Crear reporte</Link></EmptyState></div><div class="panel mt-5"><Pagination :links="reports.links"/></div>
-</AuthenticatedLayout></template>
+<template>
+    <Head title="Reportes" />
+    <AuthenticatedLayout title="Reportes">
+        <PageHeader
+            eyebrow="Seguimiento"
+            title="Reportes mensuales"
+            description="Resumen ejecutivo de actividad, incidencias y recomendaciones para cada cliente."
+        >
+            <Link v-if="user.role === 'admin'" :href="route('reports.create')" class="btn-primary">
+                + Crear reporte
+            </Link>
+        </PageHeader>
+        <form
+            class="panel mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[repeat(4,1fr)_auto]"
+            @submit.prevent="apply"
+        >
+            <select
+                v-if="clients.length"
+                v-model="form.client_id"
+                class="rounded-xl border-slate-300 text-sm"
+            >
+                <option value="">Todos los clientes</option>
+                <option v-for="c in clients" :key="c.id" :value="c.id">
+                    {{ c.company_name }}
+                </option>
+            </select>
+            <select v-model="form.month" class="rounded-xl border-slate-300 text-sm">
+                <option value="">Todos los meses</option>
+                <option v-for="i in 12" :key="i" :value="i">{{ months[i] }}</option>
+            </select>
+            <input
+                v-model="form.year"
+                type="number"
+                class="rounded-xl border-slate-300 text-sm"
+                placeholder="Año"
+            />
+            <select v-model="form.general_status" class="rounded-xl border-slate-300 text-sm">
+                <option value="">Todos los estados</option>
+                <option value="good">Correcto</option>
+                <option value="attention">Atención</option>
+                <option value="critical">Crítico</option>
+            </select>
+            <button class="btn-secondary">Filtrar</button>
+        </form>
+        <div v-if="reports.data.length" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <Link
+                v-for="report in reports.data"
+                :key="report.id"
+                :href="route('reports.show', report.id)"
+                class="panel group overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md"
+            >
+                <div
+                    class="h-1.5"
+                    :class="
+                        report.general_status === 'good'
+                            ? 'bg-emerald-500'
+                            : report.general_status === 'attention'
+                              ? 'bg-amber-500'
+                              : 'bg-red-500'
+                    "
+                />
+                <div class="p-5">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400">
+                                {{ months[report.month] }} {{ report.year }}
+                            </p>
+                            <h3 class="mt-2 text-lg font-bold group-hover:text-indigo-600">
+                                {{ report.client.company_name }}
+                            </h3>
+                        </div>
+                        <StatusBadge :status="report.general_status" />
+                    </div>
+                    <p class="mt-4 line-clamp-2 text-sm leading-6 text-slate-600">
+                        {{ report.summary }}
+                    </p>
+                    <div
+                        class="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center"
+                    >
+                        <div>
+                            <p class="text-xl font-black">{{ report.completed_tasks_count }}</p>
+                            <p class="text-[10px] uppercase text-slate-400">Tareas</p>
+                        </div>
+                        <div>
+                            <p class="text-xl font-black text-emerald-600">
+                                {{ report.resolved_tickets_count }}
+                            </p>
+                            <p class="text-[10px] uppercase text-slate-400">Resueltos</p>
+                        </div>
+                        <div>
+                            <p
+                                class="text-xl font-black"
+                                :class="report.pending_tickets_count ? 'text-amber-600' : ''"
+                            >
+                                {{ report.pending_tickets_count }}
+                            </p>
+                            <p class="text-[10px] uppercase text-slate-400">Pendientes</p>
+                        </div>
+                    </div>
+                </div>
+            </Link>
+        </div>
+        <div v-else class="panel">
+            <EmptyState
+                title="No hay reportes con estos filtros"
+                description="Los reportes mensuales aparecerán aquí."
+            >
+                <Link
+                    v-if="user.role === 'admin'"
+                    :href="route('reports.create')"
+                    class="btn-primary"
+                >
+                    Crear reporte
+                </Link>
+            </EmptyState>
+        </div>
+        <div class="panel mt-5"><Pagination :links="reports.links" /></div>
+    </AuthenticatedLayout>
+</template>

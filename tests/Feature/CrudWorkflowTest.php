@@ -86,11 +86,11 @@ class CrudWorkflowTest extends TestCase
 
         $this->post(route('tickets.store'), [
             'client_id' => $website->client_id, 'website_id' => $website->id, 'assigned_to' => $technician->id,
-            'title' => 'Ticket funcional de auditoría', 'description' => 'Descripción suficientemente detallada para validar el flujo completo.',
+            'title' => 'Ticket de flujo completo', 'description' => 'Descripción suficientemente detallada para validar el flujo completo.',
             'priority' => 'high', 'status' => 'open', 'due_date' => now()->addWeek()->toDateString(),
         ])->assertRedirect();
 
-        $ticket = Ticket::where('title', 'Ticket funcional de auditoría')->firstOrFail();
+        $ticket = Ticket::where('title', 'Ticket de flujo completo')->firstOrFail();
         $this->patch(route('tickets.status', $ticket), ['status' => 'resolved'])->assertSessionHas('success');
         $this->assertDatabaseHas('tickets', ['id' => $ticket->id, 'status' => 'resolved']);
         $this->assertNotNull($ticket->fresh()->resolved_at);
@@ -105,7 +105,7 @@ class CrudWorkflowTest extends TestCase
 
         $this->post(route('maintenance.store'), [
             'website_id' => $website->id, 'assigned_to' => $technician->id,
-            'title' => 'Revisión funcional programada', 'description' => 'Checklist creado por la auditoría.',
+            'title' => 'Revisión funcional programada', 'description' => 'Checklist creado para comprobar el flujo de mantenimiento.',
             'category' => 'security', 'priority' => 'medium', 'status' => 'pending',
             'scheduled_at' => now()->addDay()->toDateTimeString(),
         ])->assertRedirect();
@@ -119,11 +119,11 @@ class CrudWorkflowTest extends TestCase
 
     public function test_admin_can_create_view_and_delete_a_monthly_report(): void
     {
-        $client = Client::findOrFail(8);
+        $client = Client::where('company_name', 'TecnoRiba Solutions')->firstOrFail();
 
         $this->post(route('reports.store'), [
             'client_id' => $client->id, 'month' => now()->month, 'year' => now()->year,
-            'summary' => 'Resumen mensual creado durante la auditoría funcional.',
+            'summary' => 'Resumen mensual creado para comprobar el flujo de reportes.',
             'completed_tasks_count' => 4, 'resolved_tickets_count' => 3, 'pending_tickets_count' => 1,
             'recommendations' => 'Mantener el calendario preventivo y revisar rendimiento.', 'general_status' => 'good',
         ])->assertRedirect();

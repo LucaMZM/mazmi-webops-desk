@@ -34,13 +34,20 @@ const submit = () => {
         <Head title="Iniciar sesión" />
 
         <div class="mb-6">
-            <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Acceso al panel</p>
+            <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
+                Acceso al panel
+            </p>
             <h1 class="mt-2 text-2xl font-black text-slate-950">Bienvenido de nuevo</h1>
-            <p class="mt-2 text-sm text-slate-500">Usa un usuario demo para explorar los distintos permisos.</p>
+            <p class="mt-2 text-sm text-slate-500">
+                Usa un usuario demo para explorar los distintos permisos.
+            </p>
         </div>
 
-        <div class="mb-5 rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-xs text-indigo-800">
-            <strong>Admin demo:</strong> admin@webops.test · password
+        <div
+            class="mb-5 rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-xs text-indigo-800"
+        >
+            <strong>Admin demo:</strong>
+            admin@webops.test · password
         </div>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
@@ -82,9 +89,7 @@ const submit = () => {
             <div class="mt-4 block">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Recordarme</span
-                    >
+                    <span class="ms-2 text-sm text-gray-600">Recordarme</span>
                 </label>
             </div>
 

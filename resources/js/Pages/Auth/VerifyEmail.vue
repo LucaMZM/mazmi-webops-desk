@@ -16,9 +16,7 @@ const submit = () => {
     form.post(route('verification.send'));
 };
 
-const verificationLinkSent = computed(
-    () => props.status === 'verification-link-sent',
-);
+const verificationLinkSent = computed(() => props.status === 'verification-link-sent');
 </script>
 
 <template>
@@ -26,13 +24,11 @@ const verificationLinkSent = computed(
         <Head title="Verificación de email" />
 
         <div class="mb-4 text-sm text-gray-600">
-            Antes de continuar, verifica tu email desde el enlace que acabamos de enviarte. Si no lo has recibido, puedes solicitar otro.
+            Antes de continuar, verifica tu email desde el enlace que acabamos de enviarte. Si no lo
+            has recibido, puedes solicitar otro.
         </div>
 
-        <div
-            class="mb-4 text-sm font-medium text-green-600"
-            v-if="verificationLinkSent"
-        >
+        <div class="mb-4 text-sm font-medium text-green-600" v-if="verificationLinkSent">
             Se ha enviado un nuevo enlace de verificación a tu email.
         </div>
 
@@ -50,8 +46,9 @@ const verificationLinkSent = computed(
                     method="post"
                     as="button"
                     class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    >Cerrar sesión</Link
                 >
+                    Cerrar sesión
+                </Link>
             </div>
         </form>
     </GuestLayout>

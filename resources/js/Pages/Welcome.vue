@@ -17,15 +17,18 @@ const previewTasks = [
 const benefits = [
     {
         title: 'Contexto en un solo sitio',
-        description: 'Clientes, webs, tickets y tareas conectados para saber qué pasa y quién lo lleva.',
+        description:
+            'Clientes, webs, tickets y tareas conectados para saber qué pasa y quién lo lleva.',
     },
     {
         title: 'Trabajo técnico ordenado',
-        description: 'Prioridades, estados, vencimientos y asignaciones pensados para mantenimiento web real.',
+        description:
+            'Prioridades, estados, vencimientos y asignaciones pensados para mantenimiento web real.',
     },
     {
         title: 'Información clara para clientes',
-        description: 'Acceso limitado a sus datos y reportes mensuales fáciles de revisar o imprimir.',
+        description:
+            'Acceso limitado a sus datos y reportes mensuales fáciles de revisar o imprimir.',
     },
 ];
 
@@ -63,25 +66,38 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
 
         <main>
             <section class="relative overflow-hidden">
-                <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(79,70,229,.28),transparent_40%)]" />
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(79,70,229,.28),transparent_40%)]"
+                />
 
-                <div class="relative mx-auto grid max-w-7xl gap-14 px-5 pb-20 pt-14 sm:px-8 lg:grid-cols-2 lg:items-center lg:pb-28 lg:pt-24">
+                <div
+                    class="relative mx-auto grid max-w-7xl gap-14 px-5 pb-20 pt-14 sm:px-8 lg:grid-cols-2 lg:items-center lg:pb-28 lg:pt-24"
+                >
                     <div>
-                        <div class="inline-flex rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs font-semibold text-indigo-200">
+                        <div
+                            class="inline-flex rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs font-semibold text-indigo-200"
+                        >
                             Laravel · Vue · Inertia
                         </div>
-                        <h1 class="mt-7 text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+                        <h1
+                            class="mt-7 text-4xl font-black leading-tight tracking-tight sm:text-6xl"
+                        >
                             Mantenimiento web organizado,
                             <span class="text-indigo-400">sin perder contexto.</span>
                         </h1>
                         <p class="mt-6 max-w-xl text-lg leading-8 text-slate-300">
-                            Mazmi WebOps Desk ayuda a seguir clientes, webs, tickets, tareas y reportes mensuales desde un panel único. Está pensado para el día a día de una pequeña agencia o freelancer técnico.
+                            Mazmi WebOps Desk ayuda a seguir clientes, webs, tickets, tareas y
+                            reportes mensuales desde un panel único. Está pensado para el día a día
+                            de una pequeña agencia o freelancer técnico.
                         </p>
                         <div class="mt-9 flex flex-wrap gap-3">
                             <Link :href="route('login')" class="btn-primary px-6 py-3">
                                 Probar demo →
                             </Link>
-                            <a href="#proyecto" class="rounded-xl border border-white/20 px-6 py-3 text-sm font-semibold hover:bg-white/10">
+                            <a
+                                href="#proyecto"
+                                class="rounded-xl border border-white/20 px-6 py-3 text-sm font-semibold hover:bg-white/10"
+                            >
                                 Ver qué incluye
                             </a>
                         </div>
@@ -91,18 +107,22 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                     </div>
 
                     <div class="relative">
-                        <div class="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur">
+                        <div
+                            class="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur"
+                        >
                             <div class="rounded-2xl bg-slate-50 p-5 text-slate-900">
                                 <div class="flex items-center justify-between">
                                     <div>
-                                        <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
+                                        <p
+                                            class="text-xs font-bold uppercase tracking-widest text-indigo-600"
+                                        >
                                             Vista demo
                                         </p>
-                                        <p class="mt-1 text-xl font-black">
-                                            Panel de ejemplo
-                                        </p>
+                                        <p class="mt-1 text-xl font-black">Panel de ejemplo</p>
                                     </div>
-                                    <div class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                                    <div
+                                        class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700"
+                                    >
                                         Datos ficticios
                                     </div>
                                 </div>
@@ -128,7 +148,9 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                                         :key="label"
                                         class="flex items-center gap-3 rounded-xl bg-slate-100 p-3 text-xs font-semibold"
                                     >
-                                        <span class="grid h-7 w-7 place-items-center rounded-lg bg-white text-indigo-600">
+                                        <span
+                                            class="grid h-7 w-7 place-items-center rounded-lg bg-white text-indigo-600"
+                                        >
                                             {{ index + 1 }}
                                         </span>
                                         {{ label }}
@@ -150,7 +172,9 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                             Un flujo claro para mantenimiento web
                         </h2>
                         <p class="mt-4 leading-7 text-slate-400">
-                            La aplicación cubre soporte, inventario técnico, tareas programadas, vencimientos y reportes. Cada rol ve únicamente la información que necesita.
+                            La aplicación cubre soporte, inventario técnico, tareas programadas,
+                            vencimientos y reportes. Cada rol ve únicamente la información que
+                            necesita.
                         </p>
                     </div>
 
@@ -160,9 +184,7 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                             :key="item.title"
                             class="rounded-2xl border border-white/10 bg-slate-900 p-6"
                         >
-                            <span class="text-sm font-black text-indigo-400">
-                                0{{ index + 1 }}
-                            </span>
+                            <span class="text-sm font-black text-indigo-400">0{{ index + 1 }}</span>
                             <h3 class="mt-5 text-lg font-bold">
                                 {{ item.title }}
                             </h3>
@@ -180,11 +202,11 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                         <p class="text-xs font-bold uppercase tracking-widest text-indigo-400">
                             Stack técnico
                         </p>
-                        <h2 class="mt-3 text-3xl font-black">
-                            Laravel y Vue trabajando juntos
-                        </h2>
+                        <h2 class="mt-3 text-3xl font-black">Laravel y Vue trabajando juntos</h2>
                         <p class="mt-4 leading-7 text-slate-400">
-                            Laravel gestiona rutas, validación, autorización y datos. Vue 3 construye la interfaz, Inertia conecta ambas partes sin una API separada y Tailwind mantiene una base visual consistente.
+                            Laravel gestiona rutas, validación, autorización y datos. Vue 3
+                            construye la interfaz, Inertia conecta ambas partes sin una API separada
+                            y Tailwind mantiene una base visual consistente.
                         </p>
                     </div>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 
 const props = defineProps({
     show: {
@@ -14,24 +14,37 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    panelClass: {
+        type: String,
+        default: 'rounded-lg',
+    },
+    overlayClass: {
+        type: String,
+        default: 'bg-gray-500 opacity-75',
+    },
 });
 
 const emit = defineEmits(['close']);
 const dialog = ref();
 const showSlot = ref(props.show);
+let closeTimer;
 
 watch(
     () => props.show,
-    () => {
-        if (props.show) {
+    async (show) => {
+        if (show) {
+            clearTimeout(closeTimer);
             document.body.style.overflow = 'hidden';
             showSlot.value = true;
+            await nextTick();
 
-            dialog.value?.showModal();
+            if (dialog.value && !dialog.value.open) {
+                dialog.value.showModal();
+            }
         } else {
             document.body.style.overflow = '';
 
-            setTimeout(() => {
+            closeTimer = setTimeout(() => {
                 dialog.value?.close();
                 showSlot.value = false;
             }, 200);
@@ -45,21 +58,15 @@ const close = () => {
     }
 };
 
-const closeOnEscape = (e) => {
-    if (e.key === 'Escape') {
-        e.preventDefault();
-
-        if (props.show) {
-            close();
-        }
+onMounted(() => {
+    if (props.show && dialog.value && !dialog.value.open) {
+        document.body.style.overflow = 'hidden';
+        dialog.value.showModal();
     }
-};
-
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
+});
 
 onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
-
+    clearTimeout(closeTimer);
     document.body.style.overflow = '';
 });
 
@@ -76,13 +83,12 @@ const maxWidthClass = computed(() => {
 
 <template>
     <dialog
-        class="z-50 m-0 min-h-full min-w-full overflow-y-auto bg-transparent backdrop:bg-transparent"
         ref="dialog"
+        class="z-50 m-0 min-h-full min-w-full overflow-y-auto bg-transparent backdrop:bg-transparent"
+        @cancel.prevent="close"
+        @keydown.esc.prevent.stop="close"
     >
-        <div
-            class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0"
-            scroll-region
-        >
+        <div class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0" scroll-region>
             <Transition
                 enter-active-class="ease-out duration-300"
                 enter-from-class="opacity-0"
@@ -91,14 +97,8 @@ const maxWidthClass = computed(() => {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div
-                    v-show="show"
-                    class="fixed inset-0 transform transition-all"
-                    @click="close"
-                >
-                    <div
-                        class="absolute inset-0 bg-gray-500 opacity-75"
-                    />
+                <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
+                    <div class="absolute inset-0" :class="overlayClass" />
                 </div>
             </Transition>
 
@@ -112,8 +112,8 @@ const maxWidthClass = computed(() => {
             >
                 <div
                     v-show="show"
-                    class="mb-6 transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
-                    :class="maxWidthClass"
+                    class="mb-6 transform overflow-hidden bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
+                    :class="[maxWidthClass, panelClass]"
                 >
                     <slot v-if="showSlot" />
                 </div>

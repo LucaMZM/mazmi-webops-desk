@@ -29,10 +29,7 @@ const submit = () => {
             Indica tu email y recibirás un enlace para crear una nueva contraseña.
         </div>
 
-        <div
-            v-if="status"
-            class="mb-4 text-sm font-medium text-green-600"
-        >
+        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
         </div>
 
