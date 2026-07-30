@@ -10,9 +10,17 @@ use Illuminate\Validation\Rule;
 
 class TicketRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->user()?->isClient()) {
+            $this->merge([
+                'client_id' => $this->user()->client_id,
+                'assigned_to' => null,
+                'status' => 'open',
+            ]);
+        }
+    }
+
     public function authorize(): bool
     {
         return true;

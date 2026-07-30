@@ -31,7 +31,9 @@ class TicketController extends Controller
             'tickets' => $tickets,
             'filters' => $request->only('search', 'status', 'priority', 'client_id', 'assigned_to'),
             'clients' => $request->user()->isClient() ? [] : Client::orderBy('company_name')->get(['id', 'company_name']),
-            'technicians' => $request->user()->isClient() ? [] : User::where('role', 'technician')->orderBy('name')->get(['id', 'name']),
+            'technicians' => $request->user()->isAdmin()
+                ? User::where('role', 'technician')->orderBy('name')->get(['id', 'name'])
+                : [],
         ]);
     }
 
@@ -61,14 +63,14 @@ class TicketController extends Controller
     {
         $this->authorize('view', $ticket);
 
-        return Inertia::render('Tickets/Show', ['ticket' => $ticket->load(['client', 'website', 'assignee:id,name,email'])]);
+        return Inertia::render('Tickets/Show', ['ticket' => $ticket->load(['client', 'website', 'assignee:id,name'])]);
     }
 
     public function edit(Request $request, Ticket $ticket)
     {
         $this->authorize('update', $ticket);
 
-        return Inertia::render('Tickets/Form', [...$this->formData($request), 'ticket' => $ticket]);
+        return Inertia::render('Tickets/Form', [...$this->formData($request, $ticket), 'ticket' => $ticket]);
     }
 
     public function update(TicketRequest $request, Ticket $ticket)
@@ -103,14 +105,20 @@ class TicketController extends Controller
         return redirect()->route('tickets.index')->with('success', 'Ticket eliminado.');
     }
 
-    private function formData(Request $request): array
+    private function formData(Request $request, ?Ticket $ticket = null): array
     {
-        $clientId = $request->user()->isClient() ? $request->user()->client_id : null;
+        $clientId = match (true) {
+            $request->user()->isClient() => $request->user()->client_id,
+            $request->user()->isTechnician() => $ticket?->client_id,
+            default => null,
+        };
 
         return [
             'clients' => Client::query()->when($clientId, fn (Builder $q) => $q->whereKey($clientId))->orderBy('company_name')->get(['id', 'company_name']),
             'websites' => Website::query()->when($clientId, fn (Builder $q) => $q->where('client_id', $clientId))->orderBy('name')->get(['id', 'client_id', 'name']),
-            'technicians' => User::where('role', 'technician')->orderBy('name')->get(['id', 'name']),
+            'technicians' => $request->user()->isAdmin()
+                ? User::where('role', 'technician')->orderBy('name')->get(['id', 'name'])
+                : [],
         ];
     }
 }

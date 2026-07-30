@@ -104,6 +104,29 @@ class RoleAuthorizationTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_technician_cannot_create_tickets_for_clients(): void
+    {
+        $technician = User::where('email', 'tech1@webops.test')->firstOrFail();
+        $website = Website::firstOrFail();
+
+        $this->actingAs($technician)
+            ->get(route('tickets.create'))
+            ->assertForbidden();
+
+        $this->post(route('tickets.store'), [
+            'client_id' => $website->client_id,
+            'website_id' => $website->id,
+            'assigned_to' => $technician->id,
+            'title' => 'Ticket no autorizado',
+            'description' => 'Un técnico no debe crear tickets en nombre de un cliente.',
+            'priority' => 'medium',
+            'status' => 'open',
+            'due_date' => null,
+        ])->assertForbidden();
+
+        $this->assertDatabaseMissing('tickets', ['title' => 'Ticket no autorizado']);
+    }
+
     public function test_client_ticket_cannot_self_assign_or_start_resolved(): void
     {
         $user = User::where('email', 'cliente1@webops.test')->firstOrFail();

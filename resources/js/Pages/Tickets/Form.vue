@@ -1,8 +1,155 @@
 <script setup>
-import { computed,watch } from 'vue'; import { Head,Link,useForm,usePage } from '@inertiajs/vue3'; import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'; import PageHeader from '@/Components/UI/PageHeader.vue'; import FormField from '@/Components/UI/FormField.vue';
-const props=defineProps({ticket:Object,clients:Array,websites:Array,technicians:Array}); const user=usePage().props.auth.user; const editing=computed(()=>!!props.ticket); const query=route().params; const form=useForm({client_id:props.ticket?.client_id||Number(query.client_id)||props.clients[0]?.id||'',website_id:props.ticket?.website_id||Number(query.website_id)||'',assigned_to:props.ticket?.assigned_to||'',title:props.ticket?.title||'',description:props.ticket?.description||'',priority:props.ticket?.priority||'medium',status:props.ticket?.status||'open',due_date:props.ticket?.due_date?.slice(0,10)||''}); const filteredWebsites=computed(()=>props.websites.filter(w=>Number(w.client_id)===Number(form.client_id))); watch(()=>form.client_id,()=>{if(!filteredWebsites.value.some(w=>w.id===Number(form.website_id)))form.website_id=''}); const submit=()=>editing.value?form.put(route('tickets.update',props.ticket.id)):form.post(route('tickets.store')); const input='w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+import { computed, watch } from 'vue';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import FormField from '@/Components/UI/FormField.vue';
+const props = defineProps({ ticket: Object, clients: Array, websites: Array, technicians: Array });
+const user = usePage().props.auth.user;
+const editing = computed(() => !!props.ticket);
+const query = route().params;
+const form = useForm({
+    client_id: props.ticket?.client_id || Number(query.client_id) || props.clients[0]?.id || '',
+    website_id: props.ticket?.website_id || Number(query.website_id) || '',
+    assigned_to: props.ticket?.assigned_to || '',
+    title: props.ticket?.title || '',
+    description: props.ticket?.description || '',
+    priority: props.ticket?.priority || 'medium',
+    status: props.ticket?.status || 'open',
+    due_date: props.ticket?.due_date?.slice(0, 10) || '',
+});
+const filteredWebsites = computed(() =>
+    props.websites.filter((w) => Number(w.client_id) === Number(form.client_id)),
+);
+watch(
+    () => form.client_id,
+    () => {
+        if (!filteredWebsites.value.some((w) => w.id === Number(form.website_id)))
+            form.website_id = '';
+    },
+);
+const submit = () =>
+    editing.value
+        ? form.put(route('tickets.update', props.ticket.id))
+        : form.post(route('tickets.store'));
+const input =
+    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
 </script>
-<template><Head :title="editing?'Editar ticket':'Nuevo ticket'"/><AuthenticatedLayout :title="editing?'Editar ticket':'Nuevo ticket'"><PageHeader eyebrow="Soporte" :title="editing?`Editar ticket #${ticket.id}`:'Crear ticket'" description="Describe el problema, el impacto y cualquier paso para reproducirlo." :back-href="editing?route('tickets.show',ticket.id):route('tickets.index')"/>
-<form class="space-y-6" @submit.prevent="submit"><section class="panel p-5 sm:p-6"><h3 class="font-bold">Contexto</h3><div class="mt-5 grid gap-5 md:grid-cols-2"><FormField label="Cliente" required :error="form.errors.client_id"><select v-model="form.client_id" :disabled="user.role==='client'" :class="input"><option v-for="c in clients" :value="c.id">{{c.company_name}}</option></select></FormField><FormField label="Web afectada" :error="form.errors.website_id"><select v-model="form.website_id" :class="input"><option value="">Solicitud general</option><option v-for="w in filteredWebsites" :value="w.id">{{w.name}}</option></select></FormField><FormField label="Título" required :error="form.errors.title" class="md:col-span-2"><input v-model="form.title" :class="input" maxlength="180" placeholder="Resumen concreto del problema"></FormField><FormField label="Descripción" required :error="form.errors.description" class="md:col-span-2" hint="No incluyas contraseñas ni credenciales."><textarea v-model="form.description" rows="6" :class="input" maxlength="5000" placeholder="Qué ocurre, desde cuándo y qué impacto tiene…"/></FormField></div></section>
-<section class="panel p-5 sm:p-6"><h3 class="font-bold">Gestión</h3><div class="mt-5 grid gap-5 md:grid-cols-2"><FormField label="Prioridad" required :error="form.errors.priority"><select v-model="form.priority" :class="input"><option value="low">Baja</option><option value="medium">Media</option><option value="high">Alta</option><option value="urgent">Urgente</option></select></FormField><FormField label="Fecha objetivo" :error="form.errors.due_date"><input v-model="form.due_date" type="date" :class="input"></FormField><FormField v-if="user.role!=='client'" label="Técnico asignado" :error="form.errors.assigned_to"><select v-model="form.assigned_to" :class="input"><option value="">Sin asignar</option><option v-for="t in technicians" :value="t.id">{{t.name}}</option></select></FormField><FormField v-if="user.role!=='client'" label="Estado" required :error="form.errors.status"><select v-model="form.status" :class="input"><option value="open">Abierto</option><option value="in_progress">En curso</option><option value="waiting_client">Espera cliente</option><option value="resolved">Resuelto</option><option value="closed">Cerrado</option></select></FormField></div></section><div class="flex justify-end gap-3"><Link :href="editing?route('tickets.show',ticket.id):route('tickets.index')" class="btn-secondary">Cancelar</Link><button class="btn-primary" :disabled="form.processing">{{form.processing?'Guardando…':'Guardar ticket'}}</button></div></form>
-</AuthenticatedLayout></template>
+<template>
+    <Head :title="editing ? 'Editar ticket' : 'Nuevo ticket'" />
+    <AuthenticatedLayout :title="editing ? 'Editar ticket' : 'Nuevo ticket'">
+        <PageHeader
+            eyebrow="Soporte"
+            :title="editing ? `Editar ticket #${ticket.id}` : 'Crear ticket'"
+            description="Describe el problema, el impacto y cualquier paso para reproducirlo."
+            :back-href="editing ? route('tickets.show', ticket.id) : route('tickets.index')"
+        />
+        <form class="space-y-6" @submit.prevent="submit">
+            <section class="panel p-5 sm:p-6">
+                <h3 class="font-bold">Contexto</h3>
+                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                    <FormField label="Cliente" required :error="form.errors.client_id">
+                        <select
+                            v-model="form.client_id"
+                            :disabled="user.role !== 'admin'"
+                            :class="input"
+                        >
+                            <option v-for="c in clients" :key="c.id" :value="c.id">
+                                {{ c.company_name }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField label="Web afectada" :error="form.errors.website_id">
+                        <select v-model="form.website_id" :class="input">
+                            <option value="">Solicitud general</option>
+                            <option v-for="w in filteredWebsites" :key="w.id" :value="w.id">
+                                {{ w.name }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField
+                        label="Título"
+                        required
+                        :error="form.errors.title"
+                        class="md:col-span-2"
+                    >
+                        <input
+                            v-model="form.title"
+                            :class="input"
+                            maxlength="180"
+                            placeholder="Resumen concreto del problema"
+                        />
+                    </FormField>
+                    <FormField
+                        label="Descripción"
+                        required
+                        :error="form.errors.description"
+                        class="md:col-span-2"
+                        hint="No incluyas contraseñas ni credenciales."
+                    >
+                        <textarea
+                            v-model="form.description"
+                            rows="6"
+                            :class="input"
+                            maxlength="5000"
+                            placeholder="Qué ocurre, desde cuándo y qué impacto tiene…"
+                        />
+                    </FormField>
+                </div>
+            </section>
+            <section class="panel p-5 sm:p-6">
+                <h3 class="font-bold">Gestión</h3>
+                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                    <FormField label="Prioridad" required :error="form.errors.priority">
+                        <select v-model="form.priority" :class="input">
+                            <option value="low">Baja</option>
+                            <option value="medium">Media</option>
+                            <option value="high">Alta</option>
+                            <option value="urgent">Urgente</option>
+                        </select>
+                    </FormField>
+                    <FormField label="Fecha objetivo" :error="form.errors.due_date">
+                        <input v-model="form.due_date" type="date" :class="input" />
+                    </FormField>
+                    <FormField
+                        v-if="user.role === 'admin'"
+                        label="Técnico asignado"
+                        :error="form.errors.assigned_to"
+                    >
+                        <select v-model="form.assigned_to" :class="input">
+                            <option value="">Sin asignar</option>
+                            <option v-for="t in technicians" :key="t.id" :value="t.id">
+                                {{ t.name }}
+                            </option>
+                        </select>
+                    </FormField>
+                    <FormField
+                        v-if="user.role !== 'client'"
+                        label="Estado"
+                        required
+                        :error="form.errors.status"
+                    >
+                        <select v-model="form.status" :class="input">
+                            <option value="open">Abierto</option>
+                            <option value="in_progress">En curso</option>
+                            <option value="waiting_client">Espera cliente</option>
+                            <option value="resolved">Resuelto</option>
+                            <option value="closed">Cerrado</option>
+                        </select>
+                    </FormField>
+                </div>
+            </section>
+            <div class="flex justify-end gap-3">
+                <Link
+                    :href="editing ? route('tickets.show', ticket.id) : route('tickets.index')"
+                    class="btn-secondary"
+                >
+                    Cancelar
+                </Link>
+                <button class="btn-primary" :disabled="form.processing">
+                    {{ form.processing ? 'Guardando…' : 'Guardar ticket' }}
+                </button>
+            </div>
+        </form>
+    </AuthenticatedLayout>
+</template>
