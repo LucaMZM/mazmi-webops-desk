@@ -2,6 +2,8 @@
 
 Panel de gestión para centralizar mantenimiento web, soporte técnico, vencimientos y reportes mensuales de clientes.
 
+> **Estado:** versión funcional de demostración. El proyecto está orientado a evaluación técnica y todavía no está preparado para uso en producción.
+
 [![CI](https://github.com/LucaMZM/mazmi-webops-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/LucaMZM/mazmi-webops-desk/actions/workflows/ci.yml)
 ![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
 ![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
@@ -150,9 +152,9 @@ Mazmi WebOps Desk reúne esa información en un panel único y evita mezclar tar
 
 - PHP 8.3 o superior.
 - Composer 2.
-- Node.js 20 o superior.
+- Node.js 20.19 o superior, o Node.js 22.12 o superior.
 - npm.
-- MySQL 8 recomendado.
+- MySQL 8 o SQLite para la demo.
 
 ### 1. Clonar el repositorio
 
@@ -165,7 +167,7 @@ cd mazmi-webops-desk
 
 ```bash
 composer install
-npm install
+npm ci
 ```
 
 ### 3. Preparar el entorno
@@ -260,7 +262,9 @@ Los datos cargados por los seeders son ficticios.
 Comandos principales:
 
 ```bash
-php artisan test
+composer test
+composer format:check
+npm run format:check
 npm run build
 ```
 
@@ -269,6 +273,8 @@ El workflow de GitHub Actions ejecuta:
 - instalación de dependencias PHP y Node;
 - configuración de entorno con SQLite;
 - migraciones y seeders;
+- formato PHP con Laravel Pint;
+- formato frontend con Prettier;
 - tests de Laravel;
 - build del frontend con Vite.
 
