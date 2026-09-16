@@ -62,21 +62,21 @@ const months = [
                             Añadir web →
                         </Link>
                     </div>
-                    <div v-if="client.websites.length" class="grid gap-3 p-4 sm:grid-cols-2">
+                    <div v-if="client.websites.length" class="divide-y divide-slate-100">
                         <Link
                             v-for="web in client.websites"
                             :key="web.id"
                             :href="route('websites.show', web.id)"
-                            class="rounded-lg border border-slate-200 p-4 transition hover:border-indigo-300 hover:bg-slate-50/60"
+                            class="flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-slate-50"
                         >
-                            <div class="flex justify-between gap-2">
+                            <div class="min-w-0">
                                 <p class="font-bold">{{ web.name }}</p>
-                                <StatusBadge :status="web.status" />
+                                <p class="mt-1 truncate text-xs text-slate-500">{{ web.url }}</p>
+                                <p class="mt-1 text-xs font-semibold text-indigo-600">
+                                    {{ web.technology }} · {{ web.maintenance_plan }}
+                                </p>
                             </div>
-                            <p class="mt-2 truncate text-xs text-slate-500">{{ web.url }}</p>
-                            <p class="mt-3 text-xs font-semibold text-indigo-600">
-                                {{ web.technology }} · {{ web.maintenance_plan }}
-                            </p>
+                            <StatusBadge :status="web.status" />
                         </Link>
                     </div>
                     <EmptyState v-else title="Sin webs asociadas" />
@@ -148,12 +148,15 @@ const months = [
                 </section>
                 <section class="panel p-5">
                     <h2 class="section-heading">Reportes mensuales</h2>
-                    <div v-if="client.reports.length" class="mt-4 space-y-2">
+                    <div
+                        v-if="client.reports.length"
+                        class="mt-4 divide-y divide-slate-100 border-y border-slate-100"
+                    >
                         <Link
                             v-for="report in client.reports"
                             :key="report.id"
                             :href="route('reports.show', report.id)"
-                            class="flex items-center justify-between rounded-lg bg-slate-50 p-3 text-sm font-semibold transition hover:bg-slate-100"
+                            class="flex items-center justify-between py-3 text-sm font-semibold transition hover:text-indigo-600"
                         >
                             <span>{{ months[report.month] }} {{ report.year }}</span>
                             <StatusBadge :status="report.general_status" />

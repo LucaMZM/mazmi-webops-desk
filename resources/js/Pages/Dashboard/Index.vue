@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import StatCard from '@/Components/UI/StatCard.vue';
 import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import PriorityBadge from '@/Components/UI/PriorityBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
@@ -32,6 +31,12 @@ const statusColors = {
     closed: 'bg-slate-400',
 };
 const maxTech = computed(() => Math.max(...props.websitesByTechnology.map((x) => x.total), 1));
+const totalTickets = computed(() =>
+    Math.max(
+        Object.values(props.ticketsByStatus).reduce((total, value) => total + value, 0),
+        1,
+    ),
+);
 const technologyLabel = {
     'PHP custom': 'PHP a medida',
     'Static HTML': 'HTML estático',
@@ -66,92 +71,63 @@ const date = (value) =>
                 Solicitar soporte
             </Link>
         </PageHeader>
-        <section class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-            <StatCard
-                label="Clientes activos"
-                :value="metrics.active_clients"
-                icon="building"
-                tone="indigo"
-            />
-            <StatCard label="Webs gestionadas" :value="metrics.websites" icon="globe" tone="blue" />
-            <StatCard
-                label="Tickets abiertos"
-                :value="metrics.open_tickets"
-                :hint="`${metrics.urgent_tickets} urgentes`"
-                icon="tickets"
-                :tone="metrics.urgent_tickets ? 'red' : 'emerald'"
-            />
-            <StatCard
-                label="Tareas pendientes"
-                :value="metrics.pending_tasks"
-                :hint="`${metrics.overdue_tasks} atrasadas`"
-                icon="maintenance"
-                :tone="metrics.overdue_tasks ? 'amber' : 'emerald'"
-            />
-        </section>
-        <section class="panel mt-4 p-4 sm:p-5">
-            <div class="mb-4 flex items-center justify-between gap-3">
-                <div>
-                    <h2 class="section-heading">Alertas operativas</h2>
-                    <p class="mt-1 text-xs text-slate-500">
-                        Vencimientos y trabajo que requieren seguimiento.
-                    </p>
+        <section
+            class="grid overflow-hidden rounded-md bg-[#07111f] text-white sm:grid-cols-2 xl:grid-cols-[1.25fr_repeat(4,1fr)]"
+            aria-label="Resumen operativo"
+        >
+            <div class="border-b border-white/10 p-4 sm:col-span-2 xl:col-span-1 xl:border-b-0">
+                <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+                    Estado operativo
+                </p>
+                <div class="mt-3 flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-emerald-400" />
+                    <p class="text-sm font-bold">Seguimiento activo</p>
                 </div>
-                <span
-                    class="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-500"
-                >
-                    Próximos 30 días
-                </span>
+                <p class="mt-1 text-xs text-slate-400">
+                    {{ metrics.active_clients }} clientes bajo gestión
+                </p>
             </div>
-            <div class="grid grid-cols-2 gap-3 xl:grid-cols-4">
-                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
-                    <span
-                        class="grid h-9 w-9 place-items-center rounded-lg bg-amber-50 text-amber-700"
-                    >
-                        <AppIcon name="globe" :size="17" />
-                    </span>
-                    <div>
-                        <p class="text-xl font-extrabold text-slate-950">
-                            {{ metrics.expiring_domains }}
-                        </p>
-                        <p class="text-xs font-medium text-slate-500">Dominios próximos</p>
-                    </div>
-                </div>
-                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
-                    <span
-                        class="grid h-9 w-9 place-items-center rounded-lg bg-amber-50 text-amber-700"
-                    >
-                        <AppIcon name="server" :size="17" />
-                    </span>
-                    <div>
-                        <p class="text-xl font-extrabold text-slate-950">
-                            {{ metrics.expiring_hosting }}
-                        </p>
-                        <p class="text-xs font-medium text-slate-500">Hostings próximos</p>
-                    </div>
-                </div>
-                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
-                    <span class="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-700">
-                        <AppIcon name="alert" :size="17" />
-                    </span>
-                    <div>
-                        <p class="text-xl font-extrabold text-slate-950">
-                            {{ metrics.urgent_tickets }}
-                        </p>
-                        <p class="text-xs font-medium text-slate-500">Tickets urgentes</p>
-                    </div>
-                </div>
-                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
-                    <span class="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-700">
-                        <AppIcon name="clock" :size="17" />
-                    </span>
-                    <div>
-                        <p class="text-xl font-extrabold text-slate-950">
-                            {{ metrics.overdue_tasks }}
-                        </p>
-                        <p class="text-xs font-medium text-slate-500">Tareas atrasadas</p>
-                    </div>
-                </div>
+            <div class="border-b border-white/10 p-4 sm:border-r xl:border-b-0">
+                <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    Inventario
+                </p>
+                <p class="mt-2 text-2xl font-black">{{ metrics.websites }}</p>
+                <p class="text-xs text-slate-400">Webs gestionadas</p>
+            </div>
+            <div class="border-b border-white/10 p-4 xl:border-b-0 xl:border-r">
+                <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    Soporte
+                </p>
+                <p class="mt-2 text-2xl font-black">{{ metrics.open_tickets }}</p>
+                <p
+                    :class="metrics.urgent_tickets ? 'text-red-300' : 'text-slate-400'"
+                    class="text-xs"
+                >
+                    {{ metrics.urgent_tickets }} urgentes
+                </p>
+            </div>
+            <div class="border-b border-white/10 p-4 sm:border-r xl:border-b-0">
+                <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    Mantenimiento
+                </p>
+                <p class="mt-2 text-2xl font-black">{{ metrics.pending_tasks }}</p>
+                <p
+                    :class="metrics.overdue_tasks ? 'text-amber-300' : 'text-slate-400'"
+                    class="text-xs"
+                >
+                    {{ metrics.overdue_tasks }} atrasadas
+                </p>
+            </div>
+            <div class="p-4">
+                <p class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">
+                    Vencimientos · 30 días
+                </p>
+                <p class="mt-2 text-2xl font-black">
+                    {{ metrics.expiring_domains + metrics.expiring_hosting }}
+                </p>
+                <p class="text-xs text-slate-400">
+                    {{ metrics.expiring_domains }} dominios · {{ metrics.expiring_hosting }} hosting
+                </p>
             </div>
         </section>
         <section class="mt-6 grid gap-6 xl:grid-cols-5">
@@ -197,10 +173,12 @@ const date = (value) =>
                 </div>
                 <EmptyState v-else title="Sin tickets recientes" />
             </div>
-            <div class="panel p-5 xl:col-span-2">
-                <h3 class="font-bold text-slate-950">Tickets por estado</h3>
-                <p class="mb-5 text-xs text-slate-500">Distribución de la carga actual</p>
-                <div class="space-y-4">
+            <div class="panel xl:col-span-2">
+                <div class="border-b border-slate-200 px-5 py-4">
+                    <h3 class="font-bold text-slate-950">Tickets por estado</h3>
+                    <p class="text-xs text-slate-500">Distribución de la carga actual</p>
+                </div>
+                <div class="space-y-4 p-5">
                     <div v-for="(label, key) in statusLabels" :key="key">
                         <div class="mb-1.5 flex justify-between text-xs font-semibold">
                             <span>{{ label }}</span>
@@ -212,15 +190,7 @@ const date = (value) =>
                                 :style="{
                                     width: `${Math.min(
                                         100,
-                                        ((ticketsByStatus[key] || 0) /
-                                            Math.max(
-                                                Object.values(ticketsByStatus).reduce(
-                                                    (a, b) => a + b,
-                                                    0,
-                                                ),
-                                                1,
-                                            )) *
-                                            100,
+                                        ((ticketsByStatus[key] || 0) / totalTickets) * 100,
                                     )}%`,
                                 }"
                             />
@@ -248,7 +218,7 @@ const date = (value) =>
                         class="flex items-center gap-4 px-5 py-4 hover:bg-slate-50"
                     >
                         <div
-                            class="w-14 rounded-xl bg-slate-100 px-2 py-2 text-center text-xs font-bold text-slate-600"
+                            class="w-14 border-l-2 border-indigo-500 bg-slate-50 px-2 py-2 text-center text-xs font-bold text-slate-600"
                         >
                             {{ date(task.scheduled_at) }}
                         </div>
@@ -267,10 +237,12 @@ const date = (value) =>
                     description="No hay tareas programadas próximamente."
                 />
             </div>
-            <div class="panel p-5">
-                <h3 class="font-bold text-slate-950">Tecnologías gestionadas</h3>
-                <p class="mb-5 text-xs text-slate-500">Composición del inventario técnico</p>
-                <div v-if="websitesByTechnology.length" class="space-y-4">
+            <div class="panel">
+                <div class="border-b border-slate-200 px-5 py-4">
+                    <h3 class="font-bold text-slate-950">Tecnologías gestionadas</h3>
+                    <p class="text-xs text-slate-500">Composición del inventario técnico</p>
+                </div>
+                <div v-if="websitesByTechnology.length" class="space-y-4 p-5">
                     <div
                         v-for="item in websitesByTechnology"
                         :key="item.technology"

@@ -3,7 +3,9 @@ import { Link } from '@inertiajs/vue3';
 defineProps({ eyebrow: String, title: String, description: String, backHref: String });
 </script>
 <template>
-    <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <div
+        class="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-end"
+    >
         <div>
             <Link
                 v-if="backHref"

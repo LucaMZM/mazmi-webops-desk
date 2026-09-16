@@ -44,7 +44,10 @@ const input =
             description="Describe el problema, el impacto y cualquier paso para reproducirlo."
             :back-href="editing ? route('tickets.show', ticket.id) : route('tickets.index')"
         />
-        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+        <form
+            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            @submit.prevent="submit"
+        >
             <section class="form-section">
                 <h2 class="section-heading">Contexto</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-2">

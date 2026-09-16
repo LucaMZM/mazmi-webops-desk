@@ -109,7 +109,7 @@ const date = (v) =>
                         </div>
                     </dl>
                 </section>
-                <section class="rounded-xl bg-slate-950 p-5 text-white">
+                <section class="rounded-md bg-slate-950 p-5 text-white">
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-300">
                         Buena práctica
                     </p>

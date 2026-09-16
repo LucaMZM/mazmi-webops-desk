@@ -42,6 +42,8 @@ Incluye autenticación, roles, CRUDs, validaciones, filtros persistentes, seeder
 <a id="capturas"></a>
 ## Capturas
 
+Interfaz real con los datos ficticios incluidos en los seeders de demostración.
+
 ### Dashboard
 
 ![Dashboard de Mazmi WebOps Desk](docs/screenshots/dashboard.png)

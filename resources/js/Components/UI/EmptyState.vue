@@ -9,7 +9,7 @@ defineProps({
 <template>
     <div class="px-5 py-12 text-center">
         <div
-            class="mx-auto grid h-11 w-11 place-items-center rounded-xl border border-slate-200 bg-slate-50 text-slate-400"
+            class="mx-auto grid h-11 w-11 place-items-center rounded-md border border-slate-200 bg-slate-50 text-slate-400"
         >
             <AppIcon name="inbox" class="h-5 w-5" />
         </div>

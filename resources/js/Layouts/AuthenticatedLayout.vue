@@ -48,13 +48,13 @@ onUnmounted(() => {
         />
         <aside
             :class="[
-                'app-navigation fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/[0.06] bg-[#07111f] text-white shadow-2xl shadow-slate-950/20 transition-transform duration-200 lg:translate-x-0 lg:shadow-none',
+                'app-navigation fixed inset-y-0 left-0 z-50 flex w-60 flex-col border-r border-white/[0.06] bg-[#07111f] text-white shadow-2xl shadow-slate-950/20 transition-transform duration-200 lg:translate-x-0 lg:shadow-none',
                 mobileOpen ? 'translate-x-0' : '-translate-x-full',
             ]"
         >
             <div class="flex h-16 items-center gap-3 border-b border-white/[0.07] px-5">
                 <div
-                    class="grid h-9 w-9 place-items-center rounded-lg bg-indigo-500 text-sm font-extrabold shadow-lg shadow-indigo-950/30"
+                    class="grid h-9 w-9 place-items-center rounded-md bg-indigo-500 text-sm font-extrabold"
                 >
                     M
                 </div>
@@ -64,7 +64,7 @@ onUnmounted(() => {
                 </div>
                 <button
                     type="button"
-                    class="grid h-9 w-9 place-items-center rounded-lg text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+                    class="grid h-9 w-9 place-items-center rounded-md text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
                     aria-label="Cerrar menú"
                     @click="mobileOpen = false"
                 >
@@ -82,19 +82,19 @@ onUnmounted(() => {
                     :key="item.route"
                     :href="route(item.route)"
                     :class="[
-                        'group flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-sm font-medium transition',
+                        'group flex min-h-10 items-center gap-3 rounded-md border px-3 py-2 text-sm font-medium transition',
                         route().current(item.match)
-                            ? 'border-white/10 bg-white/[0.09] text-white shadow-sm'
+                            ? 'border-indigo-500 bg-indigo-600 text-white'
                             : 'border-transparent text-slate-400 hover:bg-white/[0.05] hover:text-slate-100',
                     ]"
                     @click="mobileOpen = false"
                 >
                     <span
                         :class="[
-                            'grid h-8 w-8 place-items-center rounded-md transition',
+                            'grid h-7 w-7 place-items-center transition',
                             route().current(item.match)
-                                ? 'bg-indigo-500 text-white'
-                                : 'bg-white/[0.05] text-slate-400 group-hover:text-slate-200',
+                                ? 'text-white'
+                                : 'text-slate-400 group-hover:text-slate-200',
                         ]"
                     >
                         <AppIcon :name="item.icon" :size="17" />
@@ -105,10 +105,10 @@ onUnmounted(() => {
             <div class="border-t border-white/[0.07] p-3">
                 <Link
                     :href="route('profile.edit')"
-                    class="flex items-center gap-3 rounded-lg p-3 transition hover:bg-white/[0.06]"
+                    class="flex items-center gap-3 rounded-md p-3 transition hover:bg-white/[0.06]"
                 >
                     <div
-                        class="grid h-9 w-9 place-items-center rounded-lg bg-indigo-100 text-sm font-bold text-indigo-800"
+                        class="grid h-9 w-9 place-items-center rounded-md bg-indigo-100 text-sm font-bold text-indigo-800"
                     >
                         {{ user.name.charAt(0) }}
                     </div>
@@ -121,7 +121,7 @@ onUnmounted(() => {
                     :href="route('logout')"
                     method="post"
                     as="button"
-                    class="mt-1 flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-xs font-medium text-slate-400 transition hover:bg-white/[0.06] hover:text-white"
+                    class="mt-1 flex min-h-10 w-full items-center gap-2 rounded-md px-3 text-left text-xs font-medium text-slate-400 transition hover:bg-white/[0.06] hover:text-white"
                 >
                     <AppIcon name="logout" :size="16" />
                     Cerrar sesión
@@ -129,14 +129,14 @@ onUnmounted(() => {
             </div>
         </aside>
 
-        <div class="app-content lg:pl-64">
+        <div class="app-content lg:pl-60">
             <header
-                class="app-header sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200/80 bg-white/80 px-4 shadow-[0_1px_0_rgba(15,23,42,0.02)] backdrop-blur-xl sm:px-6 lg:px-8"
+                class="app-header sticky top-0 z-30 flex h-14 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur-xl sm:px-6 lg:px-8"
             >
                 <div class="flex items-center gap-3">
                     <button
                         type="button"
-                        class="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+                        class="grid h-10 w-10 place-items-center rounded-md border border-slate-200 bg-white text-slate-700 lg:hidden"
                         @click="mobileOpen = true"
                         aria-label="Abrir menú"
                     >
@@ -154,7 +154,7 @@ onUnmounted(() => {
                         <p class="text-xs text-slate-500">{{ roleLabel[user.role] }}</p>
                     </div>
                     <div
-                        class="grid h-9 w-9 place-items-center rounded-lg border border-indigo-100 bg-indigo-50 text-sm font-bold text-indigo-700"
+                        class="grid h-9 w-9 place-items-center rounded-md border border-indigo-100 bg-indigo-50 text-sm font-bold text-indigo-700"
                     >
                         {{ user.name.charAt(0) }}
                     </div>

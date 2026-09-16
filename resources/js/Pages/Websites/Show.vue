@@ -154,14 +154,16 @@ const categoryLabel = (value) =>
                 </section>
                 <section class="panel p-5">
                     <h2 class="section-heading">Vencimientos</h2>
-                    <div class="mt-4 grid grid-cols-2 gap-3">
-                        <div class="surface-muted p-3">
+                    <div
+                        class="mt-4 grid grid-cols-2 divide-x divide-slate-200 border-y border-slate-200"
+                    >
+                        <div class="py-3 pr-3">
                             <p class="text-xs text-slate-400">Dominio</p>
                             <p class="mt-1 text-sm font-bold">
                                 {{ fullDate(website.domain_expires_at) }}
                             </p>
                         </div>
-                        <div class="surface-muted p-3">
+                        <div class="py-3 pl-3">
                             <p class="text-xs text-slate-400">Hosting</p>
                             <p class="mt-1 text-sm font-bold">
                                 {{ fullDate(website.hosting_expires_at) }}

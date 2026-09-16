@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/vue3';
     <div class="flex min-h-screen flex-col items-center justify-center bg-slate-950 px-4 py-10">
         <Link href="/" class="mb-7 flex items-center gap-3 text-white">
             <div
-                class="grid h-11 w-11 place-items-center rounded-xl bg-indigo-500 text-lg font-black"
+                class="grid h-11 w-11 place-items-center rounded-md bg-indigo-500 text-lg font-black"
             >
                 M
             </div>
@@ -17,7 +17,7 @@ import { Link } from '@inertiajs/vue3';
             </div>
         </Link>
         <div
-            class="w-full max-w-md overflow-hidden rounded-xl border border-white/10 bg-white p-6 shadow-xl shadow-black/20 sm:p-8"
+            class="w-full max-w-md overflow-hidden rounded-md border border-white/10 bg-white p-6 sm:p-8"
         >
             <slot />
         </div>

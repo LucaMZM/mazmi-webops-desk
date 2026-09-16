@@ -131,45 +131,64 @@ const categoryLabel = {
             </select>
             <button class="btn-secondary">Filtrar</button>
         </form>
-        <div v-if="tasks.data.length" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div v-if="tasks.data.length" class="table-shell">
+            <div
+                class="table-head hidden grid-cols-[140px_minmax(260px,1.4fr)_minmax(190px,1fr)_auto_110px] items-center gap-5 px-5 py-3 xl:grid"
+            >
+                <span>Planificación</span>
+                <span>Tarea / web</span>
+                <span>Responsable</span>
+                <span>Estado</span>
+                <span class="text-right">Acción</span>
+            </div>
             <article
                 v-for="task in tasks.data"
                 :key="task.id"
-                class="panel flex flex-col p-5 transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+                class="grid gap-4 border-b border-slate-100 p-5 transition last:border-b-0 hover:bg-slate-50/70 xl:grid-cols-[140px_minmax(260px,1.4fr)_minmax(190px,1fr)_auto_110px] xl:items-center"
             >
-                <div class="flex items-start justify-between gap-3">
-                    <div
-                        :class="[
-                            'rounded-lg px-3 py-2 text-center text-xs font-bold',
+                <div>
+                    <p
+                        :class="
                             overdue(task)
-                                ? 'bg-red-50 text-red-700'
-                                : 'bg-slate-100 text-slate-600',
-                        ]"
+                                ? 'font-bold text-red-700'
+                                : 'font-semibold text-slate-700'
+                        "
+                        class="text-xs"
                     >
                         {{ overdue(task) ? 'Atrasada' : date(task.scheduled_at) }}
-                    </div>
-                    <div class="flex gap-2">
-                        <PriorityBadge :priority="task.priority" />
-                        <StatusBadge :status="task.status" />
-                    </div>
+                    </p>
+                    <p v-if="overdue(task)" class="mt-1 text-[11px] text-red-500">
+                        {{ date(task.scheduled_at) }}
+                    </p>
                 </div>
-                <Link
-                    :href="route('maintenance.show', task.id)"
-                    class="mt-4 text-base font-bold text-slate-950 hover:text-indigo-600"
-                >
-                    {{ task.title }}
-                </Link>
-                <p class="mt-1 text-sm text-slate-500">
-                    {{ task.website.name }} · {{ task.website.client.company_name }}
-                </p>
-                <p class="mt-4 line-clamp-2 flex-1 text-sm leading-6 text-slate-600">
-                    {{ task.description || 'Sin descripción adicional.' }}
-                </p>
-                <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                    <span class="text-xs font-semibold text-slate-500">
-                        {{ categoryLabel[task.category] }} ·
+                <div class="min-w-0">
+                    <Link
+                        :href="route('maintenance.show', task.id)"
+                        class="font-bold text-slate-950 hover:text-indigo-600"
+                    >
+                        {{ task.title }}
+                    </Link>
+                    <p class="mt-1 truncate text-xs text-slate-500">
+                        {{ task.website.name }} · {{ task.website.client.company_name }}
+                    </p>
+                    <p
+                        v-if="task.description"
+                        class="mt-2 line-clamp-1 text-xs text-slate-500 xl:hidden"
+                    >
+                        {{ task.description }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-xs font-semibold text-slate-700">
                         {{ task.assignee?.name || 'Sin asignar' }}
-                    </span>
+                    </p>
+                    <p class="mt-1 text-xs text-slate-500">{{ categoryLabel[task.category] }}</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-2">
+                    <PriorityBadge :priority="task.priority" />
+                    <StatusBadge :status="task.status" />
+                </div>
+                <div class="xl:text-right">
                     <button
                         v-if="canEdit(task) && task.status !== 'completed'"
                         type="button"
@@ -179,6 +198,13 @@ const categoryLabel = {
                         Completar
                         <AppIcon name="check" :size="14" />
                     </button>
+                    <Link
+                        v-else
+                        :href="route('maintenance.show', task.id)"
+                        class="text-xs font-bold text-indigo-600"
+                    >
+                        Ver detalle →
+                    </Link>
                 </div>
             </article>
         </div>
@@ -196,6 +222,6 @@ const categoryLabel = {
                 </Link>
             </EmptyState>
         </div>
-        <div class="panel mt-5"><Pagination :links="tasks.links" /></div>
+        <div class="mt-5 border-t border-slate-200"><Pagination :links="tasks.links" /></div>
     </AuthenticatedLayout>
 </template>

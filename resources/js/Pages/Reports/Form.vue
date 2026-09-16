@@ -43,7 +43,10 @@ const months = [
             description="Prepara un resumen claro que pueda compartirse directamente con el cliente."
             :back-href="route('reports.index')"
         />
-        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+        <form
+            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            @submit.prevent="submit"
+        >
             <section class="form-section">
                 <h2 class="section-heading">Periodo y cliente</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-3">

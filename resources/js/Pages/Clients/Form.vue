@@ -31,7 +31,10 @@ const input =
             description="Información comercial y de contacto. No incluyas credenciales ni datos sensibles."
             :back-href="editing ? route('clients.show', client.id) : route('clients.index')"
         />
-        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+        <form
+            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            @submit.prevent="submit"
+        >
             <section class="form-section">
                 <h2 class="section-heading">Datos de empresa</h2>
                 <p class="mb-5 text-sm text-slate-500">Identificación y persona de contacto.</p>

@@ -41,7 +41,7 @@ const printReport = () => window.print();
             />
         </PageHeader>
         <article
-            class="mx-auto max-w-5xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
+            class="mx-auto max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
         >
             <header class="bg-slate-950 p-6 text-white sm:p-10">
                 <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -70,27 +70,29 @@ const printReport = () => window.print();
                         {{ report.summary }}
                     </p>
                 </section>
-                <section class="my-9 grid gap-3 sm:grid-cols-3">
-                    <div class="rounded-lg border border-indigo-100 bg-indigo-50/70 p-5">
-                        <p class="text-3xl font-black text-indigo-700">
+                <section
+                    class="my-9 grid divide-y divide-slate-200 border-y border-slate-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0"
+                >
+                    <div class="p-5">
+                        <p class="text-3xl font-black text-slate-950">
                             {{ report.completed_tasks_count }}
                         </p>
-                        <p class="mt-1 text-sm font-semibold text-indigo-900">Tareas completadas</p>
+                        <p class="mt-1 text-sm font-semibold text-slate-600">Tareas completadas</p>
                     </div>
-                    <div class="rounded-lg border border-emerald-100 bg-emerald-50/70 p-5">
+                    <div class="p-5">
                         <p class="text-3xl font-black text-emerald-700">
                             {{ report.resolved_tickets_count }}
                         </p>
-                        <p class="mt-1 text-sm font-semibold text-emerald-900">Tickets resueltos</p>
+                        <p class="mt-1 text-sm font-semibold text-slate-600">Tickets resueltos</p>
                     </div>
-                    <div class="rounded-lg border border-amber-100 bg-amber-50/70 p-5">
+                    <div class="p-5">
                         <p class="text-3xl font-black text-amber-700">
                             {{ report.pending_tickets_count }}
                         </p>
-                        <p class="mt-1 text-sm font-semibold text-amber-900">Tickets pendientes</p>
+                        <p class="mt-1 text-sm font-semibold text-slate-600">Tickets pendientes</p>
                     </div>
                 </section>
-                <section class="rounded-lg border border-slate-200 bg-slate-50/80 p-6">
+                <section class="border-l-2 border-indigo-500 bg-slate-50 p-6">
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
                         Recomendaciones
                     </p>

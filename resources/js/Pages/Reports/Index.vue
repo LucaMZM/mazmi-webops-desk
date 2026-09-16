@@ -69,62 +69,59 @@ const apply = () =>
             </select>
             <button class="btn-secondary">Filtrar</button>
         </form>
-        <div v-if="reports.data.length" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <div v-if="reports.data.length" class="table-shell">
+            <div
+                class="table-head hidden grid-cols-[150px_minmax(220px,1.3fr)_130px_260px_32px] items-center gap-5 px-5 py-3 lg:grid"
+            >
+                <span>Periodo</span>
+                <span>Cliente / resumen</span>
+                <span>Estado</span>
+                <span>Actividad</span>
+                <span></span>
+            </div>
             <Link
                 v-for="report in reports.data"
                 :key="report.id"
                 :href="route('reports.show', report.id)"
-                class="panel group overflow-hidden transition hover:-translate-y-0.5 hover:shadow-md"
+                class="group grid gap-4 border-b border-slate-100 p-5 transition last:border-b-0 hover:bg-slate-50/70 lg:grid-cols-[150px_minmax(220px,1.3fr)_130px_260px_32px] lg:items-center"
             >
-                <div
-                    class="h-1.5"
-                    :class="
-                        report.general_status === 'good'
-                            ? 'bg-emerald-500'
-                            : report.general_status === 'attention'
-                              ? 'bg-amber-500'
-                              : 'bg-red-500'
-                    "
-                />
-                <div class="p-5">
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <p class="text-xs font-bold uppercase tracking-widest text-slate-400">
-                                {{ months[report.month] }} {{ report.year }}
-                            </p>
-                            <h3 class="mt-2 text-lg font-bold group-hover:text-indigo-600">
-                                {{ report.client.company_name }}
-                            </h3>
-                        </div>
-                        <StatusBadge :status="report.general_status" />
-                    </div>
-                    <p class="mt-4 line-clamp-2 text-sm leading-6 text-slate-600">
+                <div>
+                    <p class="text-sm font-bold text-slate-900">
+                        {{ months[report.month] }}
+                    </p>
+                    <p class="text-xs text-slate-500">{{ report.year }}</p>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="font-bold text-slate-950 group-hover:text-indigo-600">
+                        {{ report.client.company_name }}
+                    </h3>
+                    <p class="mt-1 line-clamp-1 text-xs leading-5 text-slate-500">
                         {{ report.summary }}
                     </p>
-                    <div
-                        class="mt-5 grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 text-center"
-                    >
-                        <div>
-                            <p class="text-xl font-black">{{ report.completed_tasks_count }}</p>
-                            <p class="text-[10px] uppercase text-slate-400">Tareas</p>
-                        </div>
-                        <div>
-                            <p class="text-xl font-black text-emerald-600">
-                                {{ report.resolved_tickets_count }}
-                            </p>
-                            <p class="text-[10px] uppercase text-slate-400">Resueltos</p>
-                        </div>
-                        <div>
-                            <p
-                                class="text-xl font-black"
-                                :class="report.pending_tickets_count ? 'text-amber-600' : ''"
-                            >
-                                {{ report.pending_tickets_count }}
-                            </p>
-                            <p class="text-[10px] uppercase text-slate-400">Pendientes</p>
-                        </div>
+                </div>
+                <div><StatusBadge :status="report.general_status" /></div>
+                <div class="grid grid-cols-3 divide-x divide-slate-200 text-center">
+                    <div class="px-2">
+                        <p class="text-base font-black">{{ report.completed_tasks_count }}</p>
+                        <p class="text-[9px] uppercase text-slate-400">Tareas</p>
+                    </div>
+                    <div class="px-2">
+                        <p class="text-base font-black text-emerald-600">
+                            {{ report.resolved_tickets_count }}
+                        </p>
+                        <p class="text-[9px] uppercase text-slate-400">Resueltos</p>
+                    </div>
+                    <div class="px-2">
+                        <p
+                            :class="report.pending_tickets_count ? 'text-amber-600' : ''"
+                            class="text-base font-black"
+                        >
+                            {{ report.pending_tickets_count }}
+                        </p>
+                        <p class="text-[9px] uppercase text-slate-400">Pendientes</p>
                     </div>
                 </div>
+                <span class="text-right text-indigo-600">→</span>
             </Link>
         </div>
         <div v-else class="panel">
@@ -141,6 +138,6 @@ const apply = () =>
                 </Link>
             </EmptyState>
         </div>
-        <div class="panel mt-5"><Pagination :links="reports.links" /></div>
+        <div class="mt-5 border-t border-slate-200"><Pagination :links="reports.links" /></div>
     </AuthenticatedLayout>
 </template>
