@@ -46,10 +46,11 @@ const colors = {
 <template>
     <span
         :class="[
-            'inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset',
+            'inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2 py-1 text-[11px] font-bold ring-1 ring-inset',
             colors[status] || colors.unknown,
         ]"
     >
+        <span class="h-1.5 w-1.5 rounded-full bg-current opacity-70" />
         {{ labels[status] || status }}
     </span>
 </template>

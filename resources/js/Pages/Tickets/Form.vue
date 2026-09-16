@@ -33,7 +33,7 @@ const submit = () =>
         ? form.put(route('tickets.update', props.ticket.id))
         : form.post(route('tickets.store'));
 const input =
-    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+    'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
 </script>
 <template>
     <Head :title="editing ? 'Editar ticket' : 'Nuevo ticket'" />
@@ -44,9 +44,9 @@ const input =
             description="Describe el problema, el impacto y cualquier paso para reproducirlo."
             :back-href="editing ? route('tickets.show', ticket.id) : route('tickets.index')"
         />
-        <form class="space-y-6" @submit.prevent="submit">
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Contexto</h3>
+        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+            <section class="form-section">
+                <h2 class="section-heading">Contexto</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-2">
                     <FormField label="Cliente" required :error="form.errors.client_id">
                         <select
@@ -97,8 +97,8 @@ const input =
                     </FormField>
                 </div>
             </section>
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Gestión</h3>
+            <section class="form-section">
+                <h2 class="section-heading">Gestión</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-2">
                     <FormField label="Prioridad" required :error="form.errors.priority">
                         <select v-model="form.priority" :class="input">
@@ -139,7 +139,7 @@ const input =
                     </FormField>
                 </div>
             </section>
-            <div class="flex justify-end gap-3">
+            <div class="form-footer">
                 <Link
                     :href="editing ? route('tickets.show', ticket.id) : route('tickets.index')"
                     class="btn-secondary"

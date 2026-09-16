@@ -12,6 +12,22 @@ const fullDate = (v) =>
     v
         ? new Intl.DateTimeFormat('es-ES', { dateStyle: 'medium' }).format(new Date(v))
         : 'No indicado';
+const technologyLabel = (value) =>
+    ({ 'PHP custom': 'PHP a medida', 'Static HTML': 'HTML estático', Other: 'Otro' })[value] ||
+    value;
+const planLabel = (value) =>
+    ({ basic: 'Básico', standard: 'Estándar', premium: 'Premium', none: 'Sin plan' })[value] ||
+    value;
+const categoryLabel = (value) =>
+    ({
+        backups: 'Copias de seguridad',
+        updates: 'Actualizaciones',
+        security: 'Seguridad',
+        performance: 'Rendimiento',
+        content: 'Contenido',
+        seo: 'SEO',
+        other: 'Otro',
+    })[value] || value;
 </script>
 <template>
     <Head :title="website.name" />
@@ -42,7 +58,7 @@ const fullDate = (v) =>
             <div class="space-y-6">
                 <section class="panel">
                     <div class="flex justify-between border-b border-slate-100 p-5">
-                        <h3 class="font-bold">Tickets asociados</h3>
+                        <h2 class="section-heading">Tickets asociados</h2>
                         <Link
                             v-if="user.role !== 'technician'"
                             :href="route('tickets.create', { website_id: website.id })"
@@ -76,7 +92,7 @@ const fullDate = (v) =>
                 </section>
                 <section class="panel">
                     <div class="flex justify-between border-b border-slate-100 p-5">
-                        <h3 class="font-bold">Mantenimiento</h3>
+                        <h2 class="section-heading">Mantenimiento</h2>
                         <Link
                             v-if="user.role === 'admin'"
                             :href="route('maintenance.create', { website_id: website.id })"
@@ -95,7 +111,8 @@ const fullDate = (v) =>
                             <div class="flex-1">
                                 <p class="text-sm font-semibold">{{ task.title }}</p>
                                 <p class="text-xs text-slate-500">
-                                    {{ task.category }} · {{ fullDate(task.scheduled_at) }}
+                                    {{ categoryLabel(task.category) }} ·
+                                    {{ fullDate(task.scheduled_at) }}
                                 </p>
                             </div>
                             <StatusBadge :status="task.status" />
@@ -107,44 +124,44 @@ const fullDate = (v) =>
             <aside class="space-y-6">
                 <section class="panel p-5">
                     <div class="flex justify-between">
-                        <h3 class="font-bold">Estado técnico</h3>
+                        <h2 class="section-heading">Estado técnico</h2>
                         <StatusBadge :status="website.status" />
                     </div>
                     <dl class="mt-5 grid gap-4 text-sm">
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">URL</dt>
+                            <dt class="meta-label">URL</dt>
                             <dd class="mt-1 break-all font-medium text-indigo-600">
                                 {{ website.url }}
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Tecnología</dt>
-                            <dd class="mt-1">{{ website.technology }}</dd>
+                            <dt class="meta-label">Tecnología</dt>
+                            <dd class="mt-1">{{ technologyLabel(website.technology) }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Plan</dt>
-                            <dd class="mt-1 capitalize">{{ website.maintenance_plan }}</dd>
+                            <dt class="meta-label">Plan</dt>
+                            <dd class="mt-1">{{ planLabel(website.maintenance_plan) }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Hosting</dt>
+                            <dt class="meta-label">Hosting</dt>
                             <dd class="mt-1">{{ website.hosting_provider || 'No indicado' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">SSL</dt>
+                            <dt class="meta-label">SSL</dt>
                             <dd class="mt-1"><StatusBadge :status="website.ssl_status" /></dd>
                         </div>
                     </dl>
                 </section>
                 <section class="panel p-5">
-                    <h3 class="font-bold">Vencimientos</h3>
+                    <h2 class="section-heading">Vencimientos</h2>
                     <div class="mt-4 grid grid-cols-2 gap-3">
-                        <div class="rounded-xl bg-slate-50 p-3">
+                        <div class="surface-muted p-3">
                             <p class="text-xs text-slate-400">Dominio</p>
                             <p class="mt-1 text-sm font-bold">
                                 {{ fullDate(website.domain_expires_at) }}
                             </p>
                         </div>
-                        <div class="rounded-xl bg-slate-50 p-3">
+                        <div class="surface-muted p-3">
                             <p class="text-xs text-slate-400">Hosting</p>
                             <p class="mt-1 text-sm font-bold">
                                 {{ fullDate(website.hosting_expires_at) }}
@@ -153,7 +170,7 @@ const fullDate = (v) =>
                     </div>
                 </section>
                 <section class="panel p-5">
-                    <h3 class="font-bold">Notas</h3>
+                    <h2 class="section-heading">Notas</h2>
                     <p class="mt-3 whitespace-pre-line text-sm text-slate-600">
                         {{ website.notes || 'Sin notas técnicas.' }}
                     </p>

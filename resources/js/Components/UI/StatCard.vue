@@ -1,4 +1,6 @@
 <script setup>
+import AppIcon from '@/Components/UI/AppIcon.vue';
+
 defineProps({
     label: String,
     value: [String, Number],
@@ -15,20 +17,23 @@ const tones = {
 };
 </script>
 <template>
-    <div class="panel p-5">
+    <div
+        class="panel p-4 transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:p-5"
+    >
         <div class="flex items-start justify-between">
             <div>
-                <p class="text-sm font-medium text-slate-500">{{ label }}</p>
-                <p class="mt-2 text-3xl font-black tracking-tight text-slate-900">{{ value }}</p>
-                <p v-if="hint" class="mt-1 text-xs text-slate-400">{{ hint }}</p>
+                <p class="text-xs font-semibold leading-5 text-slate-500 sm:text-[13px]">
+                    {{ label }}
+                </p>
+                <p
+                    class="mt-1.5 text-2xl font-extrabold tracking-tight text-slate-950 sm:mt-2 sm:text-3xl"
+                >
+                    {{ value }}
+                </p>
+                <p v-if="hint" class="mt-1 text-xs font-medium text-slate-400">{{ hint }}</p>
             </div>
-            <div
-                :class="[
-                    'grid h-11 w-11 place-items-center rounded-xl text-lg font-bold',
-                    tones[tone],
-                ]"
-            >
-                {{ icon }}
+            <div :class="['grid h-9 w-9 shrink-0 place-items-center rounded-lg', tones[tone]]">
+                <AppIcon :name="icon" :size="18" />
             </div>
         </div>
     </div>

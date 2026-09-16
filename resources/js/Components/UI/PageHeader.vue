@@ -8,20 +8,25 @@ defineProps({ eyebrow: String, title: String, description: String, backHref: Str
             <Link
                 v-if="backHref"
                 :href="backHref"
-                class="mb-3 inline-flex text-sm font-semibold text-indigo-600 hover:text-indigo-800"
+                class="mb-3 inline-flex min-h-9 items-center text-sm font-semibold text-indigo-600 hover:text-indigo-800"
             >
                 ← Volver
             </Link>
-            <p v-if="eyebrow" class="text-xs font-bold uppercase tracking-widest text-indigo-600">
+            <p
+                v-if="eyebrow"
+                class="text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-600"
+            >
                 {{ eyebrow }}
             </p>
-            <h2 class="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+            <h1
+                class="mt-1 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-[1.75rem]"
+            >
                 {{ title }}
-            </h2>
-            <p v-if="description" class="mt-2 max-w-2xl text-sm text-slate-500">
+            </h1>
+            <p v-if="description" class="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500">
                 {{ description }}
             </p>
         </div>
-        <div class="flex flex-wrap gap-2"><slot /></div>
+        <div class="flex flex-wrap items-center gap-2"><slot /></div>
     </div>
 </template>

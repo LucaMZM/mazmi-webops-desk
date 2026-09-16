@@ -32,14 +32,16 @@ const printReport = () => window.print();
             :description="report.client.company_name"
             :back-href="route('reports.index')"
         >
-            <button class="btn-secondary print:hidden" @click="printReport">Imprimir</button>
+            <button type="button" class="btn-secondary print:hidden" @click="printReport">
+                Imprimir reporte
+            </button>
             <ConfirmDeleteModal
                 v-if="user.role === 'admin'"
                 :url="route('reports.destroy', report.id)"
             />
         </PageHeader>
         <article
-            class="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm"
+            class="mx-auto max-w-5xl overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_1px_3px_rgba(15,23,42,0.08)]"
         >
             <header class="bg-slate-950 p-6 text-white sm:p-10">
                 <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
@@ -47,7 +49,7 @@ const printReport = () => window.print();
                         <p class="text-xs font-bold uppercase tracking-[.25em] text-indigo-300">
                             Mazmi WebOps Desk · Reporte mensual
                         </p>
-                        <h2 class="mt-4 text-3xl font-black sm:text-4xl">
+                        <h2 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">
                             {{ report.client.company_name }}
                         </h2>
                         <p class="mt-2 text-slate-300">
@@ -62,31 +64,33 @@ const printReport = () => window.print();
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
                         Resumen ejecutivo
                     </p>
-                    <p class="mt-4 whitespace-pre-line text-lg leading-8 text-slate-700">
+                    <p
+                        class="mt-4 whitespace-pre-line text-base leading-7 text-slate-700 sm:text-lg sm:leading-8"
+                    >
                         {{ report.summary }}
                     </p>
                 </section>
                 <section class="my-9 grid gap-3 sm:grid-cols-3">
-                    <div class="rounded-2xl bg-indigo-50 p-5">
+                    <div class="rounded-lg border border-indigo-100 bg-indigo-50/70 p-5">
                         <p class="text-3xl font-black text-indigo-700">
                             {{ report.completed_tasks_count }}
                         </p>
                         <p class="mt-1 text-sm font-semibold text-indigo-900">Tareas completadas</p>
                     </div>
-                    <div class="rounded-2xl bg-emerald-50 p-5">
+                    <div class="rounded-lg border border-emerald-100 bg-emerald-50/70 p-5">
                         <p class="text-3xl font-black text-emerald-700">
                             {{ report.resolved_tickets_count }}
                         </p>
                         <p class="mt-1 text-sm font-semibold text-emerald-900">Tickets resueltos</p>
                     </div>
-                    <div class="rounded-2xl bg-amber-50 p-5">
+                    <div class="rounded-lg border border-amber-100 bg-amber-50/70 p-5">
                         <p class="text-3xl font-black text-amber-700">
                             {{ report.pending_tickets_count }}
                         </p>
                         <p class="mt-1 text-sm font-semibold text-amber-900">Tickets pendientes</p>
                     </div>
                 </section>
-                <section class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+                <section class="rounded-lg border border-slate-200 bg-slate-50/80 p-6">
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
                         Recomendaciones
                     </p>
@@ -97,8 +101,8 @@ const printReport = () => window.print();
                 <footer
                     class="mt-10 flex flex-col justify-between gap-3 border-t border-slate-100 pt-6 text-xs text-slate-400 sm:flex-row"
                 >
-                    <span>Generado desde Mazmi WebOps Desk</span>
-                    <span>Panel de mantenimiento web · Luca Mazmishvili</span>
+                    <span>Emitido desde Mazmi WebOps Desk</span>
+                    <span>Panel de mantenimiento web</span>
                 </footer>
             </div>
         </article>

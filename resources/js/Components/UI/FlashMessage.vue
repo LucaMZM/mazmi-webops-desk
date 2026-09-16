@@ -18,6 +18,13 @@ watch(message, () => (visible.value = true));
         ]"
     >
         <span>{{ message }}</span>
-        <button @click="visible = false" class="px-2 text-lg">×</button>
+        <button
+            type="button"
+            class="grid h-9 w-9 place-items-center rounded-lg text-lg hover:bg-black/5"
+            aria-label="Cerrar mensaje"
+            @click="visible = false"
+        >
+            ×
+        </button>
     </div>
 </template>

@@ -37,7 +37,9 @@ const submit = () => {
             <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
                 Acceso al panel
             </p>
-            <h1 class="mt-2 text-2xl font-black text-slate-950">Bienvenido de nuevo</h1>
+            <h1 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
+                Bienvenido de nuevo
+            </h1>
             <p class="mt-2 text-sm text-slate-500">
                 Usa un usuario demo para explorar los distintos permisos.
             </p>
@@ -93,17 +95,19 @@ const submit = () => {
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div
+                class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-end"
+            >
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-slate-600 underline hover:text-slate-900"
                 >
                     ¿Olvidaste la contraseña?
                 </Link>
 
                 <PrimaryButton
-                    class="ms-4"
+                    class="sm:ms-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

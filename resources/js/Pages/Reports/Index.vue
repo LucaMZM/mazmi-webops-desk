@@ -6,6 +6,7 @@ import PageHeader from '@/Components/UI/PageHeader.vue';
 import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 const props = defineProps({ reports: Object, filters: Object, clients: Array });
 const user = usePage().props.auth.user;
 const months = [
@@ -41,34 +42,26 @@ const apply = () =>
             description="Resumen ejecutivo de actividad, incidencias y recomendaciones para cada cliente."
         >
             <Link v-if="user.role === 'admin'" :href="route('reports.create')" class="btn-primary">
-                + Crear reporte
+                <AppIcon name="plus" :size="17" />
+                Crear reporte
             </Link>
         </PageHeader>
         <form
-            class="panel mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[repeat(4,1fr)_auto]"
+            class="filter-bar md:grid-cols-2 xl:grid-cols-[repeat(4,1fr)_auto]"
             @submit.prevent="apply"
         >
-            <select
-                v-if="clients.length"
-                v-model="form.client_id"
-                class="rounded-xl border-slate-300 text-sm"
-            >
+            <select v-if="clients.length" v-model="form.client_id" class="rounded-lg text-sm">
                 <option value="">Todos los clientes</option>
                 <option v-for="c in clients" :key="c.id" :value="c.id">
                     {{ c.company_name }}
                 </option>
             </select>
-            <select v-model="form.month" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.month" class="rounded-lg text-sm">
                 <option value="">Todos los meses</option>
                 <option v-for="i in 12" :key="i" :value="i">{{ months[i] }}</option>
             </select>
-            <input
-                v-model="form.year"
-                type="number"
-                class="rounded-xl border-slate-300 text-sm"
-                placeholder="Año"
-            />
-            <select v-model="form.general_status" class="rounded-xl border-slate-300 text-sm">
+            <input v-model="form.year" type="number" class="rounded-lg text-sm" placeholder="Año" />
+            <select v-model="form.general_status" class="rounded-lg text-sm">
                 <option value="">Todos los estados</option>
                 <option value="good">Correcto</option>
                 <option value="attention">Atención</option>

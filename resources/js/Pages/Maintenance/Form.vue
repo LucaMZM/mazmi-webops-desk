@@ -24,7 +24,16 @@ const submit = () =>
         ? form.put(route('maintenance.update', props.task.id))
         : form.post(route('maintenance.store'));
 const input =
-    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+    'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+const categoryLabel = {
+    backups: 'Copias de seguridad',
+    updates: 'Actualizaciones',
+    security: 'Seguridad',
+    performance: 'Rendimiento',
+    content: 'Contenido',
+    seo: 'SEO',
+    other: 'Otro',
+};
 </script>
 <template>
     <Head :title="editing ? 'Editar tarea' : 'Nueva tarea'" />
@@ -35,9 +44,9 @@ const input =
             description="Define un trabajo concreto, asignable y verificable."
             :back-href="editing ? route('maintenance.show', task.id) : route('maintenance.index')"
         />
-        <form class="space-y-6" @submit.prevent="submit">
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Trabajo a realizar</h3>
+        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+            <section class="form-section">
+                <h2 class="section-heading">Trabajo a realizar</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-2">
                     <FormField label="Web" required :error="form.errors.website_id">
                         <select
@@ -65,7 +74,7 @@ const input =
                                 :key="x"
                                 :value="x"
                             >
-                                {{ x }}
+                                {{ categoryLabel[x] }}
                             </option>
                         </select>
                     </FormField>
@@ -91,8 +100,8 @@ const input =
                     </FormField>
                 </div>
             </section>
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Planificación</h3>
+            <section class="form-section">
+                <h2 class="section-heading">Planificación</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-2">
                     <FormField label="Técnico" :error="form.errors.assigned_to">
                         <select
@@ -126,7 +135,7 @@ const input =
                     </FormField>
                 </div>
             </section>
-            <div class="flex justify-end gap-3">
+            <div class="form-footer">
                 <Link
                     :href="
                         editing ? route('maintenance.show', task.id) : route('maintenance.index')

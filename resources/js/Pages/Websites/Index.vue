@@ -6,6 +6,7 @@ import PageHeader from '@/Components/UI/PageHeader.vue';
 import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 const props = defineProps({ websites: Object, filters: Object });
 const user = usePage().props.auth.user;
 const form = reactive({
@@ -18,6 +19,12 @@ const form = reactive({
 const apply = () =>
     router.get(route('websites.index'), form, { preserveState: true, replace: true });
 const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 86400000) : null);
+const technologyLabel = {
+    'PHP custom': 'PHP a medida',
+    'Static HTML': 'HTML estático',
+    Other: 'Otro',
+};
+const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium', none: 'Sin plan' };
 </script>
 <template>
     <Head title="Webs" />
@@ -28,19 +35,20 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
             description="Estado técnico, planes de mantenimiento y próximos vencimientos."
         >
             <Link v-if="user.role === 'admin'" :href="route('websites.create')" class="btn-primary">
-                + Añadir web
+                <AppIcon name="plus" :size="17" />
+                Añadir web
             </Link>
         </PageHeader>
         <form
-            class="panel mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,170px)_auto]"
+            class="filter-bar md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,160px)_auto]"
             @submit.prevent="apply"
         >
             <input
                 v-model="form.search"
-                class="rounded-xl border-slate-300 text-sm"
+                class="rounded-lg text-sm"
                 placeholder="Buscar nombre o URL…"
             />
-            <select v-model="form.technology" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.technology" class="rounded-lg text-sm">
                 <option value="">Tecnología</option>
                 <option
                     v-for="x in [
@@ -54,23 +62,25 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
                     :key="x"
                     :value="x"
                 >
-                    {{ x }}
+                    {{ technologyLabel[x] || x }}
                 </option>
             </select>
-            <select v-model="form.status" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.status" class="rounded-lg text-sm">
                 <option value="">Estado</option>
                 <option value="stable">Estable</option>
                 <option value="review">Revisión</option>
                 <option value="incident">Incidencia</option>
                 <option value="critical">Crítico</option>
             </select>
-            <select v-model="form.maintenance_plan" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.maintenance_plan" class="rounded-lg text-sm">
                 <option value="">Plan</option>
                 <option v-for="x in ['basic', 'standard', 'premium', 'none']" :key="x" :value="x">
-                    {{ x }}
+                    {{ planLabel[x] }}
                 </option>
             </select>
-            <label class="flex items-center gap-2 rounded-xl border border-slate-300 px-3 text-sm">
+            <label
+                class="flex min-h-10 items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-700 shadow-sm"
+            >
                 <input
                     v-model="form.expiring"
                     true-value="1"
@@ -83,7 +93,7 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
             <button class="btn-secondary">Filtrar</button>
         </form>
         <div class="table-shell">
-            <div class="hidden overflow-x-auto lg:block">
+            <div class="hidden overflow-x-auto xl:block">
                 <table class="w-full">
                     <thead class="table-head">
                         <tr>
@@ -96,7 +106,11 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <tr v-for="web in websites.data" :key="web.id" class="hover:bg-slate-50">
+                        <tr
+                            v-for="web in websites.data"
+                            :key="web.id"
+                            class="transition hover:bg-slate-50/80"
+                        >
                             <td class="table-cell">
                                 <p class="font-bold">{{ web.name }}</p>
                                 <p class="max-w-xs truncate text-xs text-slate-500">
@@ -105,12 +119,12 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
                             </td>
                             <td class="table-cell">
                                 <span
-                                    class="rounded-lg bg-slate-100 px-2.5 py-1 text-xs font-semibold"
+                                    class="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-600"
                                 >
-                                    {{ web.technology }}
+                                    {{ technologyLabel[web.technology] || web.technology }}
                                 </span>
                             </td>
-                            <td class="table-cell capitalize">{{ web.maintenance_plan }}</td>
+                            <td class="table-cell">{{ planLabel[web.maintenance_plan] }}</td>
                             <td class="table-cell text-xs">
                                 <p
                                     :class="
@@ -147,21 +161,21 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
                             <td class="table-cell text-right">
                                 <Link
                                     :href="route('websites.show', web.id)"
-                                    class="font-semibold text-indigo-600"
+                                    class="inline-flex min-h-9 items-center font-semibold text-indigo-600 hover:text-indigo-800"
                                 >
-                                    Ver →
+                                    Abrir →
                                 </Link>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="grid gap-3 p-3 sm:grid-cols-2 lg:hidden">
+            <div class="grid gap-3 p-3 sm:grid-cols-2 xl:hidden">
                 <Link
                     v-for="web in websites.data"
                     :key="web.id"
                     :href="route('websites.show', web.id)"
-                    class="rounded-xl border border-slate-200 p-4"
+                    class="rounded-lg border border-slate-200 p-4 transition hover:border-slate-300 hover:bg-slate-50/60"
                 >
                     <div class="flex justify-between gap-2">
                         <p class="font-bold">{{ web.name }}</p>
@@ -170,17 +184,23 @@ const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 8640000
                     <p class="mt-1 text-xs text-slate-500">{{ web.client.company_name }}</p>
                     <div class="mt-4 flex items-center justify-between text-xs">
                         <span class="rounded-lg bg-slate-100 px-2 py-1 font-semibold">
-                            {{ web.technology }}
+                            {{ technologyLabel[web.technology] || web.technology }}
                         </span>
-                        <span class="capitalize text-slate-500">{{ web.maintenance_plan }}</span>
+                        <span class="text-slate-500">{{ planLabel[web.maintenance_plan] }}</span>
                     </div>
                     <p
                         v-if="
-                            days(web.domain_expires_at) <= 30 || days(web.hosting_expires_at) <= 30
+                            (days(web.domain_expires_at) !== null &&
+                                days(web.domain_expires_at) <= 30) ||
+                            (days(web.hosting_expires_at) !== null &&
+                                days(web.hosting_expires_at) <= 30)
                         "
                         class="mt-3 text-xs font-bold text-amber-700"
                     >
-                        ⚠ Hay un vencimiento próximo
+                        <span class="inline-flex items-center gap-1.5">
+                            <AppIcon name="alert" :size="14" />
+                            Hay un vencimiento próximo
+                        </span>
                     </p>
                 </Link>
             </div>

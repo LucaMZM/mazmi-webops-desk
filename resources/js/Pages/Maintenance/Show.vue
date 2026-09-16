@@ -18,6 +18,16 @@ const date = (v) =>
               new Date(v),
           )
         : 'No indicada';
+const categoryLabel = (value) =>
+    ({
+        backups: 'Copias de seguridad',
+        updates: 'Actualizaciones',
+        security: 'Seguridad',
+        performance: 'Rendimiento',
+        content: 'Contenido',
+        seo: 'SEO',
+        other: 'Otro',
+    })[value] || value;
 </script>
 <template>
     <Head :title="task.title" />
@@ -30,10 +40,11 @@ const date = (v) =>
         >
             <button
                 v-if="canEdit && task.status !== 'completed'"
+                type="button"
                 class="btn-secondary"
                 @click="router.patch(route('maintenance.complete', task.id))"
             >
-                Marcar completada ✓
+                Marcar como completada
             </button>
             <Link v-if="canEdit" :href="route('maintenance.edit', task.id)" class="btn-primary">
                 Editar
@@ -49,24 +60,22 @@ const date = (v) =>
                     <PriorityBadge :priority="task.priority" />
                     <StatusBadge :status="task.status" />
                     <span
-                        class="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-bold capitalize text-slate-600"
+                        class="rounded-md bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600"
                     >
-                        {{ task.category }}
+                        {{ categoryLabel(task.category) }}
                     </span>
                 </div>
-                <h3 class="mt-8 text-xs font-bold uppercase tracking-widest text-slate-400">
-                    Descripción y checklist
-                </h3>
+                <h2 class="meta-label mt-8">Descripción y checklist</h2>
                 <p class="mt-3 whitespace-pre-line leading-7 text-slate-700">
                     {{ task.description || 'No se ha añadido una descripción detallada.' }}
                 </p>
             </article>
             <aside class="space-y-5">
                 <section class="panel p-5">
-                    <h3 class="font-bold">Planificación</h3>
+                    <h2 class="section-heading">Planificación</h2>
                     <dl class="mt-5 space-y-4 text-sm">
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Web</dt>
+                            <dt class="meta-label">Web</dt>
                             <dd class="mt-1">
                                 <Link
                                     :href="route('websites.show', task.website.id)"
@@ -77,15 +86,15 @@ const date = (v) =>
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Técnico</dt>
+                            <dt class="meta-label">Técnico</dt>
                             <dd class="mt-1">{{ task.assignee?.name || 'Sin asignar' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Programada</dt>
+                            <dt class="meta-label">Programada</dt>
                             <dd class="mt-1">{{ date(task.scheduled_at) }}</dd>
                         </div>
                         <div v-if="task.completed_at">
-                            <dt class="text-xs font-bold uppercase text-slate-400">Completada</dt>
+                            <dt class="meta-label">Completada</dt>
                             <dd class="mt-1 text-emerald-700">{{ date(task.completed_at) }}</dd>
                         </div>
                     </dl>

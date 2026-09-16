@@ -9,7 +9,7 @@ const colors = {
 };
 </script>
 <template>
-    <span :class="['inline-flex rounded-full px-2.5 py-1 text-xs font-bold', colors[priority]]">
+    <span :class="['inline-flex rounded-md px-2 py-1 text-[11px] font-bold', colors[priority]]">
         {{ labels[priority] }}
     </span>
 </template>

@@ -6,6 +6,8 @@ import StatCard from '@/Components/UI/StatCard.vue';
 import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import PriorityBadge from '@/Components/UI/PriorityBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
+import PageHeader from '@/Components/UI/PageHeader.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 
 const props = defineProps({
     metrics: Object,
@@ -30,6 +32,11 @@ const statusColors = {
     closed: 'bg-slate-400',
 };
 const maxTech = computed(() => Math.max(...props.websitesByTechnology.map((x) => x.total), 1));
+const technologyLabel = {
+    'PHP custom': 'PHP a medida',
+    'Static HTML': 'HTML estático',
+    Other: 'Otro',
+};
 const date = (value) =>
     value
         ? new Intl.DateTimeFormat('es-ES', { day: '2-digit', month: 'short' }).format(
@@ -41,80 +48,111 @@ const date = (value) =>
 <template>
     <Head title="Dashboard" />
     <AuthenticatedLayout title="Dashboard">
-        <div class="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-                <p class="text-sm font-medium text-slate-500">
-                    Vista operativa ·
-                    {{
-                        new Intl.DateTimeFormat('es-ES', {
-                            weekday: 'long',
-                            day: 'numeric',
-                            month: 'long',
-                        }).format(new Date())
-                    }}
-                </p>
-                <h2 class="mt-1 text-2xl font-black text-slate-950">
-                    Hola, {{ user.name.split(' ')[0] }}
-                </h2>
-                <p class="mt-1 text-sm text-slate-500">
-                    Estas son las prioridades que requieren atención.
-                </p>
-            </div>
-            <Link v-if="user.role !== 'client'" :href="route('tickets.create')" class="btn-primary">
-                + Nuevo ticket
+        <PageHeader
+            eyebrow="Vista operativa"
+            :title="`Hola, ${user.name.split(' ')[0]}`"
+            :description="`Prioridades del ${new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())}.`"
+        >
+            <Link v-if="user.role === 'admin'" :href="route('tickets.create')" class="btn-primary">
+                <AppIcon name="plus" :size="17" />
+                Nuevo ticket
             </Link>
-            <Link v-else :href="route('tickets.create')" class="btn-primary">
+            <Link
+                v-else-if="user.role === 'client'"
+                :href="route('tickets.create')"
+                class="btn-primary"
+            >
+                <AppIcon name="plus" :size="17" />
                 Solicitar soporte
             </Link>
-        </div>
-        <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        </PageHeader>
+        <section class="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
             <StatCard
                 label="Clientes activos"
                 :value="metrics.active_clients"
-                icon="C"
+                icon="building"
                 tone="indigo"
             />
-            <StatCard label="Webs gestionadas" :value="metrics.websites" icon="W" tone="blue" />
+            <StatCard label="Webs gestionadas" :value="metrics.websites" icon="globe" tone="blue" />
             <StatCard
                 label="Tickets abiertos"
                 :value="metrics.open_tickets"
                 :hint="`${metrics.urgent_tickets} urgentes`"
-                icon="!"
+                icon="tickets"
                 :tone="metrics.urgent_tickets ? 'red' : 'emerald'"
             />
             <StatCard
                 label="Tareas pendientes"
                 :value="metrics.pending_tasks"
                 :hint="`${metrics.overdue_tasks} atrasadas`"
-                icon="✓"
+                icon="maintenance"
                 :tone="metrics.overdue_tasks ? 'amber' : 'emerald'"
             />
-            <StatCard
-                label="Dominios próximos"
-                :value="metrics.expiring_domains"
-                hint="Vencen en 30 días"
-                icon="D"
-                :tone="metrics.expiring_domains ? 'amber' : 'emerald'"
-            />
-            <StatCard
-                label="Hostings próximos"
-                :value="metrics.expiring_hosting"
-                hint="Vencen en 30 días"
-                icon="H"
-                :tone="metrics.expiring_hosting ? 'amber' : 'emerald'"
-            />
-            <StatCard
-                label="Tickets urgentes"
-                :value="metrics.urgent_tickets"
-                icon="↑"
-                :tone="metrics.urgent_tickets ? 'red' : 'emerald'"
-            />
-            <StatCard
-                label="Tareas atrasadas"
-                :value="metrics.overdue_tasks"
-                icon="⌁"
-                :tone="metrics.overdue_tasks ? 'red' : 'emerald'"
-            />
+        </section>
+        <section class="panel mt-4 p-4 sm:p-5">
+            <div class="mb-4 flex items-center justify-between gap-3">
+                <div>
+                    <h2 class="section-heading">Alertas operativas</h2>
+                    <p class="mt-1 text-xs text-slate-500">
+                        Vencimientos y trabajo que requieren seguimiento.
+                    </p>
+                </div>
+                <span
+                    class="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-500"
+                >
+                    Próximos 30 días
+                </span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 xl:grid-cols-4">
+                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
+                    <span
+                        class="grid h-9 w-9 place-items-center rounded-lg bg-amber-50 text-amber-700"
+                    >
+                        <AppIcon name="globe" :size="17" />
+                    </span>
+                    <div>
+                        <p class="text-xl font-extrabold text-slate-950">
+                            {{ metrics.expiring_domains }}
+                        </p>
+                        <p class="text-xs font-medium text-slate-500">Dominios próximos</p>
+                    </div>
+                </div>
+                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
+                    <span
+                        class="grid h-9 w-9 place-items-center rounded-lg bg-amber-50 text-amber-700"
+                    >
+                        <AppIcon name="server" :size="17" />
+                    </span>
+                    <div>
+                        <p class="text-xl font-extrabold text-slate-950">
+                            {{ metrics.expiring_hosting }}
+                        </p>
+                        <p class="text-xs font-medium text-slate-500">Hostings próximos</p>
+                    </div>
+                </div>
+                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
+                    <span class="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-700">
+                        <AppIcon name="alert" :size="17" />
+                    </span>
+                    <div>
+                        <p class="text-xl font-extrabold text-slate-950">
+                            {{ metrics.urgent_tickets }}
+                        </p>
+                        <p class="text-xs font-medium text-slate-500">Tickets urgentes</p>
+                    </div>
+                </div>
+                <div class="surface-muted flex items-center gap-2.5 p-3 sm:gap-3 sm:p-3.5">
+                    <span class="grid h-9 w-9 place-items-center rounded-lg bg-red-50 text-red-700">
+                        <AppIcon name="clock" :size="17" />
+                    </span>
+                    <div>
+                        <p class="text-xl font-extrabold text-slate-950">
+                            {{ metrics.overdue_tasks }}
+                        </p>
+                        <p class="text-xs font-medium text-slate-500">Tareas atrasadas</p>
+                    </div>
+                </div>
+            </div>
         </section>
         <section class="mt-6 grid gap-6 xl:grid-cols-5">
             <div class="panel xl:col-span-3">
@@ -239,7 +277,7 @@ const date = (value) =>
                         class="grid grid-cols-[100px_1fr_30px] items-center gap-3"
                     >
                         <span class="truncate text-xs font-semibold text-slate-600">
-                            {{ item.technology }}
+                            {{ technologyLabel[item.technology] || item.technology }}
                         </span>
                         <div class="h-3 overflow-hidden rounded-full bg-slate-100">
                             <div

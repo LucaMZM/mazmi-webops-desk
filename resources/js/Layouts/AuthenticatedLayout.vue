@@ -1,7 +1,8 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import FlashMessage from '@/Components/UI/FlashMessage.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 
 defineProps({ title: { type: String, default: '' } });
 const page = usePage();
@@ -9,63 +10,105 @@ const mobileOpen = ref(false);
 const user = computed(() => page.props.auth.user);
 const roleLabel = { admin: 'Administrador', technician: 'Técnico', client: 'Cliente' };
 const nav = [
-    { label: 'Dashboard', route: 'dashboard', match: 'dashboard', icon: '▦' },
-    { label: 'Clientes', route: 'clients.index', match: 'clients.*', icon: '◉' },
-    { label: 'Webs', route: 'websites.index', match: 'websites.*', icon: '◇' },
-    { label: 'Tickets', route: 'tickets.index', match: 'tickets.*', icon: '◫' },
-    { label: 'Mantenimiento', route: 'maintenance.index', match: 'maintenance.*', icon: '✓' },
-    { label: 'Reportes', route: 'reports.index', match: 'reports.*', icon: '≡' },
+    { label: 'Dashboard', route: 'dashboard', match: 'dashboard', icon: 'dashboard' },
+    { label: 'Clientes', route: 'clients.index', match: 'clients.*', icon: 'clients' },
+    { label: 'Webs', route: 'websites.index', match: 'websites.*', icon: 'websites' },
+    { label: 'Tickets', route: 'tickets.index', match: 'tickets.*', icon: 'tickets' },
+    {
+        label: 'Mantenimiento',
+        route: 'maintenance.index',
+        match: 'maintenance.*',
+        icon: 'maintenance',
+    },
+    { label: 'Reportes', route: 'reports.index', match: 'reports.*', icon: 'reports' },
 ];
+const closeOnEscape = (event) => {
+    if (event.key === 'Escape') {
+        mobileOpen.value = false;
+    }
+};
+
+watch(mobileOpen, (open) => {
+    document.body.style.overflow = open ? 'hidden' : '';
+});
+
+onMounted(() => window.addEventListener('keydown', closeOnEscape));
+onUnmounted(() => {
+    window.removeEventListener('keydown', closeOnEscape);
+    document.body.style.overflow = '';
+});
 </script>
 
 <template>
-    <div class="min-h-screen overflow-x-hidden bg-slate-50">
+    <div class="min-h-screen overflow-x-hidden bg-[#f6f8fb]">
         <div
             v-if="mobileOpen"
-            class="fixed inset-0 z-40 bg-slate-950/40 lg:hidden"
+            class="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-[2px] lg:hidden"
             @click="mobileOpen = false"
         />
         <aside
             :class="[
-                'fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-slate-950 text-white transition-transform lg:translate-x-0',
+                'app-navigation fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-white/[0.06] bg-[#07111f] text-white shadow-2xl shadow-slate-950/20 transition-transform duration-200 lg:translate-x-0 lg:shadow-none',
                 mobileOpen ? 'translate-x-0' : '-translate-x-full',
             ]"
         >
-            <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
-                <div class="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500 font-black">
+            <div class="flex h-16 items-center gap-3 border-b border-white/[0.07] px-5">
+                <div
+                    class="grid h-9 w-9 place-items-center rounded-lg bg-indigo-500 text-sm font-extrabold shadow-lg shadow-indigo-950/30"
+                >
                     M
                 </div>
-                <div>
-                    <p class="font-bold">Mazmi WebOps Desk</p>
-                    <p class="text-xs text-slate-400">Área de operaciones web</p>
+                <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-bold tracking-tight">Mazmi WebOps Desk</p>
+                    <p class="text-[11px] text-slate-400">Operaciones web</p>
                 </div>
+                <button
+                    type="button"
+                    class="grid h-9 w-9 place-items-center rounded-lg text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+                    aria-label="Cerrar menú"
+                    @click="mobileOpen = false"
+                >
+                    <AppIcon name="close" :size="18" />
+                </button>
             </div>
-            <nav class="flex-1 space-y-1 p-4">
+            <nav class="flex-1 space-y-1.5 px-3 py-5" aria-label="Navegación principal">
+                <p
+                    class="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500"
+                >
+                    Espacio de trabajo
+                </p>
                 <Link
                     v-for="item in nav"
                     :key="item.route"
                     :href="route(item.route)"
                     :class="[
-                        'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition',
+                        'group flex min-h-11 items-center gap-3 rounded-lg border px-3 py-2.5 text-sm font-medium transition',
                         route().current(item.match)
-                            ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-950/30'
-                            : 'text-slate-300 hover:bg-white/10 hover:text-white',
+                            ? 'border-white/10 bg-white/[0.09] text-white shadow-sm'
+                            : 'border-transparent text-slate-400 hover:bg-white/[0.05] hover:text-slate-100',
                     ]"
                     @click="mobileOpen = false"
                 >
-                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-white/10 text-base">
-                        {{ item.icon }}
+                    <span
+                        :class="[
+                            'grid h-8 w-8 place-items-center rounded-md transition',
+                            route().current(item.match)
+                                ? 'bg-indigo-500 text-white'
+                                : 'bg-white/[0.05] text-slate-400 group-hover:text-slate-200',
+                        ]"
+                    >
+                        <AppIcon :name="item.icon" :size="17" />
                     </span>
                     {{ item.label }}
                 </Link>
             </nav>
-            <div class="border-t border-white/10 p-4">
+            <div class="border-t border-white/[0.07] p-3">
                 <Link
                     :href="route('profile.edit')"
-                    class="flex items-center gap-3 rounded-xl p-3 hover:bg-white/10"
+                    class="flex items-center gap-3 rounded-lg p-3 transition hover:bg-white/[0.06]"
                 >
                     <div
-                        class="grid h-10 w-10 place-items-center rounded-full bg-indigo-200 font-bold text-indigo-900"
+                        class="grid h-9 w-9 place-items-center rounded-lg bg-indigo-100 text-sm font-bold text-indigo-800"
                     >
                         {{ user.name.charAt(0) }}
                     </div>
@@ -78,58 +121,51 @@ const nav = [
                     :href="route('logout')"
                     method="post"
                     as="button"
-                    class="mt-2 w-full rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-400 hover:bg-white/10 hover:text-white"
+                    class="mt-1 flex min-h-10 w-full items-center gap-2 rounded-lg px-3 text-left text-xs font-medium text-slate-400 transition hover:bg-white/[0.06] hover:text-white"
                 >
+                    <AppIcon name="logout" :size="16" />
                     Cerrar sesión
                 </Link>
             </div>
         </aside>
 
-        <div class="lg:pl-72">
+        <div class="app-content lg:pl-64">
             <header
-                class="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/90 px-4 backdrop-blur sm:px-8 lg:h-20"
+                class="app-header sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200/80 bg-white/80 px-4 shadow-[0_1px_0_rgba(15,23,42,0.02)] backdrop-blur-xl sm:px-6 lg:px-8"
             >
                 <div class="flex items-center gap-3">
                     <button
-                        class="grid h-10 w-10 place-items-center rounded-xl border border-slate-200 lg:hidden"
+                        type="button"
+                        class="grid h-10 w-10 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
                         @click="mobileOpen = true"
                         aria-label="Abrir menú"
                     >
-                        ☰
+                        <AppIcon name="menu" :size="19" />
                     </button>
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-widest text-indigo-600">
-                            Mazmi WebOps Desk
-                        </p>
-                        <h1 class="text-lg font-bold text-slate-900 sm:text-xl">{{ title }}</h1>
+                    <div class="flex items-center gap-2 text-sm">
+                        <span class="font-semibold text-slate-900">WebOps Desk</span>
+                        <span class="text-slate-300">/</span>
+                        <span class="text-slate-500">{{ title }}</span>
                     </div>
                 </div>
-                <div class="hidden text-right sm:block">
-                    <p class="text-sm font-semibold">{{ user.name }}</p>
-                    <p class="text-xs text-slate-500">{{ roleLabel[user.role] }}</p>
+                <div class="flex items-center gap-3">
+                    <div class="hidden text-right sm:block">
+                        <p class="text-sm font-semibold text-slate-900">{{ user.name }}</p>
+                        <p class="text-xs text-slate-500">{{ roleLabel[user.role] }}</p>
+                    </div>
+                    <div
+                        class="grid h-9 w-9 place-items-center rounded-lg border border-indigo-100 bg-indigo-50 text-sm font-bold text-indigo-700"
+                    >
+                        {{ user.name.charAt(0) }}
+                    </div>
                 </div>
             </header>
-            <main class="p-4 pb-24 sm:p-8 lg:pb-8">
-                <FlashMessage />
-                <slot />
+            <main class="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+                <div class="mx-auto w-full max-w-[1480px]">
+                    <FlashMessage />
+                    <slot />
+                </div>
             </main>
         </div>
-
-        <nav
-            class="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-slate-200 bg-white px-1 py-2 lg:hidden"
-        >
-            <Link
-                v-for="item in nav.slice(0, 5)"
-                :key="item.route"
-                :href="route(item.route)"
-                :class="[
-                    'flex flex-col items-center gap-1 rounded-lg py-1 text-[10px] font-semibold',
-                    route().current(item.match) ? 'text-indigo-600' : 'text-slate-500',
-                ]"
-            >
-                <span class="text-lg">{{ item.icon }}</span>
-                {{ item.label === 'Mantenimiento' ? 'Tareas' : item.label }}
-            </Link>
-        </nav>
     </div>
 </template>

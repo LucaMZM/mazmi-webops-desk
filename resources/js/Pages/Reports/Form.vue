@@ -17,7 +17,7 @@ const form = useForm({
     general_status: 'good',
 });
 const input =
-    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+    'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
 const submit = () => form.post(route('reports.store'));
 const months = [
     'Enero',
@@ -43,9 +43,9 @@ const months = [
             description="Prepara un resumen claro que pueda compartirse directamente con el cliente."
             :back-href="route('reports.index')"
         />
-        <form class="space-y-6" @submit.prevent="submit">
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Periodo y cliente</h3>
+        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+            <section class="form-section">
+                <h2 class="section-heading">Periodo y cliente</h2>
                 <div class="mt-5 grid gap-5 md:grid-cols-3">
                     <FormField label="Cliente" required :error="form.errors.client_id">
                         <select v-model="form.client_id" :class="input">
@@ -73,8 +73,8 @@ const months = [
                     </FormField>
                 </div>
             </section>
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Resumen ejecutivo</h3>
+            <section class="form-section">
+                <h2 class="section-heading">Resumen ejecutivo</h2>
                 <div class="mt-5 grid gap-5">
                     <FormField label="Resumen del mes" required :error="form.errors.summary">
                         <textarea
@@ -100,8 +100,8 @@ const months = [
                     </FormField>
                 </div>
             </section>
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Indicadores</h3>
+            <section class="form-section">
+                <h2 class="section-heading">Indicadores</h2>
                 <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     <FormField
                         label="Tareas completadas"
@@ -148,7 +148,7 @@ const months = [
                     </FormField>
                 </div>
             </section>
-            <div class="flex justify-end gap-3">
+            <div class="form-footer">
                 <Link :href="route('reports.index')" class="btn-secondary">Cancelar</Link>
                 <button class="btn-primary" :disabled="form.processing">
                     {{ form.processing ? 'Generando…' : 'Crear reporte' }}

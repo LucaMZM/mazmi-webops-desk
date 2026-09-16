@@ -40,9 +40,7 @@ const date = (v) =>
                     <PriorityBadge :priority="ticket.priority" />
                     <StatusBadge :status="ticket.status" />
                 </div>
-                <h3 class="mt-7 text-xs font-bold uppercase tracking-widest text-slate-400">
-                    Descripción
-                </h3>
+                <h2 class="meta-label mt-7">Descripción</h2>
                 <p class="mt-3 whitespace-pre-line leading-7 text-slate-700">
                     {{ ticket.description }}
                 </p>
@@ -58,6 +56,7 @@ const date = (v) =>
                                 'closed',
                             ]"
                             :key="s"
+                            type="button"
                             :disabled="ticket.status === s"
                             class="btn-secondary disabled:bg-indigo-50 disabled:text-indigo-700"
                             @click="setStatus(s)"
@@ -77,10 +76,10 @@ const date = (v) =>
             </article>
             <aside class="space-y-5">
                 <section class="panel p-5">
-                    <h3 class="font-bold">Datos del ticket</h3>
+                    <h2 class="section-heading">Datos del ticket</h2>
                     <dl class="mt-5 space-y-4 text-sm">
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Web</dt>
+                            <dt class="meta-label">Web</dt>
                             <dd class="mt-1">
                                 <Link
                                     v-if="ticket.website"
@@ -93,26 +92,24 @@ const date = (v) =>
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Técnico</dt>
+                            <dt class="meta-label">Técnico</dt>
                             <dd class="mt-1">{{ ticket.assignee?.name || 'Sin asignar' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">
-                                Fecha objetivo
-                            </dt>
+                            <dt class="meta-label">Fecha objetivo</dt>
                             <dd class="mt-1">{{ date(ticket.due_date) }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-bold uppercase text-slate-400">Creado</dt>
+                            <dt class="meta-label">Creado</dt>
                             <dd class="mt-1">{{ date(ticket.created_at) }}</dd>
                         </div>
                         <div v-if="ticket.resolved_at">
-                            <dt class="text-xs font-bold uppercase text-slate-400">Resuelto</dt>
+                            <dt class="meta-label">Resuelto</dt>
                             <dd class="mt-1">{{ date(ticket.resolved_at) }}</dd>
                         </div>
                     </dl>
                 </section>
-                <section class="rounded-2xl bg-slate-950 p-5 text-white">
+                <section class="rounded-xl bg-slate-950 p-5 text-white">
                     <p class="text-xs font-bold uppercase tracking-widest text-indigo-300">
                         Buena práctica
                     </p>

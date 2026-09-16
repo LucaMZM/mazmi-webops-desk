@@ -20,7 +20,7 @@ const submit = () =>
         ? form.put(route('clients.update', props.client.id))
         : form.post(route('clients.store'));
 const input =
-    'w-full rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+    'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
 </script>
 <template>
     <Head :title="editing ? 'Editar cliente' : 'Nuevo cliente'" />
@@ -31,9 +31,9 @@ const input =
             description="Información comercial y de contacto. No incluyas credenciales ni datos sensibles."
             :back-href="editing ? route('clients.show', client.id) : route('clients.index')"
         />
-        <form class="space-y-6" @submit.prevent="submit">
-            <section class="panel p-5 sm:p-6">
-                <h3 class="font-bold">Datos de empresa</h3>
+        <form class="max-w-5xl space-y-5" @submit.prevent="submit">
+            <section class="form-section">
+                <h2 class="section-heading">Datos de empresa</h2>
                 <p class="mb-5 text-sm text-slate-500">Identificación y persona de contacto.</p>
                 <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Empresa" required :error="form.errors.company_name">
@@ -63,7 +63,7 @@ const input =
                     </FormField>
                 </div>
             </section>
-            <section class="panel p-5 sm:p-6">
+            <section class="form-section">
                 <FormField
                     label="Notas operativas"
                     :error="form.errors.notes"
@@ -78,7 +78,7 @@ const input =
                     />
                 </FormField>
             </section>
-            <div class="flex justify-end gap-3">
+            <div class="form-footer">
                 <Link
                     :href="editing ? route('clients.show', client.id) : route('clients.index')"
                     class="btn-secondary"

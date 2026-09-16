@@ -50,10 +50,10 @@ const months = [
             <div class="space-y-6">
                 <section class="panel">
                     <div class="flex items-center justify-between border-b border-slate-100 p-5">
-                        <h3 class="font-bold">
+                        <h2 class="section-heading">
                             Webs gestionadas
                             <span class="text-slate-400">({{ client.websites_count }})</span>
-                        </h3>
+                        </h2>
                         <Link
                             v-if="user.role === 'admin'"
                             :href="route('websites.create', { client_id: client.id })"
@@ -67,7 +67,7 @@ const months = [
                             v-for="web in client.websites"
                             :key="web.id"
                             :href="route('websites.show', web.id)"
-                            class="rounded-xl border border-slate-200 p-4 hover:border-indigo-300"
+                            class="rounded-lg border border-slate-200 p-4 transition hover:border-indigo-300 hover:bg-slate-50/60"
                         >
                             <div class="flex justify-between gap-2">
                                 <p class="font-bold">{{ web.name }}</p>
@@ -83,7 +83,7 @@ const months = [
                 </section>
                 <section class="panel">
                     <div class="flex items-center justify-between border-b border-slate-100 p-5">
-                        <h3 class="font-bold">Tickets recientes</h3>
+                        <h2 class="section-heading">Tickets recientes</h2>
                         <Link
                             :href="route('tickets.index', { client_id: client.id })"
                             class="text-sm font-semibold text-indigo-600"
@@ -118,28 +118,28 @@ const months = [
             <aside class="space-y-6">
                 <section class="panel p-5">
                     <div class="flex items-center justify-between">
-                        <h3 class="font-bold">Ficha</h3>
+                        <h2 class="section-heading">Ficha</h2>
                         <StatusBadge :status="client.status" />
                     </div>
                     <dl class="mt-5 space-y-4 text-sm">
                         <div>
-                            <dt class="text-xs font-semibold uppercase text-slate-400">Contacto</dt>
+                            <dt class="meta-label">Contacto</dt>
                             <dd class="mt-1 font-medium">{{ client.contact_name }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase text-slate-400">Email</dt>
+                            <dt class="meta-label">Email</dt>
                             <dd class="mt-1 break-all">{{ client.email }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase text-slate-400">Teléfono</dt>
+                            <dt class="meta-label">Teléfono</dt>
                             <dd class="mt-1">{{ client.phone || 'No indicado' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase text-slate-400">Ciudad</dt>
+                            <dt class="meta-label">Ciudad</dt>
                             <dd class="mt-1">{{ client.city || 'No indicada' }}</dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase text-slate-400">Notas</dt>
+                            <dt class="meta-label">Notas</dt>
                             <dd class="mt-1 whitespace-pre-line text-slate-600">
                                 {{ client.notes || 'Sin notas' }}
                             </dd>
@@ -147,13 +147,13 @@ const months = [
                     </dl>
                 </section>
                 <section class="panel p-5">
-                    <h3 class="font-bold">Reportes mensuales</h3>
+                    <h2 class="section-heading">Reportes mensuales</h2>
                     <div v-if="client.reports.length" class="mt-4 space-y-2">
                         <Link
                             v-for="report in client.reports"
                             :key="report.id"
                             :href="route('reports.show', report.id)"
-                            class="flex items-center justify-between rounded-xl bg-slate-50 p-3 text-sm font-semibold"
+                            class="flex items-center justify-between rounded-lg bg-slate-50 p-3 text-sm font-semibold transition hover:bg-slate-100"
                         >
                             <span>{{ months[report.month] }} {{ report.year }}</span>
                             <StatusBadge :status="report.general_status" />

@@ -58,7 +58,7 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
             <Link
                 v-else
                 :href="route('login')"
-                class="rounded-xl border border-white/20 px-4 py-2 text-sm font-semibold hover:bg-white/10"
+                class="inline-flex min-h-10 items-center rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
             >
                 Iniciar sesión
             </Link>
@@ -96,7 +96,7 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                             </Link>
                             <a
                                 href="#proyecto"
-                                class="rounded-xl border border-white/20 px-6 py-3 text-sm font-semibold hover:bg-white/10"
+                                class="rounded-lg border border-white/20 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
                             >
                                 Ver qué incluye
                             </a>
@@ -108,9 +108,9 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
 
                     <div class="relative">
                         <div
-                            class="rounded-3xl border border-white/10 bg-white/5 p-4 shadow-2xl backdrop-blur"
+                            class="rounded-2xl border border-white/10 bg-white/[0.04] p-4 shadow-xl shadow-black/20 backdrop-blur-sm"
                         >
-                            <div class="rounded-2xl bg-slate-50 p-5 text-slate-900">
+                            <div class="rounded-xl bg-slate-50 p-5 text-slate-900">
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <p
@@ -182,7 +182,7 @@ const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vi
                         <article
                             v-for="(item, index) in benefits"
                             :key="item.title"
-                            class="rounded-2xl border border-white/10 bg-slate-900 p-6"
+                            class="rounded-xl border border-white/10 bg-slate-900 p-6"
                         >
                             <span class="text-sm font-black text-indigo-400">0{{ index + 1 }}</span>
                             <h3 class="mt-5 text-lg font-bold">

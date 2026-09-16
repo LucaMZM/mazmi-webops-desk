@@ -7,6 +7,7 @@ import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import PriorityBadge from '@/Components/UI/PriorityBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 const props = defineProps({ tickets: Object, filters: Object, clients: Array, technicians: Array });
 const user = usePage().props.auth.user;
 const form = reactive({
@@ -22,6 +23,13 @@ const canEdit = (t) =>
     user.role === 'admin' || (user.role === 'technician' && t.assigned_to === user.id);
 const setStatus = (t, status) =>
     router.patch(route('tickets.status', t.id), { status }, { preserveScroll: true });
+const statusLabel = {
+    open: 'Abierto',
+    in_progress: 'En curso',
+    waiting_client: 'Espera cliente',
+    resolved: 'Resuelto',
+    closed: 'Cerrado',
+};
 </script>
 <template>
     <Head title="Tickets" />
@@ -36,19 +44,16 @@ const setStatus = (t, status) =>
                 :href="route('tickets.create')"
                 class="btn-primary"
             >
-                + Nuevo ticket
+                <AppIcon name="plus" :size="17" />
+                Nuevo ticket
             </Link>
         </PageHeader>
         <form
-            class="panel mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,170px)_auto]"
+            class="filter-bar md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,160px)_auto]"
             @submit.prevent="apply"
         >
-            <input
-                v-model="form.search"
-                class="rounded-xl border-slate-300 text-sm"
-                placeholder="Buscar ticket…"
-            />
-            <select v-model="form.status" class="rounded-xl border-slate-300 text-sm">
+            <input v-model="form.search" class="rounded-lg text-sm" placeholder="Buscar ticket…" />
+            <select v-model="form.status" class="rounded-lg text-sm">
                 <option value="">Estado</option>
                 <option
                     v-for="x in ['open', 'in_progress', 'waiting_client', 'resolved', 'closed']"
@@ -66,27 +71,19 @@ const setStatus = (t, status) =>
                     }}
                 </option>
             </select>
-            <select v-model="form.priority" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.priority" class="rounded-lg text-sm">
                 <option value="">Prioridad</option>
                 <option v-for="x in ['low', 'medium', 'high', 'urgent']" :key="x" :value="x">
                     {{ { low: 'Baja', medium: 'Media', high: 'Alta', urgent: 'Urgente' }[x] }}
                 </option>
             </select>
-            <select
-                v-if="clients.length"
-                v-model="form.client_id"
-                class="rounded-xl border-slate-300 text-sm"
-            >
+            <select v-if="clients.length" v-model="form.client_id" class="rounded-lg text-sm">
                 <option value="">Cliente</option>
                 <option v-for="c in clients" :key="c.id" :value="c.id">
                     {{ c.company_name }}
                 </option>
             </select>
-            <select
-                v-if="technicians.length"
-                v-model="form.assigned_to"
-                class="rounded-xl border-slate-300 text-sm"
-            >
+            <select v-if="technicians.length" v-model="form.assigned_to" class="rounded-lg text-sm">
                 <option value="">Técnico</option>
                 <option v-for="t in technicians" :key="t.id" :value="t.id">
                     {{ t.name }}
@@ -95,7 +92,7 @@ const setStatus = (t, status) =>
             <button class="btn-secondary">Filtrar</button>
         </form>
         <div class="table-shell">
-            <div class="hidden overflow-x-auto lg:block">
+            <div class="hidden overflow-x-auto xl:block">
                 <table class="w-full">
                     <thead class="table-head">
                         <tr>
@@ -111,7 +108,7 @@ const setStatus = (t, status) =>
                         <tr
                             v-for="ticket in tickets.data"
                             :key="ticket.id"
-                            class="hover:bg-slate-50"
+                            class="transition hover:bg-slate-50/80"
                         >
                             <td class="table-cell">
                                 <Link
@@ -148,7 +145,7 @@ const setStatus = (t, status) =>
                                 <select
                                     v-if="canEdit(ticket)"
                                     :value="ticket.status"
-                                    class="rounded-lg border-slate-300 py-1.5 text-xs"
+                                    class="min-h-9 rounded-lg border-slate-300 py-1.5 text-xs"
                                     @change="setStatus(ticket, $event.target.value)"
                                 >
                                     <option
@@ -162,7 +159,7 @@ const setStatus = (t, status) =>
                                         :key="x"
                                         :value="x"
                                     >
-                                        {{ x.replace('_', ' ') }}
+                                        {{ statusLabel[x] }}
                                     </option>
                                 </select>
                                 <Link
@@ -177,7 +174,7 @@ const setStatus = (t, status) =>
                     </tbody>
                 </table>
             </div>
-            <div class="divide-y divide-slate-100 lg:hidden">
+            <div class="divide-y divide-slate-100 xl:hidden">
                 <Link
                     v-for="ticket in tickets.data"
                     :key="ticket.id"

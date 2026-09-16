@@ -7,6 +7,7 @@ import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import PriorityBadge from '@/Components/UI/PriorityBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 const props = defineProps({ tasks: Object, filters: Object, websites: Array });
 const user = usePage().props.auth.user;
 const form = reactive({
@@ -33,6 +34,22 @@ const date = (v) =>
         : 'Sin programar';
 const overdue = (t) =>
     t.scheduled_at && new Date(t.scheduled_at) < new Date() && t.status !== 'completed';
+const statusLabel = {
+    pending: 'Pendiente',
+    in_progress: 'En curso',
+    completed: 'Completada',
+    blocked: 'Bloqueada',
+};
+const priorityLabel = { low: 'Baja', medium: 'Media', high: 'Alta' };
+const categoryLabel = {
+    backups: 'Copias de seguridad',
+    updates: 'Actualizaciones',
+    security: 'Seguridad',
+    performance: 'Rendimiento',
+    content: 'Contenido',
+    seo: 'SEO',
+    other: 'Otros',
+};
 </script>
 <template>
     <Head title="Mantenimiento" />
@@ -47,7 +64,8 @@ const overdue = (t) =>
                 :href="route('maintenance.create')"
                 class="btn-primary"
             >
-                + Nueva tarea
+                <AppIcon name="plus" :size="17" />
+                Nueva tarea
             </Link>
         </PageHeader>
         <div class="mb-4 flex flex-wrap gap-2">
@@ -59,6 +77,7 @@ const overdue = (t) =>
                 ]"
                 :key="item.v"
                 :class="form.schedule === item.v ? 'btn-primary' : 'btn-secondary'"
+                type="button"
                 @click="
                     form.schedule = item.v;
                     apply();
@@ -68,31 +87,27 @@ const overdue = (t) =>
             </button>
         </div>
         <form
-            class="panel mb-5 grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,170px)_auto]"
+            class="filter-bar md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,160px)_auto]"
             @submit.prevent="apply"
         >
-            <input
-                v-model="form.search"
-                class="rounded-xl border-slate-300 text-sm"
-                placeholder="Buscar tarea…"
-            />
-            <select v-model="form.status" class="rounded-xl border-slate-300 text-sm">
+            <input v-model="form.search" class="rounded-lg text-sm" placeholder="Buscar tarea…" />
+            <select v-model="form.status" class="rounded-lg text-sm">
                 <option value="">Estado</option>
                 <option
                     v-for="x in ['pending', 'in_progress', 'completed', 'blocked']"
                     :key="x"
                     :value="x"
                 >
-                    {{ x.replace('_', ' ') }}
+                    {{ statusLabel[x] }}
                 </option>
             </select>
-            <select v-model="form.priority" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.priority" class="rounded-lg text-sm">
                 <option value="">Prioridad</option>
                 <option v-for="x in ['low', 'medium', 'high']" :key="x" :value="x">
-                    {{ x }}
+                    {{ priorityLabel[x] }}
                 </option>
             </select>
-            <select v-model="form.category" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.category" class="rounded-lg text-sm">
                 <option value="">Categoría</option>
                 <option
                     v-for="x in [
@@ -107,21 +122,25 @@ const overdue = (t) =>
                     :key="x"
                     :value="x"
                 >
-                    {{ x }}
+                    {{ categoryLabel[x] }}
                 </option>
             </select>
-            <select v-model="form.website_id" class="rounded-xl border-slate-300 text-sm">
+            <select v-model="form.website_id" class="rounded-lg text-sm">
                 <option value="">Web</option>
                 <option v-for="w in websites" :key="w.id" :value="w.id">{{ w.name }}</option>
             </select>
             <button class="btn-secondary">Filtrar</button>
         </form>
         <div v-if="tasks.data.length" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            <article v-for="task in tasks.data" :key="task.id" class="panel flex flex-col p-5">
+            <article
+                v-for="task in tasks.data"
+                :key="task.id"
+                class="panel flex flex-col p-5 transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
+            >
                 <div class="flex items-start justify-between gap-3">
                     <div
                         :class="[
-                            'rounded-xl px-3 py-2 text-center text-xs font-bold',
+                            'rounded-lg px-3 py-2 text-center text-xs font-bold',
                             overdue(task)
                                 ? 'bg-red-50 text-red-700'
                                 : 'bg-slate-100 text-slate-600',
@@ -136,7 +155,7 @@ const overdue = (t) =>
                 </div>
                 <Link
                     :href="route('maintenance.show', task.id)"
-                    class="mt-5 text-lg font-bold text-slate-950 hover:text-indigo-600"
+                    class="mt-4 text-base font-bold text-slate-950 hover:text-indigo-600"
                 >
                     {{ task.title }}
                 </Link>
@@ -147,15 +166,18 @@ const overdue = (t) =>
                     {{ task.description || 'Sin descripción adicional.' }}
                 </p>
                 <div class="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
-                    <span class="text-xs font-semibold capitalize text-slate-400">
-                        {{ task.category }} · {{ task.assignee?.name || 'Sin asignar' }}
+                    <span class="text-xs font-semibold text-slate-500">
+                        {{ categoryLabel[task.category] }} ·
+                        {{ task.assignee?.name || 'Sin asignar' }}
                     </span>
                     <button
                         v-if="canEdit(task) && task.status !== 'completed'"
-                        class="text-xs font-bold text-emerald-700"
+                        type="button"
+                        class="inline-flex min-h-9 items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800"
                         @click="complete(task)"
                     >
-                        Completar ✓
+                        Completar
+                        <AppIcon name="check" :size="14" />
                     </button>
                 </div>
             </article>

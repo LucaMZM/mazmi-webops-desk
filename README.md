@@ -42,21 +42,25 @@ Incluye autenticación, roles, CRUDs, validaciones, filtros persistentes, seeder
 <a id="capturas"></a>
 ## Capturas
 
-### Landing
-
-![Landing de Mazmi WebOps Desk](docs/screenshots/landing.png)
-
 ### Dashboard
 
 ![Dashboard de Mazmi WebOps Desk](docs/screenshots/dashboard.png)
+
+### Reporte mensual
+
+![Reporte mensual de Mazmi WebOps Desk](docs/screenshots/monthly-report.png)
 
 ### Gestión de webs
 
 ![Gestión de webs en Mazmi WebOps Desk](docs/screenshots/websites.png)
 
-### Detalle de una web
+### Gestión de tickets
 
-![Detalle de una web en Mazmi WebOps Desk](docs/screenshots/website-detail.png)
+![Gestión de tickets en Mazmi WebOps Desk](docs/screenshots/tickets.png)
+
+### Landing
+
+![Landing de Mazmi WebOps Desk](docs/screenshots/landing.png)
 
 <a id="problema-que-resuelve"></a>
 ## Problema que resuelve

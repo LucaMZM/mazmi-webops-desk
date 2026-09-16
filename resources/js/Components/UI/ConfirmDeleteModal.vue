@@ -77,7 +77,7 @@ onUnmounted(() => clearTimeout(focusTimer));
         :show="open"
         max-width="md"
         :closeable="!processing"
-        panel-class="rounded-2xl"
+        panel-class="rounded-xl"
         overlay-class="bg-slate-950/50"
         :aria-labelledby="titleId"
         :aria-describedby="descriptionId"
@@ -100,7 +100,12 @@ onUnmounted(() => clearTimeout(focusTimer));
                 >
                     Cancelar
                 </button>
-                <button class="btn-danger" type="button" :disabled="processing" @click="remove">
+                <button
+                    class="btn-danger-solid"
+                    type="button"
+                    :disabled="processing"
+                    @click="remove"
+                >
                     {{ processing ? 'Eliminando…' : 'Sí, eliminar' }}
                 </button>
             </div>

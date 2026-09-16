@@ -6,6 +6,7 @@ import PageHeader from '@/Components/UI/PageHeader.vue';
 import StatusBadge from '@/Components/UI/StatusBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import Pagination from '@/Components/UI/Pagination.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 const props = defineProps({ clients: Object, filters: Object });
 const form = reactive({ search: props.filters.search || '', status: props.filters.status || '' });
 const apply = () =>
@@ -21,22 +22,17 @@ const user = usePage().props.auth.user;
             description="Empresas, contactos y contexto operativo en un único lugar."
         >
             <Link v-if="user.role === 'admin'" :href="route('clients.create')" class="btn-primary">
-                + Nuevo cliente
+                <AppIcon name="plus" :size="17" />
+                Nuevo cliente
             </Link>
         </PageHeader>
-        <form
-            class="panel mb-5 grid gap-3 p-4 sm:grid-cols-[1fr_190px_auto]"
-            @submit.prevent="apply"
-        >
+        <form class="filter-bar sm:grid-cols-[1fr_190px_auto]" @submit.prevent="apply">
             <input
                 v-model="form.search"
-                class="rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="rounded-lg text-sm"
                 placeholder="Buscar empresa, contacto o ciudad…"
             />
-            <select
-                v-model="form.status"
-                class="rounded-xl border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500"
-            >
+            <select v-model="form.status" class="rounded-lg text-sm">
                 <option value="">Todos los estados</option>
                 <option value="active">Activos</option>
                 <option value="inactive">Inactivos</option>
@@ -60,7 +56,7 @@ const user = usePage().props.auth.user;
                         <tr
                             v-for="client in clients.data"
                             :key="client.id"
-                            class="hover:bg-slate-50"
+                            class="transition hover:bg-slate-50/80"
                         >
                             <td class="table-cell">
                                 <p class="font-bold text-slate-900">{{ client.company_name }}</p>
