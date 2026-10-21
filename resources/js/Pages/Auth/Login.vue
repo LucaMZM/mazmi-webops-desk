@@ -34,11 +34,9 @@ const submit = () => {
         <Head title="Iniciar sesión" />
 
         <div class="mb-6">
-            <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">
-                Acceso al panel
-            </p>
-            <h1 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">
-                Bienvenido de nuevo
+            <p class="text-sm font-medium text-slate-500">Acceso al panel</p>
+            <h1 class="mt-2 text-3xl font-bold leading-tight tracking-[-0.04em] text-slate-950">
+                Entrar al espacio de trabajo
             </h1>
             <p class="mt-2 text-sm text-slate-500">
                 Usa un usuario demo para explorar los distintos permisos.
@@ -46,7 +44,7 @@ const submit = () => {
         </div>
 
         <div
-            class="mb-5 rounded-xl border border-indigo-100 bg-indigo-50 p-3 text-xs text-indigo-800"
+            class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs leading-6 text-slate-600"
         >
             <strong>Admin demo:</strong>
             admin@webops.test · password
@@ -66,7 +64,8 @@ const submit = () => {
                     class="mt-1 block w-full"
                     v-model="form.email"
                     required
-                    autofocus
+                    name="email"
+                    spellcheck="false"
                     autocomplete="username"
                 />
 
@@ -78,6 +77,7 @@ const submit = () => {
 
                 <TextInput
                     id="password"
+                    name="password"
                     type="password"
                     class="mt-1 block w-full"
                     v-model="form.password"
@@ -111,7 +111,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Iniciar sesión
+                    {{ form.processing ? 'Iniciando sesión…' : 'Iniciar sesión' }}
                 </PrimaryButton>
             </div>
         </form>

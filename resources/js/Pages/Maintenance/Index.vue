@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -22,8 +22,19 @@ const apply = () =>
     router.get(route('maintenance.index'), form, { preserveState: true, replace: true });
 const canEdit = (t) =>
     user.role === 'admin' || (user.role === 'technician' && t.assigned_to === user.id);
-const complete = (t) =>
-    router.patch(route('maintenance.complete', t.id), {}, { preserveScroll: true });
+const completingTask = ref(null);
+const complete = (t) => {
+    if (completingTask.value !== null) return;
+    router.patch(
+        route('maintenance.complete', t.id),
+        {},
+        {
+            preserveScroll: true,
+            onStart: () => (completingTask.value = t.id),
+            onFinish: () => (completingTask.value = null),
+        },
+    );
+};
 const date = (v) =>
     v
         ? new Intl.DateTimeFormat('es-ES', {
@@ -68,7 +79,18 @@ const categoryLabel = {
                 Nueva tarea
             </Link>
         </PageHeader>
-        <div class="mb-4 flex flex-wrap gap-2">
+        <div class="collection-heading">
+            <p>
+                <strong>{{ tasks.total }}</strong>
+                tareas{{
+                    Object.values(filters).some(Boolean)
+                        ? ' con los filtros actuales'
+                        : ' en el registro'
+                }}
+            </p>
+            <span class="text-xs">Página {{ tasks.current_page }} de {{ tasks.last_page }}</span>
+        </div>
+        <div class="mb-5 flex flex-wrap gap-1 border-b border-slate-200">
             <button
                 v-for="item in [
                     { v: '', l: 'Todas' },
@@ -76,7 +98,8 @@ const categoryLabel = {
                     { v: 'upcoming', l: 'Próximas 30 días' },
                 ]"
                 :key="item.v"
-                :class="form.schedule === item.v ? 'btn-primary' : 'btn-secondary'"
+                class="tab-button"
+                :aria-pressed="form.schedule === item.v"
                 type="button"
                 @click="
                     form.schedule = item.v;
@@ -90,8 +113,19 @@ const categoryLabel = {
             class="filter-bar md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,160px)_auto]"
             @submit.prevent="apply"
         >
-            <input v-model="form.search" class="rounded-lg text-sm" placeholder="Buscar tarea…" />
-            <select v-model="form.status" class="rounded-lg text-sm">
+            <input
+                v-model="form.search"
+                class="rounded-lg text-sm"
+                placeholder="Buscar tarea…"
+                aria-label="Buscar tareas"
+                name="search"
+            />
+            <select
+                v-model="form.status"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por estado"
+                name="status"
+            >
                 <option value="">Estado</option>
                 <option
                     v-for="x in ['pending', 'in_progress', 'completed', 'blocked']"
@@ -101,13 +135,23 @@ const categoryLabel = {
                     {{ statusLabel[x] }}
                 </option>
             </select>
-            <select v-model="form.priority" class="rounded-lg text-sm">
+            <select
+                v-model="form.priority"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por prioridad"
+                name="priority"
+            >
                 <option value="">Prioridad</option>
                 <option v-for="x in ['low', 'medium', 'high']" :key="x" :value="x">
                     {{ priorityLabel[x] }}
                 </option>
             </select>
-            <select v-model="form.category" class="rounded-lg text-sm">
+            <select
+                v-model="form.category"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por categoría"
+                name="category"
+            >
                 <option value="">Categoría</option>
                 <option
                     v-for="x in [
@@ -125,7 +169,12 @@ const categoryLabel = {
                     {{ categoryLabel[x] }}
                 </option>
             </select>
-            <select v-model="form.website_id" class="rounded-lg text-sm">
+            <select
+                v-model="form.website_id"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por web"
+                name="website_id"
+            >
                 <option value="">Web</option>
                 <option v-for="w in websites" :key="w.id" :value="w.id">{{ w.name }}</option>
             </select>
@@ -133,18 +182,18 @@ const categoryLabel = {
         </form>
         <div v-if="tasks.data.length" class="table-shell">
             <div
-                class="table-head hidden grid-cols-[140px_minmax(260px,1.4fr)_minmax(190px,1fr)_auto_110px] items-center gap-5 px-5 py-3 xl:grid"
+                class="table-head hidden grid-cols-[105px_minmax(0,1.5fr)_minmax(0,1fr)_140px_95px] items-center gap-5 px-5 py-3 xl:grid"
             >
                 <span>Planificación</span>
                 <span>Tarea / web</span>
                 <span>Responsable</span>
-                <span>Estado</span>
+                <span>Prioridad / estado</span>
                 <span class="text-right">Acción</span>
             </div>
             <article
                 v-for="task in tasks.data"
                 :key="task.id"
-                class="grid gap-4 border-b border-slate-100 p-5 transition last:border-b-0 hover:bg-slate-50/70 xl:grid-cols-[140px_minmax(260px,1.4fr)_minmax(190px,1fr)_auto_110px] xl:items-center"
+                class="grid gap-4 border-b border-slate-100 p-5 transition last:border-b-0 hover:bg-slate-50/70 xl:grid-cols-[105px_minmax(0,1.5fr)_minmax(0,1fr)_140px_95px] xl:items-center"
             >
                 <div>
                     <p
@@ -157,7 +206,7 @@ const categoryLabel = {
                     >
                         {{ overdue(task) ? 'Atrasada' : date(task.scheduled_at) }}
                     </p>
-                    <p v-if="overdue(task)" class="mt-1 text-[11px] text-red-500">
+                    <p v-if="overdue(task)" class="mt-1 text-xs text-red-700">
                         {{ date(task.scheduled_at) }}
                     </p>
                 </div>
@@ -184,7 +233,7 @@ const categoryLabel = {
                     </p>
                     <p class="mt-1 text-xs text-slate-500">{{ categoryLabel[task.category] }}</p>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-col items-start gap-2">
                     <PriorityBadge :priority="task.priority" />
                     <StatusBadge :status="task.status" />
                 </div>
@@ -193,6 +242,8 @@ const categoryLabel = {
                         v-if="canEdit(task) && task.status !== 'completed'"
                         type="button"
                         class="inline-flex min-h-9 items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800"
+                        :disabled="completingTask !== null"
+                        :aria-busy="completingTask === task.id"
                         @click="complete(task)"
                     >
                         Completar

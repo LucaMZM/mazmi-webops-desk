@@ -19,6 +19,16 @@ const form = reactive({
 const apply = () =>
     router.get(route('websites.index'), form, { preserveState: true, replace: true });
 const days = (date) => (date ? Math.ceil((new Date(date) - new Date()) / 86400000) : null);
+const expiry = (value) => {
+    const remaining = days(value);
+    return remaining === null
+        ? 'Sin fecha'
+        : remaining < 0
+          ? `Caducado hace ${Math.abs(remaining)} días`
+          : remaining === 0
+            ? 'Vence hoy'
+            : `En ${remaining} días`;
+};
 const technologyLabel = {
     'PHP custom': 'PHP a medida',
     'Static HTML': 'HTML estático',
@@ -39,6 +49,19 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                 Añadir web
             </Link>
         </PageHeader>
+        <div class="collection-heading">
+            <p>
+                <strong>{{ websites.total }}</strong>
+                webs{{
+                    Object.values(filters).some(Boolean)
+                        ? ' con los filtros actuales'
+                        : ' en el registro'
+                }}
+            </p>
+            <span class="text-xs">
+                Página {{ websites.current_page }} de {{ websites.last_page }}
+            </span>
+        </div>
         <form
             class="filter-bar md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,160px)_auto]"
             @submit.prevent="apply"
@@ -47,8 +70,15 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                 v-model="form.search"
                 class="rounded-lg text-sm"
                 placeholder="Buscar nombre o URL…"
+                aria-label="Buscar webs"
+                name="search"
             />
-            <select v-model="form.technology" class="rounded-lg text-sm">
+            <select
+                v-model="form.technology"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por tecnología"
+                name="technology"
+            >
                 <option value="">Tecnología</option>
                 <option
                     v-for="x in [
@@ -65,14 +95,24 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     {{ technologyLabel[x] || x }}
                 </option>
             </select>
-            <select v-model="form.status" class="rounded-lg text-sm">
+            <select
+                v-model="form.status"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por estado"
+                name="status"
+            >
                 <option value="">Estado</option>
                 <option value="stable">Estable</option>
                 <option value="review">Revisión</option>
                 <option value="incident">Incidencia</option>
                 <option value="critical">Crítico</option>
             </select>
-            <select v-model="form.maintenance_plan" class="rounded-lg text-sm">
+            <select
+                v-model="form.maintenance_plan"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por plan"
+                name="maintenance_plan"
+            >
                 <option value="">Plan</option>
                 <option v-for="x in ['basic', 'standard', 'premium', 'none']" :key="x" :value="x">
                     {{ planLabel[x] }}
@@ -87,6 +127,8 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     false-value=""
                     type="checkbox"
                     class="rounded text-indigo-600"
+                    aria-label="expiring"
+                    name="expiring"
                 />
                 Vencen pronto
             </label>
@@ -97,12 +139,14 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                 <table class="w-full">
                     <thead class="table-head">
                         <tr>
-                            <th class="table-cell">Web / cliente</th>
-                            <th class="table-cell">Tecnología</th>
-                            <th class="table-cell">Plan</th>
-                            <th class="table-cell">Vencimientos</th>
-                            <th class="table-cell">Estado</th>
-                            <th class="table-cell"></th>
+                            <th scope="col" class="table-cell">Web / cliente</th>
+                            <th scope="col" class="table-cell">Tecnología</th>
+                            <th scope="col" class="table-cell">Plan</th>
+                            <th scope="col" class="table-cell">Vencimientos</th>
+                            <th scope="col" class="table-cell">Estado</th>
+                            <th scope="col" class="table-cell">
+                                <span class="sr-only">Acciones</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -112,7 +156,12 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                             class="transition hover:bg-slate-50/80"
                         >
                             <td class="table-cell">
-                                <p class="font-bold">{{ web.name }}</p>
+                                <Link
+                                    :href="route('websites.show', web.id)"
+                                    class="font-medium text-slate-900 hover:text-indigo-700"
+                                >
+                                    {{ web.name }}
+                                </Link>
                                 <p class="max-w-xs truncate text-xs text-slate-500">
                                     {{ web.client.company_name }} · {{ web.url }}
                                 </p>
@@ -135,11 +184,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                                     "
                                 >
                                     Dominio:
-                                    {{
-                                        days(web.domain_expires_at) === null
-                                            ? '—'
-                                            : days(web.domain_expires_at) + ' días'
-                                    }}
+                                    {{ expiry(web.domain_expires_at) }}
                                 </p>
                                 <p
                                     :class="
@@ -150,11 +195,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                                     "
                                 >
                                     Hosting:
-                                    {{
-                                        days(web.hosting_expires_at) === null
-                                            ? '—'
-                                            : days(web.hosting_expires_at) + ' días'
-                                    }}
+                                    {{ expiry(web.hosting_expires_at) }}
                                 </p>
                             </td>
                             <td class="table-cell"><StatusBadge :status="web.status" /></td>
@@ -170,12 +211,12 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     </tbody>
                 </table>
             </div>
-            <div class="grid gap-3 p-3 sm:grid-cols-2 xl:hidden">
+            <div class="divide-y divide-slate-100 xl:hidden">
                 <Link
                     v-for="web in websites.data"
                     :key="web.id"
                     :href="route('websites.show', web.id)"
-                    class="rounded-lg border border-slate-200 p-4 transition hover:border-slate-300 hover:bg-slate-50/60"
+                    class="block p-5 transition-colors hover:bg-slate-50"
                 >
                     <div class="flex justify-between gap-2">
                         <p class="font-bold">{{ web.name }}</p>

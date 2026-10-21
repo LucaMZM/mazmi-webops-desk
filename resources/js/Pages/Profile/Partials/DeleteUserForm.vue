@@ -41,9 +41,9 @@ const closeModal = () => {
 <template>
     <section class="space-y-6">
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Eliminar cuenta</h2>
+            <h2 class="section-heading">Eliminar cuenta</h2>
 
-            <p class="mt-1 text-sm text-gray-600">
+            <p class="mt-1 text-sm text-slate-500">
                 Al eliminar la cuenta se borrarán sus datos asociados. Hazlo solo si estás seguro de
                 que ya no necesitas este acceso.
             </p>
@@ -53,11 +53,9 @@ const closeModal = () => {
 
         <Modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900">
-                    ¿Seguro que quieres eliminar tu cuenta?
-                </h2>
+                <h2 class="section-heading">¿Seguro que quieres eliminar tu cuenta?</h2>
 
-                <p class="mt-1 text-sm text-gray-600">
+                <p class="mt-1 text-sm text-slate-500">
                     Esta acción no se puede deshacer. Introduce tu contraseña para confirmar la
                     eliminación.
                 </p>

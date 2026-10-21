@@ -1,4 +1,6 @@
 <script setup>
+import SubmitButton from '@/Components/UI/SubmitButton.vue';
+import { useFormFeedback } from '@/Composables/useFormFeedback';
 import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -21,6 +23,7 @@ const submit = () =>
         : form.post(route('clients.store'));
 const input =
     'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+const { formElement } = useFormFeedback(form);
 </script>
 <template>
     <Head :title="editing ? 'Editar cliente' : 'Nuevo cliente'" />
@@ -32,7 +35,9 @@ const input =
             :back-href="editing ? route('clients.show', client.id) : route('clients.index')"
         />
         <form
-            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            ref="formElement"
+            :aria-busy="form.processing"
+            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
             @submit.prevent="submit"
         >
             <section class="form-section">
@@ -40,26 +45,49 @@ const input =
                 <p class="mb-5 text-sm text-slate-500">Identificación y persona de contacto.</p>
                 <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Empresa" required :error="form.errors.company_name">
-                        <input v-model="form.company_name" :class="input" maxlength="150" />
+                        <input
+                            v-model="form.company_name"
+                            name="company_name"
+                            :class="input"
+                            maxlength="150"
+                        />
                     </FormField>
                     <FormField
                         label="Persona de contacto"
                         required
                         :error="form.errors.contact_name"
                     >
-                        <input v-model="form.contact_name" :class="input" maxlength="120" />
+                        <input
+                            v-model="form.contact_name"
+                            name="contact_name"
+                            :class="input"
+                            maxlength="120"
+                        />
                     </FormField>
                     <FormField label="Email" required :error="form.errors.email">
-                        <input v-model="form.email" type="email" :class="input" />
+                        <input
+                            v-model="form.email"
+                            name="email"
+                            spellcheck="false"
+                            autocomplete="email"
+                            type="email"
+                            :class="input"
+                        />
                     </FormField>
                     <FormField label="Teléfono" :error="form.errors.phone">
-                        <input v-model="form.phone" :class="input" />
+                        <input
+                            type="tel"
+                            autocomplete="tel"
+                            v-model="form.phone"
+                            name="phone"
+                            :class="input"
+                        />
                     </FormField>
                     <FormField label="Ciudad" :error="form.errors.city">
-                        <input v-model="form.city" :class="input" />
+                        <input v-model="form.city" name="city" :class="input" />
                     </FormField>
                     <FormField label="Estado" required :error="form.errors.status">
-                        <select v-model="form.status" :class="input">
+                        <select v-model="form.status" name="status" :class="input">
                             <option value="active">Activo</option>
                             <option value="inactive">Inactivo</option>
                         </select>
@@ -74,6 +102,7 @@ const input =
                 >
                     <textarea
                         v-model="form.notes"
+                        name="notes"
                         rows="5"
                         :class="input"
                         maxlength="3000"
@@ -88,7 +117,7 @@ const input =
                 >
                     Cancelar
                 </Link>
-                <button class="btn-primary" :disabled="form.processing">
+                <SubmitButton :processing="form.processing">
                     {{
                         form.processing
                             ? 'Guardando…'
@@ -96,7 +125,7 @@ const input =
                               ? 'Guardar cambios'
                               : 'Crear cliente'
                     }}
-                </button>
+                </SubmitButton>
             </div>
         </form>
     </AuthenticatedLayout>

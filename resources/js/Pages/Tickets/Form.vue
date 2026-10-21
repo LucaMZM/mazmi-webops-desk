@@ -1,4 +1,6 @@
 <script setup>
+import SubmitButton from '@/Components/UI/SubmitButton.vue';
+import { useFormFeedback } from '@/Composables/useFormFeedback';
 import { computed, watch } from 'vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -34,6 +36,7 @@ const submit = () =>
         : form.post(route('tickets.store'));
 const input =
     'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+const { formElement } = useFormFeedback(form);
 </script>
 <template>
     <Head :title="editing ? 'Editar ticket' : 'Nuevo ticket'" />
@@ -45,15 +48,18 @@ const input =
             :back-href="editing ? route('tickets.show', ticket.id) : route('tickets.index')"
         />
         <form
-            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            ref="formElement"
+            :aria-busy="form.processing"
+            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
             @submit.prevent="submit"
         >
             <section class="form-section">
                 <h2 class="section-heading">Contexto</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Cliente" required :error="form.errors.client_id">
                         <select
                             v-model="form.client_id"
+                            name="client_id"
                             :disabled="user.role !== 'admin'"
                             :class="input"
                         >
@@ -63,7 +69,7 @@ const input =
                         </select>
                     </FormField>
                     <FormField label="Web afectada" :error="form.errors.website_id">
-                        <select v-model="form.website_id" :class="input">
+                        <select v-model="form.website_id" name="website_id" :class="input">
                             <option value="">Solicitud general</option>
                             <option v-for="w in filteredWebsites" :key="w.id" :value="w.id">
                                 {{ w.name }}
@@ -78,6 +84,7 @@ const input =
                     >
                         <input
                             v-model="form.title"
+                            name="title"
                             :class="input"
                             maxlength="180"
                             placeholder="Resumen concreto del problema"
@@ -92,6 +99,7 @@ const input =
                     >
                         <textarea
                             v-model="form.description"
+                            name="description"
                             rows="6"
                             :class="input"
                             maxlength="5000"
@@ -102,9 +110,9 @@ const input =
             </section>
             <section class="form-section">
                 <h2 class="section-heading">Gestión</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Prioridad" required :error="form.errors.priority">
-                        <select v-model="form.priority" :class="input">
+                        <select v-model="form.priority" name="priority" :class="input">
                             <option value="low">Baja</option>
                             <option value="medium">Media</option>
                             <option value="high">Alta</option>
@@ -112,14 +120,14 @@ const input =
                         </select>
                     </FormField>
                     <FormField label="Fecha objetivo" :error="form.errors.due_date">
-                        <input v-model="form.due_date" type="date" :class="input" />
+                        <input v-model="form.due_date" name="due_date" type="date" :class="input" />
                     </FormField>
                     <FormField
                         v-if="user.role === 'admin'"
                         label="Técnico asignado"
                         :error="form.errors.assigned_to"
                     >
-                        <select v-model="form.assigned_to" :class="input">
+                        <select v-model="form.assigned_to" name="assigned_to" :class="input">
                             <option value="">Sin asignar</option>
                             <option v-for="t in technicians" :key="t.id" :value="t.id">
                                 {{ t.name }}
@@ -132,7 +140,7 @@ const input =
                         required
                         :error="form.errors.status"
                     >
-                        <select v-model="form.status" :class="input">
+                        <select v-model="form.status" name="status" :class="input">
                             <option value="open">Abierto</option>
                             <option value="in_progress">En curso</option>
                             <option value="waiting_client">Espera cliente</option>
@@ -149,9 +157,9 @@ const input =
                 >
                     Cancelar
                 </Link>
-                <button class="btn-primary" :disabled="form.processing">
+                <SubmitButton :processing="form.processing">
                     {{ form.processing ? 'Guardando…' : 'Guardar ticket' }}
-                </button>
+                </SubmitButton>
             </div>
         </form>
     </AuthenticatedLayout>

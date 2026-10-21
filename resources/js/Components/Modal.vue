@@ -16,11 +16,11 @@ const props = defineProps({
     },
     panelClass: {
         type: String,
-        default: 'rounded-lg',
+        default: 'rounded-xl',
     },
     overlayClass: {
         type: String,
-        default: 'bg-gray-500 opacity-75',
+        default: 'bg-slate-950/35',
     },
 });
 
@@ -88,7 +88,10 @@ const maxWidthClass = computed(() => {
         @cancel.prevent="close"
         @keydown.esc.prevent.stop="close"
     >
-        <div class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0" scroll-region>
+        <div
+            class="fixed inset-0 z-50 grid items-center overflow-y-auto overscroll-contain px-4 py-6"
+            scroll-region
+        >
             <Transition
                 enter-active-class="ease-out duration-300"
                 enter-from-class="opacity-0"
@@ -97,9 +100,15 @@ const maxWidthClass = computed(() => {
                 leave-from-class="opacity-100"
                 leave-to-class="opacity-0"
             >
-                <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
-                    <div class="absolute inset-0" :class="overlayClass" />
-                </div>
+                <button
+                    v-show="show"
+                    type="button"
+                    aria-label="Cerrar diálogo"
+                    class="fixed inset-0 w-full transition-opacity"
+                    @click="close"
+                >
+                    <span class="absolute inset-0" :class="overlayClass" />
+                </button>
             </Transition>
 
             <Transition
@@ -112,7 +121,7 @@ const maxWidthClass = computed(() => {
             >
                 <div
                     v-show="show"
-                    class="mb-6 transform overflow-hidden bg-white shadow-xl transition-all sm:mx-auto sm:w-full"
+                    class="relative mx-auto w-full transform overflow-hidden border border-slate-200 bg-white shadow-xl transition-[opacity,transform]"
                     :class="[maxWidthClass, panelClass]"
                 >
                     <slot v-if="showSlot" />

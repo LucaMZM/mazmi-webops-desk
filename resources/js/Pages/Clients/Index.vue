@@ -26,13 +26,33 @@ const user = usePage().props.auth.user;
                 Nuevo cliente
             </Link>
         </PageHeader>
+        <div class="collection-heading">
+            <p>
+                <strong>{{ clients.total }}</strong>
+                clientes{{
+                    Object.values(filters).some(Boolean)
+                        ? ' con los filtros actuales'
+                        : ' en el registro'
+                }}
+            </p>
+            <span class="text-xs">
+                Página {{ clients.current_page }} de {{ clients.last_page }}
+            </span>
+        </div>
         <form class="filter-bar sm:grid-cols-[1fr_190px_auto]" @submit.prevent="apply">
             <input
                 v-model="form.search"
                 class="rounded-lg text-sm"
                 placeholder="Buscar empresa, contacto o ciudad…"
+                aria-label="Buscar clientes"
+                name="search"
             />
-            <select v-model="form.status" class="rounded-lg text-sm">
+            <select
+                v-model="form.status"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por estado"
+                name="status"
+            >
                 <option value="">Todos los estados</option>
                 <option value="active">Activos</option>
                 <option value="inactive">Inactivos</option>
@@ -44,12 +64,14 @@ const user = usePage().props.auth.user;
                 <table class="w-full">
                     <thead class="table-head">
                         <tr>
-                            <th class="table-cell">Empresa</th>
-                            <th class="table-cell">Contacto</th>
-                            <th class="table-cell">Ubicación</th>
-                            <th class="table-cell">Actividad</th>
-                            <th class="table-cell">Estado</th>
-                            <th class="table-cell"></th>
+                            <th scope="col" class="table-cell">Empresa</th>
+                            <th scope="col" class="table-cell">Contacto</th>
+                            <th scope="col" class="table-cell">Ubicación</th>
+                            <th scope="col" class="table-cell">Actividad</th>
+                            <th scope="col" class="table-cell">Estado</th>
+                            <th scope="col" class="table-cell">
+                                <span class="sr-only">Acciones</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">

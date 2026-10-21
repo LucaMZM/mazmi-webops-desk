@@ -1,4 +1,6 @@
 <script setup>
+import SubmitButton from '@/Components/UI/SubmitButton.vue';
+import { useFormFeedback } from '@/Composables/useFormFeedback';
 import { computed } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -31,6 +33,7 @@ const technologyLabel = {
     Other: 'Otro',
 };
 const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium', none: 'Sin plan' };
+const { formElement } = useFormFeedback(form);
 </script>
 <template>
     <Head :title="editing ? 'Editar web' : 'Añadir web'" />
@@ -42,27 +45,29 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
             :back-href="editing ? route('websites.show', website.id) : route('websites.index')"
         />
         <form
-            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            ref="formElement"
+            :aria-busy="form.processing"
+            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
             @submit.prevent="submit"
         >
             <section class="form-section">
                 <h2 class="section-heading">Identificación</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Cliente" required :error="form.errors.client_id">
-                        <select v-model="form.client_id" :class="input">
+                        <select v-model="form.client_id" name="client_id" :class="input">
                             <option v-for="c in clients" :key="c.id" :value="c.id">
                                 {{ c.company_name }}
                             </option>
                         </select>
                     </FormField>
                     <FormField label="Nombre interno" required :error="form.errors.name">
-                        <input v-model="form.name" :class="input" />
+                        <input v-model="form.name" name="name" :class="input" />
                     </FormField>
                     <FormField label="URL" required :error="form.errors.url">
-                        <input v-model="form.url" type="url" :class="input" />
+                        <input v-model="form.url" name="url" type="url" :class="input" />
                     </FormField>
                     <FormField label="Tecnología" required :error="form.errors.technology">
-                        <select v-model="form.technology" :class="input">
+                        <select v-model="form.technology" name="technology" :class="input">
                             <option
                                 v-for="x in [
                                     'WordPress',
@@ -80,14 +85,22 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                         </select>
                     </FormField>
                     <FormField label="Proveedor de hosting" :error="form.errors.hosting_provider">
-                        <input v-model="form.hosting_provider" :class="input" />
+                        <input
+                            v-model="form.hosting_provider"
+                            name="hosting_provider"
+                            :class="input"
+                        />
                     </FormField>
                     <FormField
                         label="Plan de mantenimiento"
                         required
                         :error="form.errors.maintenance_plan"
                     >
-                        <select v-model="form.maintenance_plan" :class="input">
+                        <select
+                            v-model="form.maintenance_plan"
+                            name="maintenance_plan"
+                            :class="input"
+                        >
                             <option
                                 v-for="x in ['basic', 'standard', 'premium', 'none']"
                                 :key="x"
@@ -101,21 +114,31 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
             </section>
             <section class="form-section">
                 <h2 class="section-heading">Salud y vencimientos</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     <FormField
                         label="Vencimiento del dominio"
                         :error="form.errors.domain_expires_at"
                     >
-                        <input v-model="form.domain_expires_at" type="date" :class="input" />
+                        <input
+                            v-model="form.domain_expires_at"
+                            name="domain_expires_at"
+                            type="date"
+                            :class="input"
+                        />
                     </FormField>
                     <FormField
                         label="Vencimiento del hosting"
                         :error="form.errors.hosting_expires_at"
                     >
-                        <input v-model="form.hosting_expires_at" type="date" :class="input" />
+                        <input
+                            v-model="form.hosting_expires_at"
+                            name="hosting_expires_at"
+                            type="date"
+                            :class="input"
+                        />
                     </FormField>
                     <FormField label="Estado SSL" required :error="form.errors.ssl_status">
-                        <select v-model="form.ssl_status" :class="input">
+                        <select v-model="form.ssl_status" name="ssl_status" :class="input">
                             <option value="active">Activo</option>
                             <option value="expiring">Próximo a vencer</option>
                             <option value="expired">Caducado</option>
@@ -123,7 +146,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                         </select>
                     </FormField>
                     <FormField label="Estado general" required :error="form.errors.status">
-                        <select v-model="form.status" :class="input">
+                        <select v-model="form.status" name="status" :class="input">
                             <option value="stable">Estable</option>
                             <option value="review">Revisión</option>
                             <option value="incident">Incidencia</option>
@@ -137,7 +160,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     :error="form.errors.notes"
                     hint="No almacenes contraseñas, tokens ni credenciales reales."
                 >
-                    <textarea v-model="form.notes" rows="4" :class="input" />
+                    <textarea v-model="form.notes" name="notes" rows="4" :class="input" />
                 </FormField>
             </section>
             <div class="form-footer">
@@ -147,9 +170,9 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                 >
                     Cancelar
                 </Link>
-                <button class="btn-primary" :disabled="form.processing">
+                <SubmitButton :processing="form.processing">
                     {{ form.processing ? 'Guardando…' : 'Guardar web' }}
-                </button>
+                </SubmitButton>
             </div>
         </form>
     </AuthenticatedLayout>

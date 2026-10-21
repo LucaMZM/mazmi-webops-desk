@@ -1,34 +1,28 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 defineProps({ eyebrow: String, title: String, description: String, backHref: String });
 </script>
 <template>
-    <div
-        class="mb-6 flex flex-col justify-between gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-end"
-    >
-        <div>
+    <div class="mb-7 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+        <div class="min-w-0">
             <Link
                 v-if="backHref"
                 :href="backHref"
-                class="mb-3 inline-flex min-h-9 items-center text-sm font-semibold text-indigo-600 hover:text-indigo-800"
+                class="mb-3 inline-flex min-h-9 items-center gap-2 rounded-md text-sm text-slate-500 hover:text-indigo-700"
             >
-                ← Volver
+                <AppIcon name="arrow-left" :size="15" />
+                {{ eyebrow || 'Volver' }}
             </Link>
-            <p
-                v-if="eyebrow"
-                class="text-[11px] font-bold uppercase tracking-[0.14em] text-indigo-600"
-            >
-                {{ eyebrow }}
-            </p>
             <h1
-                class="mt-1 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-[1.75rem]"
+                class="font-display text-[1.75rem] font-bold leading-tight tracking-[-0.045em] text-slate-900 sm:text-[2rem]"
             >
                 {{ title }}
             </h1>
-            <p v-if="description" class="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500">
+            <p v-if="description" class="mt-2 max-w-[65ch] text-sm leading-6 text-slate-500">
                 {{ description }}
             </p>
         </div>
-        <div class="flex flex-wrap items-center gap-2"><slot /></div>
+        <div v-if="$slots.default" class="flex shrink-0 flex-wrap items-center gap-2"><slot /></div>
     </div>
 </template>

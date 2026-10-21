@@ -20,6 +20,9 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Confirmar contraseña" />
+        <h1 class="mb-4 text-3xl font-bold leading-tight tracking-[-0.04em] text-slate-900">
+            Confirma tu contraseña
+        </h1>
 
         <div class="mb-4 text-sm text-gray-600">
             Esta zona requiere confirmación. Introduce tu contraseña para continuar.
@@ -35,7 +38,6 @@ const submit = () => {
                     v-model="form.password"
                     required
                     autocomplete="current-password"
-                    autofocus
                 />
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>

@@ -1,4 +1,6 @@
 <script setup>
+import SubmitButton from '@/Components/UI/SubmitButton.vue';
+import { useFormFeedback } from '@/Composables/useFormFeedback';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -33,6 +35,7 @@ const months = [
     'Noviembre',
     'Diciembre',
 ];
+const { formElement } = useFormFeedback(form);
 </script>
 <template>
     <Head title="Crear reporte" />
@@ -44,14 +47,16 @@ const months = [
             :back-href="route('reports.index')"
         />
         <form
-            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            ref="formElement"
+            :aria-busy="form.processing"
+            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
             @submit.prevent="submit"
         >
             <section class="form-section">
                 <h2 class="section-heading">Periodo y cliente</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-3">
+                <div class="grid gap-5 md:grid-cols-3">
                     <FormField label="Cliente" required :error="form.errors.client_id">
-                        <select v-model="form.client_id" :class="input">
+                        <select v-model="form.client_id" name="client_id" :class="input">
                             <option value="" disabled>Selecciona un cliente</option>
                             <option v-for="c in clients" :key="c.id" :value="c.id">
                                 {{ c.company_name }}
@@ -59,7 +64,7 @@ const months = [
                         </select>
                     </FormField>
                     <FormField label="Mes" required :error="form.errors.month">
-                        <select v-model="form.month" :class="input">
+                        <select v-model="form.month" name="month" :class="input">
                             <option v-for="(m, i) in months" :key="m" :value="i + 1">
                                 {{ m }}
                             </option>
@@ -68,6 +73,7 @@ const months = [
                     <FormField label="Año" required :error="form.errors.year">
                         <input
                             v-model="form.year"
+                            name="year"
                             type="number"
                             min="2020"
                             max="2100"
@@ -78,10 +84,11 @@ const months = [
             </section>
             <section class="form-section">
                 <h2 class="section-heading">Resumen ejecutivo</h2>
-                <div class="mt-5 grid gap-5">
+                <div class="grid gap-5">
                     <FormField label="Resumen del mes" required :error="form.errors.summary">
                         <textarea
                             v-model="form.summary"
+                            name="summary"
                             rows="6"
                             :class="input"
                             maxlength="5000"
@@ -95,6 +102,7 @@ const months = [
                     >
                         <textarea
                             v-model="form.recommendations"
+                            name="recommendations"
                             rows="5"
                             :class="input"
                             maxlength="5000"
@@ -105,7 +113,7 @@ const months = [
             </section>
             <section class="form-section">
                 <h2 class="section-heading">Indicadores</h2>
-                <div class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     <FormField
                         label="Tareas completadas"
                         required
@@ -113,6 +121,7 @@ const months = [
                     >
                         <input
                             v-model="form.completed_tasks_count"
+                            name="completed_tasks_count"
                             type="number"
                             min="0"
                             :class="input"
@@ -125,6 +134,7 @@ const months = [
                     >
                         <input
                             v-model="form.resolved_tickets_count"
+                            name="resolved_tickets_count"
                             type="number"
                             min="0"
                             :class="input"
@@ -137,13 +147,14 @@ const months = [
                     >
                         <input
                             v-model="form.pending_tickets_count"
+                            name="pending_tickets_count"
                             type="number"
                             min="0"
                             :class="input"
                         />
                     </FormField>
                     <FormField label="Estado general" required :error="form.errors.general_status">
-                        <select v-model="form.general_status" :class="input">
+                        <select v-model="form.general_status" name="general_status" :class="input">
                             <option value="good">Correcto</option>
                             <option value="attention">Requiere atención</option>
                             <option value="critical">Crítico</option>
@@ -153,9 +164,9 @@ const months = [
             </section>
             <div class="form-footer">
                 <Link :href="route('reports.index')" class="btn-secondary">Cancelar</Link>
-                <button class="btn-primary" :disabled="form.processing">
+                <SubmitButton :processing="form.processing">
                     {{ form.processing ? 'Generando…' : 'Crear reporte' }}
-                </button>
+                </SubmitButton>
             </div>
         </form>
     </AuthenticatedLayout>

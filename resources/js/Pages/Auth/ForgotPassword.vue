@@ -24,6 +24,9 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Recuperar contraseña" />
+        <h1 class="mb-4 text-3xl font-bold leading-tight tracking-[-0.04em] text-slate-900">
+            Recuperar acceso
+        </h1>
 
         <div class="mb-4 text-sm text-gray-600">
             Indica tu email y recibirás un enlace para crear una nueva contraseña.
@@ -42,8 +45,9 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
+                    name="email"
+                    spellcheck="false"
                     required
-                    autofocus
                     autocomplete="username"
                 />
 

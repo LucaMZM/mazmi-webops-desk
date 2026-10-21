@@ -46,7 +46,7 @@ const months = [
                 message="Solo se eliminará si no tiene webs, tickets, reportes o usuarios asociados."
             />
         </PageHeader>
-        <div class="grid gap-6 xl:grid-cols-[1fr_320px]">
+        <div class="detail-layout">
             <div class="space-y-6">
                 <section class="panel">
                     <div class="flex items-center justify-between border-b border-slate-100 p-5">
@@ -72,8 +72,16 @@ const months = [
                             <div class="min-w-0">
                                 <p class="font-bold">{{ web.name }}</p>
                                 <p class="mt-1 truncate text-xs text-slate-500">{{ web.url }}</p>
-                                <p class="mt-1 text-xs font-semibold text-indigo-600">
-                                    {{ web.technology }} · {{ web.maintenance_plan }}
+                                <p class="mt-1 text-xs font-medium text-slate-500">
+                                    {{ web.technology }} /
+                                    {{
+                                        {
+                                            basic: 'Básico',
+                                            standard: 'Estándar',
+                                            premium: 'Premium',
+                                            none: 'Sin plan',
+                                        }[web.maintenance_plan]
+                                    }}
                                 </p>
                             </div>
                             <StatusBadge :status="web.status" />
@@ -98,7 +106,7 @@ const months = [
                             :href="route('tickets.show', ticket.id)"
                             class="flex flex-col gap-2 p-4 hover:bg-slate-50 sm:flex-row sm:items-center"
                         >
-                            <div class="flex-1">
+                            <div class="min-w-0 flex-1">
                                 <p class="text-sm font-semibold">
                                     #{{ ticket.id }} · {{ ticket.title }}
                                 </p>

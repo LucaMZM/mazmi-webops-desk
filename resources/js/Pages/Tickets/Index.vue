@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -21,8 +21,19 @@ const apply = () =>
     router.get(route('tickets.index'), form, { preserveState: true, replace: true });
 const canEdit = (t) =>
     user.role === 'admin' || (user.role === 'technician' && t.assigned_to === user.id);
-const setStatus = (t, status) =>
-    router.patch(route('tickets.status', t.id), { status }, { preserveScroll: true });
+const updatingTicket = ref(null);
+const setStatus = (t, status) => {
+    if (updatingTicket.value !== null) return;
+    router.patch(
+        route('tickets.status', t.id),
+        { status },
+        {
+            preserveScroll: true,
+            onStart: () => (updatingTicket.value = t.id),
+            onFinish: () => (updatingTicket.value = null),
+        },
+    );
+};
 const statusLabel = {
     open: 'Abierto',
     in_progress: 'En curso',
@@ -48,12 +59,36 @@ const statusLabel = {
                 Nuevo ticket
             </Link>
         </PageHeader>
+        <div class="collection-heading">
+            <p>
+                <strong>{{ tickets.total }}</strong>
+                tickets{{
+                    Object.values(filters).some(Boolean)
+                        ? ' con los filtros actuales'
+                        : ' en el registro'
+                }}
+            </p>
+            <span class="text-xs">
+                Página {{ tickets.current_page }} de {{ tickets.last_page }}
+            </span>
+        </div>
         <form
             class="filter-bar md:grid-cols-2 xl:grid-cols-[1fr_repeat(4,160px)_auto]"
             @submit.prevent="apply"
         >
-            <input v-model="form.search" class="rounded-lg text-sm" placeholder="Buscar ticket…" />
-            <select v-model="form.status" class="rounded-lg text-sm">
+            <input
+                v-model="form.search"
+                class="rounded-lg text-sm"
+                placeholder="Buscar ticket…"
+                aria-label="Buscar tickets"
+                name="search"
+            />
+            <select
+                v-model="form.status"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por estado"
+                name="status"
+            >
                 <option value="">Estado</option>
                 <option
                     v-for="x in ['open', 'in_progress', 'waiting_client', 'resolved', 'closed']"
@@ -71,19 +106,36 @@ const statusLabel = {
                     }}
                 </option>
             </select>
-            <select v-model="form.priority" class="rounded-lg text-sm">
+            <select
+                v-model="form.priority"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por prioridad"
+                name="priority"
+            >
                 <option value="">Prioridad</option>
                 <option v-for="x in ['low', 'medium', 'high', 'urgent']" :key="x" :value="x">
                     {{ { low: 'Baja', medium: 'Media', high: 'Alta', urgent: 'Urgente' }[x] }}
                 </option>
             </select>
-            <select v-if="clients.length" v-model="form.client_id" class="rounded-lg text-sm">
+            <select
+                v-if="clients.length"
+                v-model="form.client_id"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por cliente"
+                name="client_id"
+            >
                 <option value="">Cliente</option>
                 <option v-for="c in clients" :key="c.id" :value="c.id">
                     {{ c.company_name }}
                 </option>
             </select>
-            <select v-if="technicians.length" v-model="form.assigned_to" class="rounded-lg text-sm">
+            <select
+                v-if="technicians.length"
+                v-model="form.assigned_to"
+                class="rounded-lg text-sm"
+                aria-label="Filtrar por técnico"
+                name="assigned_to"
+            >
                 <option value="">Técnico</option>
                 <option v-for="t in technicians" :key="t.id" :value="t.id">
                     {{ t.name }}
@@ -96,12 +148,12 @@ const statusLabel = {
                 <table class="w-full">
                     <thead class="table-head">
                         <tr>
-                            <th class="table-cell">Ticket</th>
-                            <th class="table-cell">Cliente / web</th>
-                            <th class="table-cell">Prioridad</th>
-                            <th class="table-cell">Asignado</th>
-                            <th class="table-cell">Estado</th>
-                            <th class="table-cell">Acción</th>
+                            <th scope="col" class="table-cell">Ticket</th>
+                            <th scope="col" class="table-cell">Cliente / web</th>
+                            <th scope="col" class="table-cell">Prioridad</th>
+                            <th scope="col" class="table-cell">Asignado</th>
+                            <th scope="col" class="table-cell">Estado</th>
+                            <th scope="col" class="table-cell">Acción</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -145,6 +197,9 @@ const statusLabel = {
                                 <select
                                     v-if="canEdit(ticket)"
                                     :value="ticket.status"
+                                    :disabled="updatingTicket !== null"
+                                    :aria-busy="updatingTicket === ticket.id"
+                                    :aria-label="`Estado del ticket #${ticket.id}`"
                                     class="min-h-9 rounded-lg border-slate-300 py-1.5 text-xs"
                                     @change="setStatus(ticket, $event.target.value)"
                                 >

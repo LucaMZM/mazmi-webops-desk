@@ -1,6 +1,6 @@
 # Funcionalidades de Mazmi WebOps Desk
 
-Este documento resume el comportamiento implementado. Describe el código actual y separa las mejoras futuras para no presentar funcionalidades simuladas como terminadas.
+Referencia del comportamiento de los módulos y de sus reglas de acceso.
 
 ## Autenticación y roles
 
@@ -68,10 +68,14 @@ La exportación PDF no está implementada y figura como mejora futura.
 ## Experiencia de uso
 
 - Sidebar en escritorio y navegación adaptada a móvil.
-- Tablas convertidas en cards en pantallas pequeñas.
+- Listados adaptados a filas apiladas en pantallas pequeñas.
 - Formularios divididos en secciones.
 - Badges semánticos, mensajes flash, estados vacíos y confirmación antes de borrar.
 - Filtros persistentes mediante parámetros de consulta.
+- Navegación móvil en un diálogo con cierre por Escape y recuperación del foco.
+- Errores asociados a cada campo y foco en el primer campo inválido.
+- Estados de envío que bloquean peticiones duplicadas en formularios y acciones rápidas de tickets y tareas.
+- Fuentes autoalojadas y soporte para la preferencia de movimiento reducido.
 
 ## Datos demo
 

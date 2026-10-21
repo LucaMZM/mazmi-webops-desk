@@ -34,6 +34,9 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Restablecer contraseña" />
+        <h1 class="mb-4 text-3xl font-bold leading-tight tracking-[-0.04em] text-slate-900">
+            Nueva contraseña
+        </h1>
 
         <form @submit.prevent="submit">
             <div>
@@ -44,8 +47,9 @@ const submit = () => {
                     type="email"
                     class="mt-1 block w-full"
                     v-model="form.email"
+                    name="email"
+                    spellcheck="false"
                     required
-                    autofocus
                     autocomplete="username"
                 />
 

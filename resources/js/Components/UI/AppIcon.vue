@@ -91,5 +91,31 @@ defineProps({
         <template v-else-if="name === 'arrow-up'">
             <path d="m18 15-6-6-6 6M12 9v10" />
         </template>
+        <template v-else-if="name === 'arrow-right'"><path d="M4 12h16m-6-6 6 6-6 6" /></template>
+        <template v-else-if="name === 'arrow-left'"><path d="M20 12H4m6-6-6 6 6 6" /></template>
+        <template v-else-if="name === 'chevron-right'"><path d="m9 6 6 6-6 6" /></template>
+        <template v-else-if="name === 'external'">
+            <path
+                d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"
+            />
+        </template>
+        <template v-else-if="name === 'search'">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 5 5" />
+        </template>
+        <template v-else-if="name === 'settings'">
+            <circle cx="12" cy="12" r="3" />
+            <path
+                d="m9 3-.7 2.4-2.4 1L3.6 6 2 9l1.8 1.8v2.4L2 15l1.6 3 2.3-.4 2.4 1L9 21h6l.7-2.4 2.4-1 2.3.4 1.6-3-1.8-1.8v-2.4L22 9l-1.6-3-2.3.4-2.4-1L15 3Z"
+            />
+        </template>
+        <template v-else-if="name === 'shield'">
+            <path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6Z" />
+            <path d="m8.5 12 2.5 2.5 4.5-5" />
+        </template>
+        <template v-else-if="name === 'print'">
+            <path d="M7 7V3h10v4M7 17H3V8h18v9h-4M7 13h10v8H7Z" />
+            <path d="M17 10h1" />
+        </template>
     </svg>
 </template>

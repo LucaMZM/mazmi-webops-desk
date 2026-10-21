@@ -1,224 +1,230 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
+import BrandMark from '@/Components/UI/BrandMark.vue';
+import AppIcon from '@/Components/UI/AppIcon.vue';
 
-const previewStats = [
-    { value: '8', label: 'Clientes demo', color: 'text-indigo-600' },
-    { value: '12', label: 'Webs registradas', color: 'text-blue-600' },
-    { value: '10', label: 'Tickets abiertos', color: 'text-orange-600' },
-    { value: '18', label: 'Tareas pendientes', color: 'text-emerald-600' },
-];
-
-const previewTasks = [
-    'Revisar actualizaciones de una web WordPress',
-    'Comprobar un certificado SSL próximo a vencer',
-    'Preparar el resumen mensual de un cliente',
-];
-
-const benefits = [
+const areas = [
     {
-        title: 'Contexto en un solo sitio',
-        description:
-            'Clientes, webs, tickets y tareas conectados para saber qué pasa y quién lo lleva.',
+        title: 'El inventario, con contexto',
+        text: 'Web, cliente, tecnología, hosting y vencimientos en una misma ficha. Sin tener que reconstruir la información cada vez.',
+        icon: 'websites',
     },
     {
-        title: 'Trabajo técnico ordenado',
-        description:
-            'Prioridades, estados, vencimientos y asignaciones pensados para mantenimiento web real.',
+        title: 'El soporte, con responsable',
+        text: 'Tickets con prioridad, estado y técnico asignado. Un punto de partida claro para atender cada solicitud.',
+        icon: 'tickets',
     },
     {
-        title: 'Información clara para clientes',
-        description:
-            'Acceso limitado a sus datos y reportes mensuales fáciles de revisar o imprimir.',
+        title: 'El mantenimiento, con seguimiento',
+        text: 'Tareas programadas, trabajo pendiente y reportes mensuales para explicar qué se ha hecho y qué queda por hacer.',
+        icon: 'maintenance',
     },
 ];
-
-const stack = ['Laravel 13', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL', 'Vite'];
+const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
 </script>
-
 <template>
-    <Head title="Panel de mantenimiento web" />
-
-    <div class="min-h-screen bg-slate-950 text-white">
-        <header class="mx-auto flex max-w-7xl items-center justify-between px-5 py-6 sm:px-8">
-            <div class="flex items-center gap-3">
-                <div class="grid h-10 w-10 place-items-center rounded-md bg-indigo-500 font-black">
-                    M
-                </div>
-                <div>
-                    <p class="font-bold">Mazmi WebOps Desk</p>
-                    <p class="text-[10px] uppercase tracking-widest text-slate-400">
-                        Operaciones web
-                    </p>
+    <Head title="Mantenimiento web, con contexto" />
+    <div class="bg-white text-slate-900">
+        <a href="#content" class="skip-link">Ir al contenido</a>
+        <header class="border-b border-slate-200">
+            <div
+                class="mx-auto flex min-h-[88px] max-w-[1320px] items-center justify-between gap-5 px-5 sm:px-8"
+            >
+                <Link href="/" class="flex items-center gap-3" title="Mazmi WebOps Desk, inicio">
+                    <BrandMark class="h-10 w-10 shrink-0 text-indigo-600" />
+                    <div translate="no">
+                        <p class="font-display text-lg font-extrabold tracking-tight">Mazmi</p>
+                        <p class="-mt-0.5 text-xs text-slate-500">WebOps Desk</p>
+                    </div>
+                </Link>
+                <div class="flex items-center gap-7">
+                    <a
+                        href="#proyecto"
+                        class="hidden text-sm text-slate-600 hover:text-indigo-700 sm:block"
+                    >
+                        El espacio de trabajo
+                    </a>
+                    <Link
+                        :href="$page.props.auth.user ? route('dashboard') : route('login')"
+                        class="btn-secondary"
+                    >
+                        {{ $page.props.auth.user ? 'Abrir panel' : 'Iniciar sesión' }}
+                        <AppIcon name="arrow-right" :size="16" />
+                    </Link>
                 </div>
             </div>
-
-            <Link v-if="$page.props.auth.user" :href="route('dashboard')" class="btn-primary">
-                Ir al dashboard
-            </Link>
-            <Link
-                v-else
-                :href="route('login')"
-                class="inline-flex min-h-10 items-center rounded-md border border-white/20 px-4 py-2 text-sm font-semibold transition hover:bg-white/10"
-            >
-                Iniciar sesión
-            </Link>
         </header>
-
-        <main>
-            <section class="relative overflow-hidden border-t border-white/[0.06]">
+        <main id="content">
+            <section
+                class="mx-auto grid max-w-[1320px] items-center gap-12 px-5 pb-16 pt-14 sm:px-8 sm:py-20 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24"
+            >
+                <div>
+                    <p class="mb-6 flex items-center gap-2 text-sm font-medium text-slate-600">
+                        <span class="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                        Operaciones web para equipos pequeños
+                    </p>
+                    <h1
+                        class="max-w-[12ch] text-[clamp(2.6rem,5vw,4.6rem)] font-semibold leading-[1.09] tracking-[-0.065em]"
+                    >
+                        Todo lo que hay detrás de una web, a la vista.
+                    </h1>
+                    <p
+                        class="mt-7 max-w-[48ch] text-base leading-7 text-slate-600 sm:text-lg sm:leading-8"
+                    >
+                        Organiza clientes, incidencias y mantenimiento en un espacio compartido.
+                        Para agencias y profesionales que cuidan de más de una web.
+                    </p>
+                    <div class="mt-9 flex flex-wrap items-center gap-5">
+                        <Link :href="route('login')" class="btn-primary px-6">
+                            Explorar la demo
+                            <AppIcon name="arrow-right" :size="17" />
+                        </Link>
+                        <a href="#proyecto" class="btn-text">Conocer el proyecto</a>
+                    </div>
+                    <p class="mt-5 text-xs text-slate-500">
+                        Demostración funcional con datos ficticios.
+                    </p>
+                </div>
                 <div
-                    class="relative mx-auto grid max-w-7xl gap-14 px-5 pb-20 pt-14 sm:px-8 lg:grid-cols-[1.08fr_.92fr] lg:items-center lg:pb-28 lg:pt-24"
+                    class="relative rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-7"
+                    role="img"
+                    aria-label="La ficha de una web reúne datos del cliente, tickets, tareas y reportes. Diagrama de la organización del producto."
                 >
-                    <div>
-                        <div
-                            class="inline-flex border-l-2 border-indigo-400 pl-3 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200"
-                        >
-                            Laravel · Vue · Inertia
-                        </div>
-                        <h1
-                            class="mt-7 text-4xl font-black leading-tight tracking-tight sm:text-6xl"
-                        >
-                            Mantenimiento web organizado,
-                            <span class="text-indigo-400">sin perder contexto.</span>
-                        </h1>
-                        <p class="mt-6 max-w-xl text-lg leading-8 text-slate-300">
-                            Mazmi WebOps Desk ayuda a seguir clientes, webs, tickets, tareas y
-                            reportes mensuales desde un panel único. Está pensado para el día a día
-                            de una pequeña agencia o freelancer técnico.
-                        </p>
-                        <div class="mt-9 flex flex-wrap gap-3">
-                            <Link :href="route('login')" class="btn-primary px-6 py-3">
-                                Probar demo →
-                            </Link>
-                            <a
-                                href="#proyecto"
-                                class="rounded-md border border-white/20 px-6 py-3 text-sm font-semibold transition hover:bg-white/10"
+                    <div class="mb-7 flex items-center justify-between text-xs text-slate-500">
+                        <span>WebOps Desk</span>
+                        <span class="rounded-md border border-slate-200 bg-white px-2 py-1">
+                            Estructura del servicio
+                        </span>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-white">
+                        <div class="flex items-center gap-3 border-b border-slate-200 p-5">
+                            <span
+                                class="grid h-11 w-11 place-items-center rounded-xl bg-indigo-50 text-indigo-700"
                             >
-                                Ver qué incluye
-                            </a>
-                        </div>
-                        <p class="mt-4 text-xs text-slate-500">
-                            Acceso demo: admin@webops.test · password
-                        </p>
-                    </div>
-
-                    <div class="relative border border-white/10 bg-white/[0.035] p-3">
-                        <div class="bg-slate-50 p-5 text-slate-900">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p
-                                        class="text-xs font-bold uppercase tracking-widest text-indigo-600"
-                                    >
-                                        Vista demo
-                                    </p>
-                                    <p class="mt-1 text-xl font-black">Panel de ejemplo</p>
-                                </div>
-                                <div
-                                    class="rounded-md bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700"
-                                >
-                                    Datos ficticios
-                                </div>
-                            </div>
-
-                            <div class="mt-5 grid grid-cols-2 border-y border-slate-200">
-                                <div
-                                    v-for="item in previewStats"
-                                    :key="item.label"
-                                    class="border-b border-r border-slate-200 p-4 even:border-r-0 [&:nth-last-child(-n+2)]:border-b-0"
-                                >
-                                    <p :class="['text-3xl font-black', item.color]">
-                                        {{ item.value }}
-                                    </p>
-                                    <p class="text-xs text-slate-500">
-                                        {{ item.label }}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 space-y-2">
-                                <div
-                                    v-for="(label, index) in previewTasks"
-                                    :key="label"
-                                    class="flex items-center gap-3 border-b border-slate-200 px-1 py-3 text-xs font-semibold last:border-b-0"
-                                >
-                                    <span
-                                        class="grid h-7 w-7 place-items-center border border-slate-200 bg-white text-indigo-600"
-                                    >
-                                        {{ index + 1 }}
-                                    </span>
-                                    {{ label }}
-                                </div>
+                                <AppIcon name="websites" :size="23" />
+                            </span>
+                            <div>
+                                <p class="font-display font-bold">Una web. Todo su contexto.</p>
+                                <p class="mt-1 text-xs text-slate-500">
+                                    Ficha técnica del servicio
+                                </p>
                             </div>
                         </div>
+                        <dl class="grid grid-cols-2 gap-x-6 gap-y-5 p-5">
+                            <div>
+                                <dt class="text-xs text-slate-500">Relación</dt>
+                                <dd class="mt-1 text-sm font-medium">Cliente y contacto</dd>
+                            </div>
+                            <div>
+                                <dt class="text-xs text-slate-500">Tecnología</dt>
+                                <dd class="mt-1 text-sm font-medium">Stack y mantenimiento</dd>
+                            </div>
+                            <div>
+                                <dt class="text-xs text-slate-500">Infraestructura</dt>
+                                <dd class="mt-1 text-sm font-medium">Hosting y dominio</dd>
+                            </div>
+                            <div>
+                                <dt class="text-xs text-slate-500">Seguimiento</dt>
+                                <dd class="mt-1 text-sm font-medium">Estado y vencimientos</dd>
+                            </div>
+                        </dl>
                     </div>
+                    <div class="ml-5 border-l border-slate-300 pb-2 pl-6 pt-6 sm:ml-8">
+                        <div
+                            v-for="area in areas"
+                            :key="area.icon"
+                            class="relative mb-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3.5 last:mb-0"
+                        >
+                            <span class="absolute -left-6 w-6 border-t border-slate-300" />
+                            <AppIcon
+                                :name="area.icon"
+                                :size="17"
+                                class="shrink-0 text-indigo-600"
+                            />
+                            <span class="text-sm font-medium">
+                                {{
+                                    {
+                                        websites: 'Inventario de webs',
+                                        tickets: 'Tickets de soporte',
+                                        maintenance: 'Tareas de mantenimiento',
+                                    }[area.icon]
+                                }}
+                            </span>
+                            <AppIcon name="check" :size="15" class="ml-auto text-slate-400" />
+                        </div>
+                    </div>
+                    <p class="mt-5 text-xs text-slate-500">
+                        La información conectada. El trabajo, localizado.
+                    </p>
                 </div>
             </section>
-
-            <section id="proyecto" class="border-y border-white/10 bg-white/[.03]">
-                <div class="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-                    <div class="max-w-2xl">
-                        <p class="text-xs font-bold uppercase tracking-widest text-indigo-400">
-                            Operaciones centralizadas
-                        </p>
-                        <h2 class="mt-3 text-3xl font-black">
-                            Un flujo claro para mantenimiento web
+            <section id="proyecto" class="border-y border-slate-200 bg-slate-50">
+                <div class="mx-auto max-w-[1320px] px-5 py-16 sm:px-8 sm:py-20">
+                    <div class="mb-12 grid gap-5 md:grid-cols-2 md:gap-16">
+                        <h2
+                            class="max-w-[22ch] text-3xl font-semibold leading-tight tracking-[-0.045em] sm:text-4xl"
+                        >
+                            Menos buscar información.
+                            <br />
+                            Más atender el servicio.
                         </h2>
-                        <p class="mt-4 leading-7 text-slate-400">
-                            La aplicación cubre soporte, inventario técnico, tareas programadas,
-                            vencimientos y reportes. Cada rol ve únicamente la información que
-                            necesita.
+                        <p class="max-w-[55ch] text-base leading-7 text-slate-600">
+                            Cuando el mantenimiento se reparte entre correos, hojas de cálculo y
+                            notas, se pierde el hilo. WebOps Desk conecta los datos con el trabajo
+                            que depende de ellos.
                         </p>
                     </div>
-
-                    <div
-                        class="mt-10 grid border-y border-white/10 md:grid-cols-3 md:divide-x md:divide-white/10"
-                    >
+                    <div class="grid gap-8 md:grid-cols-3 md:gap-10">
                         <article
-                            v-for="(item, index) in benefits"
-                            :key="item.title"
-                            class="border-b border-white/10 py-7 last:border-b-0 md:border-b-0 md:px-7 md:first:pl-0 md:last:pr-0"
+                            v-for="area in areas"
+                            :key="area.title"
+                            class="border-t border-slate-300 pt-6"
                         >
-                            <span class="text-sm font-black text-indigo-400">0{{ index + 1 }}</span>
-                            <h3 class="mt-5 text-lg font-bold">
-                                {{ item.title }}
-                            </h3>
-                            <p class="mt-2 text-sm leading-6 text-slate-400">
-                                {{ item.description }}
-                            </p>
+                            <AppIcon :name="area.icon" :size="22" class="mb-5 text-indigo-600" />
+                            <h3 class="text-lg font-bold tracking-tight">{{ area.title }}</h3>
+                            <p class="mt-3 text-sm leading-7 text-slate-600">{{ area.text }}</p>
                         </article>
                     </div>
                 </div>
             </section>
-
-            <section class="mx-auto max-w-7xl px-5 py-20 sm:px-8">
-                <div class="grid gap-10 lg:grid-cols-2 lg:items-center">
-                    <div>
-                        <p class="text-xs font-bold uppercase tracking-widest text-indigo-400">
-                            Stack técnico
-                        </p>
-                        <h2 class="mt-3 text-3xl font-black">Laravel y Vue trabajando juntos</h2>
-                        <p class="mt-4 leading-7 text-slate-400">
-                            Laravel gestiona rutas, validación, autorización y datos. Vue 3
-                            construye la interfaz, Inertia conecta ambas partes sin una API separada
-                            y Tailwind mantiene una base visual consistente.
-                        </p>
-                    </div>
-
-                    <div class="grid grid-cols-2 border border-white/10 sm:grid-cols-3">
-                        <div
-                            v-for="tech in stack"
-                            :key="tech"
-                            class="border-b border-r border-white/10 p-4 text-center text-sm font-bold even:border-r-0 sm:[&:nth-child(2)]:border-r sm:[&:nth-child(3)]:border-r-0 sm:[&:nth-child(4)]:border-b-0 sm:[&:nth-child(6)]:border-r-0 sm:[&:nth-child(5)]:border-b-0 sm:[&:nth-child(6)]:border-b-0"
-                        >
-                            {{ tech }}
-                        </div>
-                    </div>
+            <section
+                class="mx-auto grid max-w-[1320px] gap-10 px-5 py-16 sm:px-8 sm:py-20 lg:grid-cols-2 lg:gap-20"
+            >
+                <div>
+                    <h2 class="text-2xl font-bold tracking-[-0.035em]">
+                        Cada persona, su espacio.
+                    </h2>
+                    <p class="mt-4 max-w-[55ch] text-sm leading-7 text-slate-600">
+                        El administrador organiza el servicio. Los técnicos trabajan sobre lo
+                        asignado. Cada cliente consulta sus webs, solicita soporte y revisa sus
+                        reportes.
+                    </p>
+                    <Link :href="route('login')" class="btn-text mt-5">
+                        Entrar con un usuario demo
+                        <AppIcon name="arrow-right" :size="16" />
+                    </Link>
+                </div>
+                <div class="rounded-xl border border-slate-200 p-6 sm:p-7">
+                    <h3 class="text-base font-bold">Una aplicación full-stack</h3>
+                    <p class="mt-3 text-sm leading-7 text-slate-600">
+                        Laravel gestiona los datos, permisos y validaciones. Vue construye la
+                        interfaz e Inertia conecta ambas partes.
+                    </p>
+                    <ul
+                        class="mt-6 flex flex-wrap gap-x-5 gap-y-3 border-t border-slate-200 pt-5 text-xs font-medium text-slate-600"
+                    >
+                        <li v-for="tech in stack" :key="tech">{{ tech }}</li>
+                    </ul>
                 </div>
             </section>
         </main>
-
-        <footer class="border-t border-white/10 px-5 py-8 text-center text-xs text-slate-500">
-            Diseñado y desarrollado por Luca Mazmishvili · Valencia, España
+        <footer class="border-t border-slate-200">
+            <div
+                class="mx-auto flex max-w-[1320px] flex-col justify-between gap-3 px-5 py-7 text-xs text-slate-500 sm:flex-row sm:px-8"
+            >
+                <span>© {{ new Date().getFullYear() }} Mazmi WebOps Desk</span>
+                <span>Luca Mazmishvili · Valencia, España</span>
+            </div>
         </footer>
     </div>
 </template>

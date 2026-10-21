@@ -25,9 +25,9 @@ const form = useForm({
 <template>
     <section>
         <header>
-            <h2 class="text-lg font-medium text-gray-900">Datos del perfil</h2>
+            <h2 class="section-heading">Datos del perfil</h2>
 
-            <p class="mt-1 text-sm text-gray-600">Actualiza tu nombre y email de acceso.</p>
+            <p class="mt-1 text-sm text-slate-500">Actualiza tu nombre y email de acceso.</p>
         </header>
 
         <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
@@ -40,7 +40,6 @@ const form = useForm({
                     class="mt-1 block w-full"
                     v-model="form.name"
                     required
-                    autofocus
                     autocomplete="name"
                 />
 
@@ -69,7 +68,7 @@ const form = useForm({
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="rounded-md text-sm text-slate-500 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     >
                         Reenviar email de verificación.
                     </Link>
@@ -92,7 +91,7 @@ const form = useForm({
                     leave-active-class="transition ease-in-out"
                     leave-to-class="opacity-0"
                 >
-                    <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Guardado.</p>
+                    <p v-if="form.recentlySuccessful" class="text-sm text-slate-500">Guardado.</p>
                 </Transition>
             </div>
         </form>

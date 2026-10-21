@@ -17,20 +17,16 @@ const tones = {
 };
 </script>
 <template>
-    <div
-        class="panel p-4 transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md sm:p-5"
-    >
+    <div class="panel p-4 sm:p-5">
         <div class="flex items-start justify-between">
             <div>
                 <p class="text-xs font-semibold leading-5 text-slate-500 sm:text-[13px]">
                     {{ label }}
                 </p>
-                <p
-                    class="mt-1.5 text-2xl font-extrabold tracking-tight text-slate-950 sm:mt-2 sm:text-3xl"
-                >
+                <p class="mt-1.5 stat-number text-2xl sm:mt-2 sm:text-3xl">
                     {{ value }}
                 </p>
-                <p v-if="hint" class="mt-1 text-xs font-medium text-slate-400">{{ hint }}</p>
+                <p v-if="hint" class="mt-1 text-xs font-medium text-slate-500">{{ hint }}</p>
             </div>
             <div :class="['grid h-9 w-9 shrink-0 place-items-center rounded-lg', tones[tone]]">
                 <AppIcon :name="icon" :size="18" />

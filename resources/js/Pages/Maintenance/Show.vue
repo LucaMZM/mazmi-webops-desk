@@ -54,8 +54,8 @@ const categoryLabel = (value) =>
                 :url="route('maintenance.destroy', task.id)"
             />
         </PageHeader>
-        <div class="grid gap-6 xl:grid-cols-[1fr_340px]">
-            <article class="panel p-5 sm:p-7">
+        <div class="detail-layout">
+            <article class="dossier p-5 sm:p-7">
                 <div class="flex flex-wrap gap-2">
                     <PriorityBadge :priority="task.priority" />
                     <StatusBadge :status="task.status" />
@@ -65,13 +65,13 @@ const categoryLabel = (value) =>
                         {{ categoryLabel(task.category) }}
                     </span>
                 </div>
-                <h2 class="meta-label mt-8">Descripción y checklist</h2>
+                <h2 class="meta-label mt-8">Descripción de la tarea</h2>
                 <p class="mt-3 whitespace-pre-line leading-7 text-slate-700">
                     {{ task.description || 'No se ha añadido una descripción detallada.' }}
                 </p>
             </article>
             <aside class="space-y-5">
-                <section class="panel p-5">
+                <section class="dossier p-5 sm:p-6">
                     <h2 class="section-heading">Planificación</h2>
                     <dl class="mt-5 space-y-4 text-sm">
                         <div>

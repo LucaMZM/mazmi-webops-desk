@@ -1,197 +1,167 @@
 # Mazmi WebOps Desk
 
-Panel de gestión para centralizar mantenimiento web, soporte técnico, vencimientos y reportes mensuales de clientes.
+Un espacio de trabajo para organizar el mantenimiento de las webs de tus clientes.
 
-> **Estado:** versión funcional de demostración. El proyecto está orientado a evaluación técnica y todavía no está preparado para uso en producción.
+Mazmi WebOps Desk conecta el inventario técnico con las solicitudes de soporte, las tareas programadas y los reportes mensuales. Está pensado para pequeñas agencias y profesionales que necesitan seguir el servicio sin repartir la información entre correos, hojas de cálculo y notas.
 
 [![CI](https://github.com/LucaMZM/mazmi-webops-desk/actions/workflows/ci.yml/badge.svg)](https://github.com/LucaMZM/mazmi-webops-desk/actions/workflows/ci.yml)
-![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
-![Vue.js](https://img.shields.io/badge/Vue.js-3-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)
-![Inertia.js](https://img.shields.io/badge/Inertia.js-2-9553E9?style=for-the-badge&logo=inertia&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![PHPUnit](https://img.shields.io/badge/PHPUnit-12-366488?style=for-the-badge)
-![License](https://img.shields.io/badge/license-MIT-16A34A?style=for-the-badge)
+![PHP](https://img.shields.io/badge/PHP-8.3%2B-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white)
+![Vue](https://img.shields.io/badge/Vue-3-4FC08D?logo=vuedotjs&logoColor=white)
+![Inertia](https://img.shields.io/badge/Inertia.js-2-9553E9?logo=inertia&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
+![PHPUnit](https://img.shields.io/badge/PHPUnit-12-366488)
+[![MIT](https://img.shields.io/badge/Licencia-MIT-344966)](LICENSE)
 
-Mazmi WebOps Desk es una aplicación full-stack construida con Laravel, Vue 3 e Inertia. Permite organizar clientes, webs, tickets, tareas de mantenimiento, vencimientos de dominio/hosting y reportes mensuales desde un panel privado con roles.
+> **Estado:** versión funcional de demostración, orientada a evaluación técnica. Todavía no está preparada para uso en producción.
 
-<a id="indice"></a>
-## Índice
+## Contenido
 
-- [Descripción](#descripcion)
-- [Capturas](#capturas)
-- [Problema que resuelve](#problema-que-resuelve)
 - [Funcionalidades](#funcionalidades)
 - [Roles](#roles)
-- [Stack técnico](#stack-tecnico)
-- [Instalación](#instalacion)
-- [Usuarios demo](#usuarios-demo)
-- [Tests y CI](#tests-y-ci)
+- [Capturas](#capturas)
+- [Stack técnico](#stack)
+- [Instalación y ejecución](#instalacion)
+- [Usuarios demo](#demo)
+- [Calidad y CI](#calidad)
+- [Estructura y decisiones técnicas](#estructura)
 - [Documentación](#documentacion)
-- [Próximas mejoras](#proximas-mejoras)
-- [Autor](#autor)
+- [Próximas mejoras](#mejoras)
+- [Autor y licencia](#autor)
 
-<a id="descripcion"></a>
-## Descripción
+<a id="funcionalidades"></a>
 
-La aplicación simula el flujo de trabajo de una pequeña agencia web o de un equipo técnico que mantiene sitios de varios clientes. El objetivo es tener una vista clara de qué webs están activas, qué incidencias siguen abiertas, qué tareas están pendientes y qué información puede consultarse en reportes mensuales.
+## Funcionalidades
 
-Incluye autenticación, roles, CRUDs, validaciones, filtros persistentes, seeders con datos ficticios y una interfaz responsive con Tailwind CSS.
+| Área | Qué permite hacer |
+| --- | --- |
+| Resumen de operaciones | Consultar tickets activos y urgentes, tareas pendientes y atrasadas, próximos vencimientos y agenda de mantenimiento. |
+| Clientes | Crear y editar fichas, buscar por empresa, contacto o ciudad y consultar sus webs, tickets y reportes. |
+| Webs | Mantener el inventario de tecnologías, planes, hosting, SSL y vencimientos; abrir una ficha con tickets y tareas relacionados. |
+| Tickets | Registrar solicitudes, asignar técnicos, establecer prioridades y actualizar estados con fecha de resolución. |
+| Mantenimiento | Programar tareas por web, categoría y responsable; filtrar trabajo atrasado o próximo y marcarlo como completado. |
+| Reportes | Redactar un informe mensual por cliente, con indicadores, resumen y recomendaciones, e imprimirlo desde el navegador. |
+
+Los listados incluyen búsqueda o filtros según el módulo, paginación y parámetros de consulta persistentes. Los formularios muestran errores junto al campo y llevan el foco al primero que requiere revisión.
+
+El panel organiza y registra el trabajo técnico. Las actualizaciones de CMS, las copias de seguridad y las revisiones de las webs se realizan fuera de la aplicación. Los indicadores del reporte se introducen al redactarlo.
+
+<a id="roles"></a>
+
+## Roles
+
+| Rol | Acceso |
+| --- | --- |
+| Administrador | Gestiona clientes, webs, tickets, tareas y reportes. Asigna el trabajo a técnicos. |
+| Técnico | Consulta clientes, webs y reportes. Su bandeja muestra los tickets y tareas asignados; puede trabajar sobre ellos y cambiar sus estados. |
+| Cliente | Consulta únicamente los datos de su empresa y crea solicitudes de soporte propias. |
+
+Laravel controla el acceso mediante sesiones, Form Requests y policies. El aislamiento de clientes también se comprueba al abrir un recurso directamente por su URL. El borrado de clientes y webs se bloquea cuando tienen datos relacionados.
 
 <a id="capturas"></a>
+
 ## Capturas
 
-Interfaz real con los datos ficticios incluidos en los seeders de demostración.
+Pantallas reales de la aplicación, con los datos ficticios incluidos en los seeders. Escritorio: viewport de 1440 × 1000 px. Móvil: 390 × 844 px. Las imágenes capturan la página completa y usan compresión PNG sin pérdida.
 
-### Dashboard
+### Resumen de operaciones
 
-![Dashboard de Mazmi WebOps Desk](docs/screenshots/dashboard.png)
+![Resumen de operaciones de Mazmi WebOps Desk](docs/screenshots/dashboard.png)
+
+### Inventario y detalle de una web
+
+![Inventario de webs con tecnología, estado y vencimientos](docs/screenshots/websites.png)
+
+<details>
+<summary>Ver la ficha técnica de una web</summary>
+
+![Ficha de servicio con tickets, mantenimiento, vencimientos y SSL](docs/screenshots/website-detail.png)
+
+</details>
+
+### Soporte y mantenimiento
+
+![Bandeja de tickets con prioridad, estado, cliente y técnico](docs/screenshots/tickets.png)
+
+<details>
+<summary>Ver las tareas de mantenimiento y sus filtros</summary>
+
+![Listado de tareas con planificación, responsable, prioridad y estado](docs/screenshots/maintenance.png)
+
+</details>
 
 ### Reporte mensual
 
-![Reporte mensual de Mazmi WebOps Desk](docs/screenshots/monthly-report.png)
+![Informe mensual de un cliente, con resumen, actividad y recomendaciones](docs/screenshots/monthly-report.png)
 
-### Gestión de webs
+<details>
+<summary>Ver clientes, presentación pública y acceso</summary>
 
-![Gestión de webs en Mazmi WebOps Desk](docs/screenshots/websites.png)
+![Listado de clientes](docs/screenshots/clients.png)
 
-### Gestión de tickets
+![Presentación pública de Mazmi WebOps Desk](docs/screenshots/landing.png)
 
-![Gestión de tickets en Mazmi WebOps Desk](docs/screenshots/tickets.png)
+![Pantalla de inicio de sesión con usuario demo](docs/screenshots/login.png)
 
-### Landing
+</details>
 
-![Landing de Mazmi WebOps Desk](docs/screenshots/landing.png)
+<details>
+<summary>Ver la interfaz móvil</summary>
 
-<a id="problema-que-resuelve"></a>
-## Problema que resuelve
+| Resumen | Tickets | Detalle web |
+| --- | --- | --- |
+| ![Resumen en móvil](docs/screenshots/mobile-dashboard.png) | ![Tickets en móvil](docs/screenshots/mobile-tickets.png) | ![Ficha de una web en móvil](docs/screenshots/mobile-website-detail.png) |
 
-En muchos equipos pequeños, el mantenimiento web acaba repartido entre emails, hojas de cálculo, chats y notas sueltas. Eso dificulta saber:
+</details>
 
-- qué clientes tienen webs en mantenimiento;
-- qué dominios o hostings vencen pronto;
-- qué tickets están abiertos o son urgentes;
-- qué técnico tiene asignado cada trabajo;
-- qué se ha realizado durante el mes.
+<a id="stack"></a>
 
-Mazmi WebOps Desk reúne esa información en un panel único y evita mezclar tareas operativas con canales informales.
-
-> El proyecto no almacena contraseñas, tokens ni credenciales reales de webs. Ese tipo de información debe gestionarse en herramientas específicas para secretos.
-
-<a id="funcionalidades"></a>
-## Funcionalidades
-
-### Dashboard
-
-- Métricas de clientes activos, webs gestionadas, tickets abiertos y tareas pendientes.
-- Indicadores de tickets urgentes, tareas atrasadas y vencimientos próximos.
-- Listados compactos de tickets recientes y próximos mantenimientos.
-- Distribuciones simples por estado de ticket y tecnología de web.
-
-### Clientes y webs
-
-- CRUD de clientes con búsqueda por empresa, contacto o ciudad.
-- Filtro de clientes por estado.
-- Inventario de webs por cliente.
-- Filtros de webs por tecnología, estado, plan y vencimientos próximos.
-- Detalle con webs, tickets recientes, tareas y reportes relacionados.
-
-### Tickets
-
-- CRUD de tickets con prioridad, estado, cliente, web y técnico asignado.
-- Filtros por estado, prioridad, cliente y técnico.
-- Cambio rápido de estado cuando el rol lo permite.
-- Registro automático de resolución mediante `resolved_at`.
-
-### Mantenimiento
-
-- Tareas por web con categoría, prioridad, estado y fecha programada.
-- Filtros por estado, prioridad, categoría, web y agenda.
-- Vista de tareas atrasadas y próximas.
-- Acción para marcar tareas como completadas.
-
-### Reportes
-
-- Reportes mensuales por cliente, mes y año.
-- Resumen, tareas completadas, tickets resueltos, tickets pendientes y recomendaciones.
-- Estado general del servicio: `good`, `attention` o `critical`.
-- Vista de detalle preparada para lectura y revisión desde navegador.
-
-### Roles y seguridad
-
-- Autenticación con Laravel Breeze.
-- Autorización por rol y policies.
-- Protección CSRF propia de Laravel.
-- Aislamiento de datos para usuarios cliente.
-- Validaciones mediante Form Requests.
-- Seeders con datos ficticios reproducibles.
-
-<a id="roles"></a>
-## Roles
-
-| Rol | Permisos principales |
-| --- | --- |
-| Administrador | Puede consultar y gestionar clientes, webs, tickets, tareas y reportes. También puede asignar trabajo a técnicos. |
-| Técnico | Puede consultar clientes y webs, trabajar con tickets y tareas asignadas y actualizar estados. No elimina datos críticos ni reasigna trabajo. |
-| Cliente | Solo puede consultar información vinculada a su empresa y crear tickets propios. No accede a datos de otros clientes. |
-
-<a id="stack-tecnico"></a>
 ## Stack técnico
 
-| Área | Tecnología | Uso dentro del proyecto |
-| --- | --- | --- |
-| Backend | PHP 8.3+ | Lenguaje principal del servidor |
-| Framework | Laravel 13 | MVC, rutas, controladores, migraciones, seeders, validaciones y policies |
-| Frontend | Vue 3 | Componentes de interfaz y pantallas de la aplicación |
-| Navegación | Inertia.js 2 | Comunicación Laravel/Vue sin API REST separada |
-| Estilos | Tailwind CSS 3 | Sistema visual responsive |
-| Base de datos | MySQL 8 | Base de datos principal recomendada |
-| Demo y CI | SQLite | Ejecución rápida local y validación automatizada |
-| Assets | Vite | Desarrollo y build del frontend |
-| Tests | PHPUnit 12 | Pruebas automatizadas de Laravel |
+| Área | Tecnología |
+| --- | --- |
+| Servidor | PHP 8.3+, Laravel 13 y Eloquent |
+| Interfaz | Vue 3, JavaScript e Inertia.js 2 |
+| Estilos y assets | Tailwind CSS 3 y Vite 8 |
+| Datos | MySQL 8; SQLite para demo y tests |
+| Autenticación | Laravel Breeze, sesiones y protección CSRF |
+| Calidad | PHPUnit 12, Laravel Pint, Prettier y GitHub Actions |
+| Tipografía | Manrope e IBM Plex Sans, autoalojadas con sus licencias OFL |
 
 <a id="instalacion"></a>
-## Instalación
+
+## Instalación y ejecución
 
 ### Requisitos
 
-- PHP 8.3 o superior.
-- Composer 2.
-- Node.js 20.19 o superior, o Node.js 22.12 o superior.
-- npm.
-- MySQL 8 o SQLite para la demo.
+- PHP 8.3+ y Composer 2, con las extensiones requeridas por Laravel y el controlador PDO de la base elegida.
+- Node.js 20.19+ en la rama 20, o Node.js 22.12+; npm. CI utiliza Node 22.
+- MySQL 8 o SQLite.
 
-### 1. Clonar el repositorio
+### 1. Preparar el proyecto
 
 ```bash
 git clone https://github.com/LucaMZM/mazmi-webops-desk.git
 cd mazmi-webops-desk
-```
-
-### 2. Instalar dependencias
-
-```bash
 composer install
 npm ci
-```
-
-### 3. Preparar el entorno
-
-```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-### 4. Configurar base de datos
+### 2. Elegir la base de datos
 
-Opción recomendada con MySQL:
+**MySQL — opción principal**
+
+Crea una base vacía:
 
 ```sql
-CREATE DATABASE mazmi_webops_desk CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE mazmi_webops_desk
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-Configura estas variables en `.env`:
+Configura `.env` con las credenciales de tu servidor local:
 
 ```dotenv
 DB_CONNECTION=mysql
@@ -202,25 +172,33 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Opción rápida con SQLite:
+**SQLite — demo local**
+
+Crea el archivo:
 
 ```bash
 touch database/database.sqlite
 ```
 
-Configura en `.env`:
+Sustituye las variables de conexión y base de datos de `.env`:
 
 ```dotenv
 DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
 ```
 
-### 5. Ejecutar migraciones y seeders
+No conserves `DB_DATABASE=mazmi_webops_desk` al cambiar a SQLite. En Windows puedes crear un archivo vacío en esa misma ubicación desde el explorador o PowerShell.
+
+### 3. Crear el esquema y cargar la demo
 
 ```bash
-php artisan migrate:fresh --seed
+php artisan optimize:clear
+php artisan migrate --seed
 ```
 
-### 6. Levantar el proyecto
+Ejecuta los seeders una vez sobre una base vacía. Cargan 6 usuarios, 8 clientes, 12 webs, 25 tickets, 35 tareas y 6 reportes. Las fechas se calculan respecto al momento de la carga.
+
+### 4. Abrir la aplicación
 
 En una terminal:
 
@@ -228,98 +206,101 @@ En una terminal:
 php artisan serve
 ```
 
-En otra terminal:
+En otra:
 
 ```bash
 npm run dev
 ```
 
-Abre la aplicación en:
+Abre [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-```text
-http://127.0.0.1:8000
-```
+Para probar los assets compilados, ejecuta `npm run build` y mantén únicamente `php artisan serve`. Detén antes Vite si estaba abierto.
 
-Para generar assets de producción:
+<a id="demo"></a>
 
-```bash
-npm run build
-```
-
-<a id="usuarios-demo"></a>
 ## Usuarios demo
 
-Contraseña común: `password`
+Contraseña común: `password`. Son cuentas de demostración; no deben utilizarse en un despliegue público sin adaptar el acceso.
 
-| Rol | Email | Alcance |
-| --- | --- | --- |
-| Administrador | `admin@webops.test` | Gestión completa |
-| Técnico | `tech1@webops.test` | Tickets y tareas asignadas |
-| Técnico | `tech2@webops.test` | Tickets y tareas asignadas |
-| Cliente | `cliente1@webops.test` | Datos de su empresa |
-| Cliente | `cliente2@webops.test` | Datos de su empresa |
-| Cliente | `cliente3@webops.test` | Datos de su empresa |
+| Rol | Email |
+| --- | --- |
+| Administrador | `admin@webops.test` |
+| Técnico | `tech1@webops.test` |
+| Técnico | `tech2@webops.test` |
+| Cliente | `cliente1@webops.test` |
+| Cliente | `cliente2@webops.test` |
+| Cliente | `cliente3@webops.test` |
 
-Los datos cargados por los seeders son ficticios.
+Los dominios `.test` y los contactos pertenecen al conjunto ficticio de datos. La aplicación no tiene campos para credenciales de las webs: no deben introducirse contraseñas ni tokens en notas o tickets.
 
-<a id="tests-y-ci"></a>
-## Tests y CI
+<a id="calidad"></a>
 
-Comandos principales:
+## Calidad y CI
 
 ```bash
-composer test
+composer validate --strict
 composer format:check
 npm run format:check
+composer test
 npm run build
 ```
 
-El workflow de GitHub Actions ejecuta:
+Las pruebas cubren helpers de roles, autenticación, autorización, aislamiento de clientes, validación y flujos CRUD. PHPUnit utiliza SQLite en memoria; Vite se desactiva en los tests del backend y su build se valida por separado.
 
-- instalación de dependencias PHP y Node;
-- configuración de entorno con SQLite;
-- migraciones y seeders;
-- formato PHP con Laravel Pint;
-- formato frontend con Prettier;
-- tests de Laravel;
-- build del frontend con Vite.
+[GitHub Actions](https://github.com/LucaMZM/mazmi-webops-desk/actions/workflows/ci.yml) instala las dependencias, prepara SQLite, ejecuta migraciones y seeders, comprueba Pint y Prettier, ejecuta los tests y compila el frontend.
 
-<a id="documentacion"></a>
-## Documentación
+Para aplicar formato: `composer format` y `npm run format`.
 
-- [Esquema de base de datos](docs/database-schema.md)
-- [Funcionalidades y permisos](docs/features.md)
+<a id="estructura"></a>
 
-Estructura principal:
+## Estructura y decisiones técnicas
 
 ```text
-app/Http/Controllers     Controladores por módulo
-app/Http/Requests        Validaciones
-app/Models               Modelos Eloquent
-app/Policies             Autorización por recurso
-database/migrations      Esquema de base de datos
-database/seeders         Datos demo
-resources/js/Layouts     Layouts Inertia
-resources/js/Pages       Pantallas Vue
-resources/js/Components  Componentes reutilizables
-docs                     Documentación técnica
-tests                    Pruebas automatizadas
+app/
+  Http/Controllers/       Flujos de cada módulo
+  Http/Requests/          Validación de entradas
+  Models/                 Entidades y relaciones Eloquent
+  Policies/               Autorización por recurso
+database/
+  migrations/             Esquema e integridad de datos
+  seeders/                Escenario de demostración
+resources/
+  css/                    Tokens y estilos compartidos
+  fonts/                  Fuentes locales y licencias
+  js/
+    Components/           Controles y componentes reutilizables
+    Composables/          Comportamiento compartido de formularios
+    Layouts/              Navegación y estructura de páginas
+    Pages/                Vistas Inertia por módulo
+docs/                     Documentación y capturas
+tests/                    Pruebas unitarias y funcionales
 ```
 
-<a id="proximas-mejoras"></a>
+Laravel concentra las reglas, la validación y la autorización en el servidor. Inertia permite navegar y enviar formularios con Vue conservando las rutas de Laravel, sin mantener una API REST adicional. El sistema visual comparte colores, tipografía y controles entre el panel, el acceso y la página pública.
+
+`.env`, dependencias, SQLite local, logs, cachés y `public/build/` se excluyen de Git. El build se genera durante la instalación o en CI.
+
+<a id="documentacion"></a>
+
+## Documentación
+
+- [Tablas, relaciones y reglas de integridad](docs/database-schema.md).
+- [Comportamiento de los módulos y permisos](docs/features.md).
+
+<a id="mejoras"></a>
+
 ## Próximas mejoras
 
-- Exportación PDF de reportes.
-- Notificaciones por email.
-- Adjuntos en tickets.
+- Exportación de reportes a PDF desde el servidor.
+- Notificaciones por email y adjuntos en tickets.
 - Calendario visual de mantenimiento.
-- Más tests de interfaz y accesibilidad.
-- API REST opcional.
-- Demo online controlada.
+- Pruebas de interfaz y accesibilidad integradas en CI.
+- API REST y despliegue de una demo online controlada.
 
 <a id="autor"></a>
-## Autor
 
-**Luca Mazmishvili**  
-Desarrollador web  
-Valencia, España
+## Autor y licencia
+
+**Luca Mazmishvili** · Desarrollador web · Valencia, España.
+
+Código bajo [licencia MIT](LICENSE). Las fuentes conservan sus licencias en [resources/fonts](resources/fonts).

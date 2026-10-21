@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
@@ -13,7 +13,15 @@ const canEdit = computed(
         user.role === 'admin' ||
         (user.role === 'technician' && props.ticket.assigned_to === user.id),
 );
-const setStatus = (status) => router.patch(route('tickets.status', props.ticket.id), { status });
+const updating = ref(false);
+const setStatus = (status) => {
+    if (updating.value) return;
+    router.patch(
+        route('tickets.status', props.ticket.id),
+        { status },
+        { onStart: () => (updating.value = true), onFinish: () => (updating.value = false) },
+    );
+};
 const date = (v) =>
     v ? new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' }).format(new Date(v)) : 'No indicada';
 </script>
@@ -34,8 +42,8 @@ const date = (v) =>
                 :url="route('tickets.destroy', ticket.id)"
             />
         </PageHeader>
-        <div class="grid gap-6 xl:grid-cols-[1fr_340px]">
-            <article class="panel p-5 sm:p-7">
+        <div class="detail-layout">
+            <article class="dossier p-5 sm:p-7">
                 <div class="flex flex-wrap gap-2">
                     <PriorityBadge :priority="ticket.priority" />
                     <StatusBadge :status="ticket.status" />
@@ -57,7 +65,8 @@ const date = (v) =>
                             ]"
                             :key="s"
                             type="button"
-                            :disabled="ticket.status === s"
+                            :disabled="ticket.status === s || updating"
+                            :aria-busy="updating"
                             class="btn-secondary disabled:bg-indigo-50 disabled:text-indigo-700"
                             @click="setStatus(s)"
                         >
@@ -75,7 +84,7 @@ const date = (v) =>
                 </div>
             </article>
             <aside class="space-y-5">
-                <section class="panel p-5">
+                <section class="dossier p-5 sm:p-6">
                     <h2 class="section-heading">Datos del ticket</h2>
                     <dl class="mt-5 space-y-4 text-sm">
                         <div>
@@ -109,11 +118,9 @@ const date = (v) =>
                         </div>
                     </dl>
                 </section>
-                <section class="rounded-md bg-slate-950 p-5 text-white">
-                    <p class="text-xs font-bold uppercase tracking-widest text-indigo-300">
-                        Buena práctica
-                    </p>
-                    <p class="mt-2 text-sm leading-6 text-slate-300">
+                <section class="border-l-2 border-slate-300 px-5 py-2">
+                    <p class="text-xs font-medium text-slate-700">Buena práctica</p>
+                    <p class="mt-2 text-xs leading-6 text-slate-500">
                         No compartas contraseñas en el ticket. Usa un gestor seguro y un canal
                         autorizado.
                     </p>

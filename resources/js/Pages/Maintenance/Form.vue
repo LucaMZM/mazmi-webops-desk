@@ -1,4 +1,6 @@
 <script setup>
+import SubmitButton from '@/Components/UI/SubmitButton.vue';
+import { useFormFeedback } from '@/Composables/useFormFeedback';
 import { computed } from 'vue';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -34,6 +36,7 @@ const categoryLabel = {
     seo: 'SEO',
     other: 'Otro',
 };
+const { formElement } = useFormFeedback(form);
 </script>
 <template>
     <Head :title="editing ? 'Editar tarea' : 'Nueva tarea'" />
@@ -45,15 +48,18 @@ const categoryLabel = {
             :back-href="editing ? route('maintenance.show', task.id) : route('maintenance.index')"
         />
         <form
-            class="max-w-5xl overflow-hidden rounded-md border border-slate-200 bg-white"
+            ref="formElement"
+            :aria-busy="form.processing"
+            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
             @submit.prevent="submit"
         >
             <section class="form-section">
                 <h2 class="section-heading">Trabajo a realizar</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Web" required :error="form.errors.website_id">
                         <select
                             v-model="form.website_id"
+                            name="website_id"
                             :disabled="user.role === 'technician'"
                             :class="input"
                         >
@@ -63,7 +69,7 @@ const categoryLabel = {
                         </select>
                     </FormField>
                     <FormField label="Categoría" required :error="form.errors.category">
-                        <select v-model="form.category" :class="input">
+                        <select v-model="form.category" name="category" :class="input">
                             <option
                                 v-for="x in [
                                     'backups',
@@ -87,7 +93,7 @@ const categoryLabel = {
                         :error="form.errors.title"
                         class="md:col-span-2"
                     >
-                        <input v-model="form.title" :class="input" maxlength="180" />
+                        <input v-model="form.title" name="title" :class="input" maxlength="180" />
                     </FormField>
                     <FormField
                         label="Descripción / checklist"
@@ -96,6 +102,7 @@ const categoryLabel = {
                     >
                         <textarea
                             v-model="form.description"
+                            name="description"
                             rows="5"
                             :class="input"
                             maxlength="5000"
@@ -105,10 +112,11 @@ const categoryLabel = {
             </section>
             <section class="form-section">
                 <h2 class="section-heading">Planificación</h2>
-                <div class="mt-5 grid gap-5 md:grid-cols-2">
+                <div class="grid gap-5 md:grid-cols-2">
                     <FormField label="Técnico" :error="form.errors.assigned_to">
                         <select
                             v-model="form.assigned_to"
+                            name="assigned_to"
                             :disabled="user.role === 'technician'"
                             :class="input"
                         >
@@ -119,17 +127,22 @@ const categoryLabel = {
                         </select>
                     </FormField>
                     <FormField label="Fecha programada" :error="form.errors.scheduled_at">
-                        <input v-model="form.scheduled_at" type="datetime-local" :class="input" />
+                        <input
+                            v-model="form.scheduled_at"
+                            name="scheduled_at"
+                            type="datetime-local"
+                            :class="input"
+                        />
                     </FormField>
                     <FormField label="Prioridad" required :error="form.errors.priority">
-                        <select v-model="form.priority" :class="input">
+                        <select v-model="form.priority" name="priority" :class="input">
                             <option value="low">Baja</option>
                             <option value="medium">Media</option>
                             <option value="high">Alta</option>
                         </select>
                     </FormField>
                     <FormField label="Estado" required :error="form.errors.status">
-                        <select v-model="form.status" :class="input">
+                        <select v-model="form.status" name="status" :class="input">
                             <option value="pending">Pendiente</option>
                             <option value="in_progress">En curso</option>
                             <option value="completed">Completada</option>
@@ -147,9 +160,9 @@ const categoryLabel = {
                 >
                     Cancelar
                 </Link>
-                <button class="btn-primary" :disabled="form.processing">
+                <SubmitButton :processing="form.processing">
                     {{ form.processing ? 'Guardando…' : 'Guardar tarea' }}
-                </button>
+                </SubmitButton>
             </div>
         </form>
     </AuthenticatedLayout>

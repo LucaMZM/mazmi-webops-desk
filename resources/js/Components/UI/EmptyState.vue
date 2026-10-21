@@ -7,14 +7,14 @@ defineProps({
 });
 </script>
 <template>
-    <div class="px-5 py-12 text-center">
+    <div class="px-5 py-14 text-center">
         <div
-            class="mx-auto grid h-11 w-11 place-items-center rounded-md border border-slate-200 bg-slate-50 text-slate-400"
+            class="mx-auto grid h-11 w-11 place-items-center rounded-full bg-slate-50 text-slate-500"
         >
             <AppIcon name="inbox" class="h-5 w-5" />
         </div>
-        <h3 class="mt-4 text-sm font-bold text-slate-900">{{ title }}</h3>
-        <p class="mx-auto mt-1 max-w-sm text-sm text-slate-500">{{ description }}</p>
+        <h3 class="mt-4 text-base font-semibold text-slate-900">{{ title }}</h3>
+        <p class="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">{{ description }}</p>
         <div class="mt-5"><slot /></div>
     </div>
 </template>
