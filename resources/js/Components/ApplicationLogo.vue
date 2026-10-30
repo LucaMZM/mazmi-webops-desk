@@ -1,4 +1,4 @@
 <script setup>
 import BrandMark from '@/Components/UI/BrandMark.vue';
 </script>
-<template><BrandMark class="text-indigo-600" /></template>
+<template><BrandMark class="text-teal-600" /></template>
