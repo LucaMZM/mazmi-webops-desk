@@ -245,10 +245,26 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     </p>
                 </Link>
             </div>
-            <EmptyState v-if="!websites.data.length" title="Todavía no hay webs" icon="websites"
-                description="Registra tu primera página web para controlar su tecnología, hosting, SSL y vencimientos.">
-                <Link v-if="user.role === 'admin'" :href="route('websites.create')" class="btn-primary">Registrar web</Link>
-                <Link v-if="user.role === 'admin'" :href="route('clients.index')" class="btn-secondary">Ver clientes</Link>
+            <EmptyState
+                v-if="!websites.data.length"
+                title="Todavía no hay webs"
+                icon="websites"
+                description="Registra tu primera página web para controlar su tecnología, hosting, SSL y vencimientos."
+            >
+                <Link
+                    v-if="user.role === 'admin'"
+                    :href="route('websites.create')"
+                    class="btn-primary"
+                >
+                    Registrar web
+                </Link>
+                <Link
+                    v-if="user.role === 'admin'"
+                    :href="route('clients.index')"
+                    class="btn-secondary"
+                >
+                    Ver clientes
+                </Link>
             </EmptyState>
             <Pagination :links="websites.links" />
         </div>

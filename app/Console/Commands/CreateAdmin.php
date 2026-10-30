@@ -18,11 +18,13 @@ class CreateAdmin extends Command
     {
         if (User::query()->exists()) {
             $this->error('Ya existen usuarios. La creación inicial está bloqueada.');
+
             return self::FAILURE;
         }
 
         if (! $this->input->isInteractive()) {
             $this->error('Ejecuta este comando en una terminal interactiva para introducir una contraseña segura.');
+
             return self::FAILURE;
         }
 
@@ -44,11 +46,13 @@ class CreateAdmin extends Command
             foreach ($validator->errors()->all() as $error) {
                 $this->error($error);
             }
+
             return self::FAILURE;
         }
 
         if (! is_string($confirmation) || ! hash_equals($password, $confirmation)) {
             $this->error('Las contraseñas no coinciden.');
+
             return self::FAILURE;
         }
 
@@ -61,6 +65,7 @@ class CreateAdmin extends Command
         ]);
 
         $this->info('Administrador creado. Ya puedes iniciar sesión.');
+
         return self::SUCCESS;
     }
 }

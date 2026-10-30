@@ -49,8 +49,12 @@ const { formElement } = useFormFeedback(form);
         />
         <div v-if="!editing && !websites.length" class="glass-hero mb-6 p-6 sm:p-8">
             <p class="webops-eyebrow">PRIMER PASO</p>
-            <h2 class="mt-3 text-xl font-semibold tracking-tight text-slate-900">Prepara tu espacio antes de continuar</h2>
-            <p class="mt-3 text-sm leading-7 text-slate-600">Primero registra una web para poder programar su mantenimiento.</p>
+            <h2 class="mt-3 text-xl font-semibold tracking-tight text-slate-900">
+                Prepara tu espacio antes de continuar
+            </h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">
+                Primero registra una web para poder programar su mantenimiento.
+            </p>
             <Link :href="route('websites.create')" class="btn-primary mt-5">Registrar web</Link>
         </div>
         <form

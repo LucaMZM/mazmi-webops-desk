@@ -3,7 +3,10 @@ import AppIcon from '@/Components/UI/AppIcon.vue';
 
 defineProps({
     title: { type: String, default: 'Tu espacio está listo' },
-    description: { type: String, default: 'Todavía no hay registros. Añade el primero para empezar a trabajar.' },
+    description: {
+        type: String,
+        default: 'Todavía no hay registros. Añade el primero para empezar a trabajar.',
+    },
     icon: { type: String, default: 'inbox' },
 });
 </script>

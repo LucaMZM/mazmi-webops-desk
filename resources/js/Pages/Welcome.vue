@@ -138,11 +138,7 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                             class="relative mb-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-white/40 p-3.5 last:mb-0"
                         >
                             <span class="absolute -left-6 w-6 border-t border-slate-300" />
-                            <AppIcon
-                                :name="area.icon"
-                                :size="17"
-                                class="shrink-0 text-teal-600"
-                            />
+                            <AppIcon :name="area.icon" :size="17" class="shrink-0 text-teal-600" />
                             <span class="text-sm font-medium">
                                 {{
                                     {

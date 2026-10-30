@@ -261,7 +261,8 @@ const categoryLabel = {
         </div>
         <div v-else class="panel">
             <EmptyState
-                title="Sin tareas de mantenimiento" icon="maintenance"
+                title="Sin tareas de mantenimiento"
+                icon="maintenance"
                 description="Las revisiones que programes aparecerán aquí con su fecha y responsable."
             >
                 <Link

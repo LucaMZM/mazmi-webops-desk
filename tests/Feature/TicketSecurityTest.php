@@ -2,11 +2,10 @@
 
 namespace Tests\Feature;
 
-use Database\Seeders\DemoSeeder;
-
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Website;
+use Database\Seeders\DemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;

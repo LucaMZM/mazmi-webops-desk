@@ -127,7 +127,11 @@ const user = usePage().props.auth.user;
             <EmptyState
                 v-if="!clients.data.length"
                 icon="clients"
-                :title="Object.values(filters).some(Boolean) ? 'No se encontraron clientes' : 'Empieza con tu primer cliente'"
+                :title="
+                    Object.values(filters).some(Boolean)
+                        ? 'No se encontraron clientes'
+                        : 'Empieza con tu primer cliente'
+                "
                 description="Guarda la primera ficha para organizar sus webs, solicitudes y reportes."
             >
                 <Link

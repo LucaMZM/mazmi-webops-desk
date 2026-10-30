@@ -17,7 +17,12 @@ const props = defineProps({
     websitesByTechnology: Array,
 });
 const user = computed(() => usePage().props.auth.user);
-const isNewWorkspace = computed(() => user.value.role === 'admin' && Number(props.metrics.clients) === 0 && Number(props.metrics.websites) === 0);
+const isNewWorkspace = computed(
+    () =>
+        user.value.role === 'admin' &&
+        Number(props.metrics.clients) === 0 &&
+        Number(props.metrics.websites) === 0,
+);
 const statusLabels = {
     open: 'Abiertos',
     in_progress: 'En curso',
@@ -65,7 +70,11 @@ const date = (value) =>
             </Link>
         </PageHeader>
 
-        <WorkspaceOnboarding v-if="isNewWorkspace" :clients="metrics.clients" :websites="metrics.websites" />
+        <WorkspaceOnboarding
+            v-if="isNewWorkspace"
+            :clients="metrics.clients"
+            :websites="metrics.websites"
+        />
 
         <section
             v-if="!isNewWorkspace"
@@ -310,7 +319,11 @@ const date = (value) =>
                     <dd class="stat-number mt-1 text-2xl">{{ item.total }}</dd>
                 </div>
             </dl>
-            <EmptyState v-else title="Sin webs registradas" description="Cuando añadas tu primer cliente y su sitio web, aquí aparecerá el inventario." />
+            <EmptyState
+                v-else
+                title="Sin webs registradas"
+                description="Cuando añadas tu primer cliente y su sitio web, aquí aparecerá el inventario."
+            />
         </section>
     </AuthenticatedLayout>
 </template>

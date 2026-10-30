@@ -164,7 +164,8 @@ const apply = () =>
         </div>
         <div v-else class="panel">
             <EmptyState
-                title="Tus informes empezarán aquí" icon="reports"
+                title="Tus informes empezarán aquí"
+                icon="reports"
                 description="Prepara el primer resumen del trabajo realizado y compártelo con tu cliente."
             >
                 <Link

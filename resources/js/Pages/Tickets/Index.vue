@@ -249,9 +249,19 @@ const statusLabel = {
                     </div>
                 </Link>
             </div>
-            <EmptyState v-if="!tickets.data.length" title="Soporte al día" icon="tickets"
-                description="Cuando llegue la primera solicitud, aparecerá aquí con su prioridad y responsable.">
-                <Link v-if="user.role !== 'technician'" :href="route('tickets.create')" class="btn-primary">Nuevo ticket</Link>
+            <EmptyState
+                v-if="!tickets.data.length"
+                title="Soporte al día"
+                icon="tickets"
+                description="Cuando llegue la primera solicitud, aparecerá aquí con su prioridad y responsable."
+            >
+                <Link
+                    v-if="user.role !== 'technician'"
+                    :href="route('tickets.create')"
+                    class="btn-primary"
+                >
+                    Nuevo ticket
+                </Link>
             </EmptyState>
             <Pagination :links="tickets.links" />
         </div>

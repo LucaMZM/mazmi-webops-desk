@@ -46,8 +46,12 @@ const { formElement } = useFormFeedback(form);
         />
         <div v-if="!editing && !clients.length" class="glass-hero mb-6 p-6 sm:p-8">
             <p class="webops-eyebrow">PRIMER PASO</p>
-            <h2 class="mt-3 text-xl font-semibold tracking-tight text-slate-900">Prepara tu espacio antes de continuar</h2>
-            <p class="mt-3 text-sm leading-7 text-slate-600">Primero crea un cliente para poder trabajar con datos reales.</p>
+            <h2 class="mt-3 text-xl font-semibold tracking-tight text-slate-900">
+                Prepara tu espacio antes de continuar
+            </h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">
+                Primero crea un cliente para poder trabajar con datos reales.
+            </p>
             <Link :href="route('clients.create')" class="btn-primary mt-5">Crear cliente</Link>
         </div>
         <form
