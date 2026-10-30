@@ -473,3 +473,38 @@
     .webops-optical-canvas, .webops-progress { display: none !important; }
     .app-shell :is(.panel,.table-shell,.dossier,.glass-hero,.webops-onboarding) { background:#fff !important; box-shadow:none !important; backdrop-filter:none !important; }
 }
+
+/* Component primitives shared by the whole editor and its overlays. */
+@layer components {
+    .app-shell .glass-editor {
+        border: 1px solid rgba(255,255,255,.78) !important;
+        border-radius: 24px !important;
+        background: rgba(255,255,255,.43) !important;
+        box-shadow: 0 18px 52px rgba(35,51,44,.07), inset 0 1px rgba(255,255,255,.83);
+        -webkit-backdrop-filter: blur(22px) saturate(130%);
+        backdrop-filter: blur(22px) saturate(130%);
+        overflow: hidden;
+    }
+    .webops-public-page .glass-hero { z-index: 0; }
+    .webops-public-page > :not(.webops-optical-canvas):not(.skip-link) { position: relative; z-index: 1; }
+    .app-shell .tab-button { transition: color 240ms ease, border-color 240ms ease; }
+    .app-shell .tab-button[aria-pressed=true] { color: #226c60; border-bottom-color: #226c60; }
+    .app-shell .btn-text { color: #246f63; transition: color 180ms ease, transform 250ms var(--webops-ease); }
+    .app-shell .btn-text:hover { color: #174d46; transform: translateX(2px); }
+    .app-shell .stat-number { font-variant-numeric: tabular-nums; }
+    .app-shell :is(.panel,.table-shell,.dossier,.glass-editor) {
+        transition: box-shadow 350ms var(--webops-ease), border-color 350ms ease;
+    }
+    .app-shell :is(.panel,.table-shell,.dossier,.glass-editor):hover {
+        border-color: rgba(255,255,255,.95) !important;
+        box-shadow: 0 18px 50px rgba(26,52,44,.075), inset 0 1px rgba(255,255,255,.76);
+    }
+    #nprogress .bar { background: #28796c !important; height: 2px !important; }
+    #nprogress .peg { box-shadow: 0 0 12px #298375, 0 0 4px #298375 !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .app-shell .glass-editor { background: #f7faf7 !important; backdrop-filter: none !important; }
+}
+@media print {
+    .app-shell .glass-editor { background: white !important; box-shadow: none !important; backdrop-filter: none !important; }
+}
