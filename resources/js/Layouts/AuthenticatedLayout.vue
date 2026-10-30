@@ -79,7 +79,7 @@ onUnmounted(() => {
                     <AppIcon name="building" :size="17" class="text-slate-500" />
                     <span class="text-sm font-medium">Operaciones web</span>
                 </div>
-                <p class="ml-[27px] mt-1 text-xs text-slate-500">Espacio de demostración</p>
+                <p class="ml-[27px] mt-1 text-xs text-slate-500">Tu espacio de trabajo</p>
             </div>
             <nav class="flex-1 space-y-1 px-3" aria-label="Navegación principal">
                 <Link
