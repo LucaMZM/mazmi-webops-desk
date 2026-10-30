@@ -213,7 +213,7 @@ const categoryLabel = {
                 <div class="min-w-0">
                     <Link
                         :href="route('maintenance.show', task.id)"
-                        class="font-bold text-slate-950 hover:text-indigo-600"
+                        class="font-bold text-slate-950 hover:text-teal-600"
                     >
                         {{ task.title }}
                     </Link>
@@ -252,7 +252,7 @@ const categoryLabel = {
                     <Link
                         v-else
                         :href="route('maintenance.show', task.id)"
-                        class="text-xs font-bold text-indigo-600"
+                        class="text-xs font-bold text-teal-600"
                     >
                         Ver detalle →
                     </Link>
