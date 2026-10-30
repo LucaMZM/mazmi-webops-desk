@@ -9,7 +9,7 @@ defineProps({
     icon: String,
 });
 const tones = {
-    indigo: 'bg-indigo-50 text-indigo-700',
+    indigo: 'bg-teal-50 text-teal-700',
     emerald: 'bg-emerald-50 text-emerald-700',
     amber: 'bg-amber-50 text-amber-700',
     red: 'bg-red-50 text-red-700',
@@ -17,7 +17,7 @@ const tones = {
 };
 </script>
 <template>
-    <div class="panel p-4 sm:p-5">
+    <div class="panel p-5 sm:p-6" data-glass-optic>
         <div class="flex items-start justify-between">
             <div>
                 <p class="text-xs font-semibold leading-5 text-slate-500 sm:text-[13px]">
