@@ -48,11 +48,11 @@ const printReport = () => window.print();
         <article
             class="mx-auto max-w-[1000px] overflow-hidden rounded-xl border border-slate-200 bg-white print:border-0"
         >
-            <div class="h-1.5 bg-indigo-600" />
+            <div class="h-1.5 bg-teal-600" />
             <header class="px-6 pb-7 pt-8 sm:px-10 sm:pt-10">
                 <div class="flex flex-wrap items-start justify-between gap-5">
                     <div class="flex items-center gap-3">
-                        <BrandMark class="h-9 w-9 text-indigo-600" />
+                        <BrandMark class="h-9 w-9 text-teal-600" />
                         <div>
                             <p class="font-display text-sm font-bold" translate="no">
                                 Mazmi WebOps Desk
@@ -122,7 +122,7 @@ const printReport = () => window.print();
                             {{ report.recommendations }}
                         </p>
                         <p
-                            class="mt-5 border-l-2 border-indigo-300 pl-4 text-xs leading-6 text-slate-500"
+                            class="mt-5 border-l-2 border-teal-300 pl-4 text-xs leading-6 text-slate-500"
                         >
                             Estas recomendaciones orientan la planificación del siguiente periodo.
                         </p>
