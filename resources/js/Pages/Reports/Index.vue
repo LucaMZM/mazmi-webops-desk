@@ -164,8 +164,8 @@ const apply = () =>
         </div>
         <div v-else class="panel">
             <EmptyState
-                title="No hay reportes con estos filtros"
-                description="Los reportes mensuales aparecerán aquí."
+                title="Tus informes empezarán aquí" icon="reports"
+                description="Prepara el primer resumen del trabajo realizado y compártelo con tu cliente."
             >
                 <Link
                     v-if="user.role === 'admin'"
