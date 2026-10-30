@@ -17,8 +17,8 @@ defineProps({
 });
 
 const form = useForm({
-    email: 'admin@webops.test',
-    password: 'password',
+    email: '',
+    password: '',
     remember: false,
 });
 
@@ -39,15 +39,8 @@ const submit = () => {
                 Entrar al espacio de trabajo
             </h1>
             <p class="mt-2 text-sm text-slate-500">
-                Usa un usuario demo para explorar los distintos permisos.
+                Accede con las credenciales de tu espacio de trabajo.
             </p>
-        </div>
-
-        <div
-            class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4 text-xs leading-6 text-slate-600"
-        >
-            <strong>Admin demo:</strong>
-            admin@webops.test · password
         </div>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
