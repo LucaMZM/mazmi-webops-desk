@@ -14,7 +14,7 @@ Mazmi WebOps Desk conecta el inventario técnico con las solicitudes de soporte,
 ![PHPUnit](https://img.shields.io/badge/PHPUnit-12-366488)
 [![All Rights Reserved](https://img.shields.io/badge/License-All_Rights_Reserved-344966)](LICENSE)
 
-> **Estado:** versión funcional de demostración, orientada a evaluación técnica. Todavía no está preparada para uso en producción.
+> **Estado:** prototipo de portfolio en evolución. El modo normal arranca sin datos ficticios; el conjunto de prueba es optativo. No desplegar públicamente sin una auditoría de seguridad.
 
 ## Contenido
 
@@ -63,7 +63,7 @@ Laravel controla el acceso mediante sesiones, Form Requests y policies. El aisla
 
 ## Capturas
 
-Pantallas reales de la aplicación, con los datos ficticios incluidos en los seeders. Escritorio: viewport de 1440 × 1000 px. Móvil: 390 × 844 px. Las imágenes capturan la página completa y usan compresión PNG sin pérdida.
+Pantallas reales de la aplicación, con los datos ficticios incluidos en los seeders. Escritorio: viewport de 1440 × 1000 px. Móvil: 390 × 844 px. Las imágenes documentan el escenario de demostración anterior al rediseño; se actualizarán cuando se valide visualmente la versión nueva.
 
 ### Resumen de operaciones
 
@@ -197,16 +197,24 @@ Para una instalación limpia ejecuta **solo** `php artisan migrate`. El esquema 
 php artisan migrate
 ```
 
+Antes de iniciar sesión en una instalación vacía, crea tu primer administrador desde la terminal interactiva:
+
+```bash
+php artisan webops:admin
+```
+
+Introduce nombre, email y una contraseña única de al menos 12 caracteres (mayúsculas, minúsculas y números). La aplicación **no incluye credenciales por defecto**. Tras crear el primer usuario, este comando rechaza nuevas altas; los accesos futuros se administran por flujos autorizados.
+
 **Solo en una base de pruebas desechable**, `php artisan migrate:fresh` elimina todas las tablas y datos y vuelve a crear el esquema. Haz una copia de seguridad y comprueba la conexión de `.env` antes de ejecutarlo. Este proyecto no borra datos de ninguna instancia automáticamente.
 
 ### 3b. Cargar datos de demostración (opcional, solo entorno de pruebas)
 
 ```bash
 php artisan optimize:clear
-php artisan migrate --seed
+php artisan db:seed --class=DemoSeeder
 ```
 
-Ejecuta los seeders una vez sobre una base vacía. Cargan 6 usuarios, 8 clientes, 12 webs, 25 tickets, 35 tareas y 6 reportes. Las fechas se calculan respecto al momento de la carga.
+Ejecuta el seeder de demostración explícitamente sobre una base de pruebas vacía. Cargan 6 usuarios, 8 clientes, 12 webs, 25 tickets, 35 tareas y 6 reportes. Las fechas se calculan respecto al momento de la carga.
 
 ### 4. Abrir la aplicación
 
@@ -230,7 +238,7 @@ Para probar los assets compilados, ejecuta `npm run build` y mantén únicamente
 
 ## Usuarios demo
 
-Contraseña común: `password`. Son cuentas de demostración; no deben utilizarse en un despliegue público sin adaptar el acceso.
+**Solo si has ejecutado `php artisan db:seed --class=DemoSeeder` en una base desechable:** contraseña común: `password`. Son cuentas de demostración; no deben utilizarse en un despliegue público sin adaptar el acceso.
 
 | Rol | Email |
 | --- | --- |
