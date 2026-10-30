@@ -7,6 +7,7 @@ import PriorityBadge from '@/Components/UI/PriorityBadge.vue';
 import EmptyState from '@/Components/UI/EmptyState.vue';
 import PageHeader from '@/Components/UI/PageHeader.vue';
 import AppIcon from '@/Components/UI/AppIcon.vue';
+import WorkspaceOnboarding from '@/Components/UI/WorkspaceOnboarding.vue';
 
 const props = defineProps({
     metrics: Object,
@@ -16,6 +17,7 @@ const props = defineProps({
     websitesByTechnology: Array,
 });
 const user = computed(() => usePage().props.auth.user);
+const isNewWorkspace = computed(() => user.value.role === 'admin' && Number(props.metrics.clients) === 0 && Number(props.metrics.websites) === 0);
 const statusLabels = {
     open: 'Abiertos',
     in_progress: 'En curso',
@@ -24,7 +26,7 @@ const statusLabels = {
     closed: 'Cerrados',
 };
 const statusColors = {
-    open: 'bg-indigo-600',
+    open: 'bg-teal-600',
     in_progress: 'bg-sky-400',
     waiting_client: 'bg-amber-400',
     resolved: 'bg-emerald-500',
@@ -63,8 +65,12 @@ const date = (value) =>
             </Link>
         </PageHeader>
 
+        <WorkspaceOnboarding v-if="isNewWorkspace" :clients="metrics.clients" :websites="metrics.websites" />
+
         <section
-            class="mb-7 grid overflow-hidden rounded-xl border border-slate-200 bg-white xl:grid-cols-[1.15fr_1fr]"
+            v-if="!isNewWorkspace"
+            class="glass-hero mb-7 grid overflow-hidden xl:grid-cols-[1.15fr_1fr]"
+            data-glass-optic
             aria-label="Carga de trabajo"
         >
             <div class="relative border-b border-slate-200 p-6 sm:p-7 xl:border-b-0 xl:border-r">
@@ -102,7 +108,7 @@ const date = (value) =>
                         <AppIcon
                             name="chevron-right"
                             :size="16"
-                            class="text-slate-400 group-hover:text-indigo-600"
+                            class="text-slate-400 group-hover:text-teal-600"
                         />
                     </div>
                     <p class="stat-number mt-4 text-4xl">{{ metrics.pending_tasks }}</p>
@@ -125,7 +131,7 @@ const date = (value) =>
                         <AppIcon
                             name="chevron-right"
                             :size="16"
-                            class="text-slate-400 group-hover:text-indigo-600"
+                            class="text-slate-400 group-hover:text-teal-600"
                         />
                     </div>
                     <p class="stat-number mt-4 text-4xl">
@@ -143,7 +149,7 @@ const date = (value) =>
         <div
             class="grid items-start gap-6 2xl:grid-cols-[minmax(0,1.6fr)_minmax(320px,1fr)] xl:grid-cols-[minmax(0,1.4fr)_minmax(300px,1fr)]"
         >
-            <section class="panel">
+            <section class="panel" data-glass-optic>
                 <header class="section-topline">
                     <div>
                         <h2 class="section-heading">Actividad de soporte</h2>
@@ -167,7 +173,7 @@ const date = (value) =>
                             </span>
                             <div class="min-w-0 flex-1">
                                 <h3
-                                    class="font-sans text-sm font-medium text-slate-900 group-hover:text-indigo-700"
+                                    class="font-sans text-sm font-medium text-slate-900 group-hover:text-teal-700"
                                 >
                                     {{ ticket.title }}
                                 </h3>
@@ -218,7 +224,7 @@ const date = (value) =>
                             :href="route('maintenance.show', task.id)"
                             class="flex items-start gap-4 px-5 py-4 hover:bg-slate-50 sm:px-6"
                         >
-                            <time class="mt-0.5 w-12 shrink-0 text-xs font-medium text-indigo-700">
+                            <time class="mt-0.5 w-12 shrink-0 text-xs font-medium text-teal-700">
                                 {{ date(task.scheduled_at) }}
                             </time>
                             <div class="min-w-0">
@@ -304,7 +310,7 @@ const date = (value) =>
                     <dd class="stat-number mt-1 text-2xl">{{ item.total }}</dd>
                 </div>
             </dl>
-            <EmptyState v-else title="Sin webs registradas" />
+            <EmptyState v-else title="Sin webs registradas" description="Cuando añadas tu primer cliente y su sitio web, aquí aparecerá el inventario." />
         </section>
     </AuthenticatedLayout>
 </template>
