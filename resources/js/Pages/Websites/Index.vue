@@ -126,7 +126,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     true-value="1"
                     false-value=""
                     type="checkbox"
-                    class="rounded text-indigo-600"
+                    class="rounded text-teal-600"
                     aria-label="expiring"
                     name="expiring"
                 />
@@ -158,7 +158,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                             <td class="table-cell">
                                 <Link
                                     :href="route('websites.show', web.id)"
-                                    class="font-medium text-slate-900 hover:text-indigo-700"
+                                    class="font-medium text-slate-900 hover:text-teal-700"
                                 >
                                     {{ web.name }}
                                 </Link>
@@ -202,7 +202,7 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                             <td class="table-cell text-right">
                                 <Link
                                     :href="route('websites.show', web.id)"
-                                    class="inline-flex min-h-9 items-center font-semibold text-indigo-600 hover:text-indigo-800"
+                                    class="inline-flex min-h-9 items-center font-semibold text-teal-600 hover:text-teal-800"
                                 >
                                     Abrir →
                                 </Link>
@@ -245,7 +245,27 @@ const planLabel = { basic: 'Básico', standard: 'Estándar', premium: 'Premium',
                     </p>
                 </Link>
             </div>
-            <EmptyState v-if="!websites.data.length" title="No hay webs con estos filtros" />
+            <EmptyState
+                v-if="!websites.data.length"
+                title="Todavía no hay webs"
+                icon="websites"
+                description="Registra tu primera página web para controlar su tecnología, hosting, SSL y vencimientos."
+            >
+                <Link
+                    v-if="user.role === 'admin'"
+                    :href="route('websites.create')"
+                    class="btn-primary"
+                >
+                    Registrar web
+                </Link>
+                <Link
+                    v-if="user.role === 'admin'"
+                    :href="route('clients.index')"
+                    class="btn-secondary"
+                >
+                    Ver clientes
+                </Link>
+            </EmptyState>
             <Pagination :links="websites.links" />
         </div>
     </AuthenticatedLayout>

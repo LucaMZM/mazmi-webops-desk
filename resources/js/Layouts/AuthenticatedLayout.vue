@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import FlashMessage from '@/Components/UI/FlashMessage.vue';
+import LiquidBackdrop from '@/Components/UI/LiquidBackdrop.vue';
 import AppIcon from '@/Components/UI/AppIcon.vue';
 import BrandMark from '@/Components/UI/BrandMark.vue';
 
@@ -55,16 +56,18 @@ onUnmounted(() => {
 </script>
 <template>
     <div class="app-shell min-h-screen bg-slate-50">
+        <LiquidBackdrop />
         <a href="#main-content" class="skip-link">Ir al contenido</a>
         <aside
-            class="app-navigation fixed inset-y-0 left-0 z-40 hidden w-[232px] flex-col border-r border-slate-200 bg-white lg:flex"
+            class="app-navigation fixed inset-y-5 left-5 z-40 hidden w-[248px] flex-col border border-white/60 bg-white/40 lg:flex"
+            data-glass-optic
         >
             <Link
                 :href="route('dashboard')"
                 class="flex h-24 items-center gap-3 px-6"
                 aria-label="Mazmi WebOps Desk, resumen"
             >
-                <BrandMark class="h-10 w-10 shrink-0 text-indigo-600" />
+                <BrandMark class="h-10 w-10 shrink-0 text-teal-600" />
                 <div translate="no">
                     <p
                         class="font-display text-lg font-extrabold tracking-[-0.04em] text-slate-900"
@@ -79,7 +82,7 @@ onUnmounted(() => {
                     <AppIcon name="building" :size="17" class="text-slate-500" />
                     <span class="text-sm font-medium">Operaciones web</span>
                 </div>
-                <p class="ml-[27px] mt-1 text-xs text-slate-500">Espacio de demostración</p>
+                <p class="ml-[27px] mt-1 text-xs text-slate-500">Tu espacio de trabajo</p>
             </div>
             <nav class="flex-1 space-y-1 px-3" aria-label="Navegación principal">
                 <Link
@@ -90,7 +93,7 @@ onUnmounted(() => {
                     :class="[
                         'nav-item flex min-h-11 items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm transition-colors',
                         route().current(item.match)
-                            ? 'bg-indigo-50 font-semibold text-indigo-700'
+                            ? 'bg-teal-50 font-semibold text-teal-700'
                             : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900',
                     ]"
                 >
@@ -98,7 +101,7 @@ onUnmounted(() => {
                     {{ item.label }}
                     <span
                         v-if="route().current(item.match)"
-                        class="ml-auto h-1.5 w-1.5 rounded-full bg-indigo-600"
+                        class="ml-auto h-1.5 w-1.5 rounded-full bg-teal-600"
                     />
                 </Link>
             </nav>
@@ -131,7 +134,7 @@ onUnmounted(() => {
         </aside>
         <dialog
             ref="drawer"
-            class="app-navigation m-0 h-dvh max-h-none w-[min(320px,88vw)] max-w-none overscroll-contain border-0 bg-white p-0 backdrop:bg-slate-950/40 lg:hidden"
+            class="app-navigation m-0 h-dvh max-h-none w-[min(340px,90vw)] max-w-none overscroll-contain rounded-none border-0 bg-white/90 p-0 backdrop:bg-slate-950/30 lg:hidden"
             aria-label="Menú principal"
             @cancel.prevent="mobileOpen = false"
             @click="
@@ -142,7 +145,7 @@ onUnmounted(() => {
         >
             <div class="flex h-full flex-col p-5">
                 <div class="mb-8 flex items-center gap-3">
-                    <BrandMark class="h-9 w-9 text-indigo-600" />
+                    <BrandMark class="h-9 w-9 text-teal-600" />
                     <span class="font-display font-bold">Mazmi WebOps Desk</span>
                     <button
                         type="button"
@@ -162,7 +165,7 @@ onUnmounted(() => {
                         :class="[
                             'flex min-h-12 items-center gap-3 rounded-lg px-4 text-base',
                             route().current(item.match)
-                                ? 'bg-indigo-50 font-semibold text-indigo-700'
+                                ? 'bg-teal-50 font-semibold text-teal-700'
                                 : 'text-slate-600 hover:bg-slate-50',
                         ]"
                         @click="mobileOpen = false"
@@ -193,9 +196,10 @@ onUnmounted(() => {
                 </Link>
             </div>
         </dialog>
-        <div class="app-content lg:pl-[232px]">
+        <div class="app-content lg:pl-[288px]">
             <header
-                class="app-header flex h-[72px] items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 sm:px-7 lg:px-9"
+                class="app-header sticky top-3 z-30 mx-4 mt-4 flex h-[72px] items-center justify-between gap-4 rounded-[22px] border border-white/70 bg-white/40 px-4 sm:px-7 lg:mr-7 lg:px-8"
+                data-glass-optic
             >
                 <div class="flex min-w-0 items-center gap-3">
                     <button
@@ -240,7 +244,7 @@ onUnmounted(() => {
             <main
                 id="main-content"
                 tabindex="-1"
-                class="px-4 py-6 outline-none sm:px-7 sm:py-8 lg:px-9 lg:py-9"
+                class="px-4 py-6 outline-none sm:px-7 sm:py-8 lg:pl-1 lg:pr-7 lg:py-9"
             >
                 <div class="mx-auto w-full max-w-[1500px]">
                     <FlashMessage />

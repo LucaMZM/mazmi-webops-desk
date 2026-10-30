@@ -8,6 +8,7 @@ use App\Models\MonthlyReport;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Website;
+use Database\Seeders\DemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -21,7 +22,7 @@ class CrudWorkflowTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed();
+        $this->seed(DemoSeeder::class);
         $this->admin = User::where('email', 'admin@webops.test')->firstOrFail();
         $this->actingAs($this->admin);
     }

@@ -2,6 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3';
 import BrandMark from '@/Components/UI/BrandMark.vue';
 import AppIcon from '@/Components/UI/AppIcon.vue';
+import LiquidBackdrop from '@/Components/UI/LiquidBackdrop.vue';
 
 const areas = [
     {
@@ -24,14 +25,15 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
 </script>
 <template>
     <Head title="Mantenimiento web, con contexto" />
-    <div class="bg-white text-slate-900">
+    <div class="webops-public-page text-slate-900">
+        <LiquidBackdrop />
         <a href="#content" class="skip-link">Ir al contenido</a>
         <header class="border-b border-slate-200">
             <div
                 class="mx-auto flex min-h-[88px] max-w-[1320px] items-center justify-between gap-5 px-5 sm:px-8"
             >
                 <Link href="/" class="flex items-center gap-3" title="Mazmi WebOps Desk, inicio">
-                    <BrandMark class="h-10 w-10 shrink-0 text-indigo-600" />
+                    <BrandMark class="h-10 w-10 shrink-0 text-teal-600" />
                     <div translate="no">
                         <p class="font-display text-lg font-extrabold tracking-tight">Mazmi</p>
                         <p class="-mt-0.5 text-xs text-slate-500">WebOps Desk</p>
@@ -40,7 +42,7 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                 <div class="flex items-center gap-7">
                     <a
                         href="#proyecto"
-                        class="hidden text-sm text-slate-600 hover:text-indigo-700 sm:block"
+                        class="hidden text-sm text-slate-600 hover:text-teal-700 sm:block"
                     >
                         El espacio de trabajo
                     </a>
@@ -60,7 +62,7 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
             >
                 <div>
                     <p class="mb-6 flex items-center gap-2 text-sm font-medium text-slate-600">
-                        <span class="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                        <span class="h-1.5 w-1.5 rounded-full bg-teal-600" />
                         Operaciones web para equipos pequeños
                     </p>
                     <h1
@@ -86,20 +88,20 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                     </p>
                 </div>
                 <div
-                    class="relative rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-7"
+                    class="relative rounded-2xl border border-slate-200 bg-white/25 p-4 sm:p-7"
                     role="img"
                     aria-label="La ficha de una web reúne datos del cliente, tickets, tareas y reportes. Diagrama de la organización del producto."
                 >
                     <div class="mb-7 flex items-center justify-between text-xs text-slate-500">
                         <span>WebOps Desk</span>
-                        <span class="rounded-md border border-slate-200 bg-white px-2 py-1">
+                        <span class="rounded-md border border-slate-200 bg-white/40 px-2 py-1">
                             Estructura del servicio
                         </span>
                     </div>
-                    <div class="rounded-xl border border-slate-200 bg-white">
+                    <div class="rounded-xl border border-slate-200 bg-white/40">
                         <div class="flex items-center gap-3 border-b border-slate-200 p-5">
                             <span
-                                class="grid h-11 w-11 place-items-center rounded-xl bg-indigo-50 text-indigo-700"
+                                class="grid h-11 w-11 place-items-center rounded-xl bg-teal-50 text-teal-700"
                             >
                                 <AppIcon name="websites" :size="23" />
                             </span>
@@ -133,14 +135,10 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                         <div
                             v-for="area in areas"
                             :key="area.icon"
-                            class="relative mb-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3.5 last:mb-0"
+                            class="relative mb-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-white/40 p-3.5 last:mb-0"
                         >
                             <span class="absolute -left-6 w-6 border-t border-slate-300" />
-                            <AppIcon
-                                :name="area.icon"
-                                :size="17"
-                                class="shrink-0 text-indigo-600"
-                            />
+                            <AppIcon :name="area.icon" :size="17" class="shrink-0 text-teal-600" />
                             <span class="text-sm font-medium">
                                 {{
                                     {
@@ -158,7 +156,7 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                     </p>
                 </div>
             </section>
-            <section id="proyecto" class="border-y border-slate-200 bg-slate-50">
+            <section id="proyecto" class="border-y border-slate-200 bg-white/25">
                 <div class="mx-auto max-w-[1320px] px-5 py-16 sm:px-8 sm:py-20">
                     <div class="mb-12 grid gap-5 md:grid-cols-2 md:gap-16">
                         <h2
@@ -180,7 +178,7 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                             :key="area.title"
                             class="border-t border-slate-300 pt-6"
                         >
-                            <AppIcon :name="area.icon" :size="22" class="mb-5 text-indigo-600" />
+                            <AppIcon :name="area.icon" :size="22" class="mb-5 text-teal-600" />
                             <h3 class="text-lg font-bold tracking-tight">{{ area.title }}</h3>
                             <p class="mt-3 text-sm leading-7 text-slate-600">{{ area.text }}</p>
                         </article>
@@ -200,7 +198,7 @@ const stack = ['Laravel', 'Vue 3', 'Inertia.js', 'Tailwind CSS', 'MySQL'];
                         reportes.
                     </p>
                     <Link :href="route('login')" class="btn-text mt-5">
-                        Entrar con un usuario demo
+                        Acceder al espacio
                         <AppIcon name="arrow-right" :size="16" />
                     </Link>
                 </div>

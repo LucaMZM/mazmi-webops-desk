@@ -213,7 +213,7 @@ const categoryLabel = {
                 <div class="min-w-0">
                     <Link
                         :href="route('maintenance.show', task.id)"
-                        class="font-bold text-slate-950 hover:text-indigo-600"
+                        class="font-bold text-slate-950 hover:text-teal-600"
                     >
                         {{ task.title }}
                     </Link>
@@ -252,7 +252,7 @@ const categoryLabel = {
                     <Link
                         v-else
                         :href="route('maintenance.show', task.id)"
-                        class="text-xs font-bold text-indigo-600"
+                        class="text-xs font-bold text-teal-600"
                     >
                         Ver detalle →
                     </Link>
@@ -261,8 +261,9 @@ const categoryLabel = {
         </div>
         <div v-else class="panel">
             <EmptyState
-                title="No hay tareas con estos filtros"
-                description="Prueba otra vista o programa una nueva tarea."
+                title="Sin tareas de mantenimiento"
+                icon="maintenance"
+                description="Las revisiones que programes aparecerán aquí con su fecha y responsable."
             >
                 <Link
                     v-if="user.role === 'admin'"

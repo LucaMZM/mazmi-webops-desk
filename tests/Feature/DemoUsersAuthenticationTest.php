@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use Database\Seeders\DemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -12,7 +13,7 @@ class DemoUsersAuthenticationTest extends TestCase
 
     public function test_every_demo_user_can_log_in_with_the_documented_password(): void
     {
-        $this->seed();
+        $this->seed(DemoSeeder::class);
 
         $emails = [
             'admin@webops.test',

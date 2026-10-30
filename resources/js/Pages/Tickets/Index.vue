@@ -220,7 +220,7 @@ const statusLabel = {
                                 <Link
                                     v-else
                                     :href="route('tickets.show', ticket.id)"
-                                    class="text-sm font-semibold text-indigo-600"
+                                    class="text-sm font-semibold text-teal-600"
                                 >
                                     Ver →
                                 </Link>
@@ -249,7 +249,20 @@ const statusLabel = {
                     </div>
                 </Link>
             </div>
-            <EmptyState v-if="!tickets.data.length" title="No hay tickets con estos filtros" />
+            <EmptyState
+                v-if="!tickets.data.length"
+                title="Soporte al día"
+                icon="tickets"
+                description="Cuando llegue la primera solicitud, aparecerá aquí con su prioridad y responsable."
+            >
+                <Link
+                    v-if="user.role !== 'technician'"
+                    :href="route('tickets.create')"
+                    class="btn-primary"
+                >
+                    Nuevo ticket
+                </Link>
+            </EmptyState>
             <Pagination :links="tickets.links" />
         </div>
     </AuthenticatedLayout>

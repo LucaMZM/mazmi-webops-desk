@@ -29,6 +29,7 @@ class DashboardController extends Controller
 
         $metrics = [
             'active_clients' => (clone $clients)->where('status', 'active')->count(),
+            'clients' => (clone $clients)->count(),
             'websites' => (clone $websites)->count(),
             'open_tickets' => (clone $tickets)->whereNotIn('status', ['resolved', 'closed'])->count(),
             'urgent_tickets' => (clone $tickets)->where('priority', 'urgent')->whereNotIn('status', ['resolved', 'closed'])->count(),

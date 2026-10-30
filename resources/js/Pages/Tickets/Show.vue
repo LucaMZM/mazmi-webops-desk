@@ -67,7 +67,7 @@ const date = (v) =>
                             type="button"
                             :disabled="ticket.status === s || updating"
                             :aria-busy="updating"
-                            class="btn-secondary disabled:bg-indigo-50 disabled:text-indigo-700"
+                            class="btn-secondary disabled:bg-teal-50 disabled:text-teal-700"
                             @click="setStatus(s)"
                         >
                             {{
@@ -93,7 +93,7 @@ const date = (v) =>
                                 <Link
                                     v-if="ticket.website"
                                     :href="route('websites.show', ticket.website.id)"
-                                    class="font-semibold text-indigo-600"
+                                    class="font-semibold text-teal-600"
                                 >
                                     {{ ticket.website.name }}
                                 </Link>

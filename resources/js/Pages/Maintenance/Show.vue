@@ -79,7 +79,7 @@ const categoryLabel = (value) =>
                             <dd class="mt-1">
                                 <Link
                                     :href="route('websites.show', task.website.id)"
-                                    class="font-semibold text-indigo-600"
+                                    class="font-semibold text-teal-600"
                                 >
                                     {{ task.website.name }}
                                 </Link>

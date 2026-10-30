@@ -24,7 +24,7 @@ const labelText = (label) =>
             :class="[
                 'inline-flex min-h-10 min-w-10 items-center justify-center gap-2 rounded-lg px-3 text-sm',
                 link.active
-                    ? 'bg-indigo-50 font-semibold text-indigo-700'
+                    ? 'bg-teal-50 font-semibold text-teal-700'
                     : link.url
                       ? 'text-slate-600 hover:bg-slate-50'
                       : 'text-slate-400',

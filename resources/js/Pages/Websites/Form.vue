@@ -26,7 +26,7 @@ const submit = () =>
         ? form.put(route('websites.update', props.website.id))
         : form.post(route('websites.store'));
 const input =
-    'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+    'w-full rounded-lg border-slate-300 text-sm focus:border-teal-500 focus:ring-teal-500';
 const technologyLabel = {
     'PHP custom': 'PHP a medida',
     'Static HTML': 'HTML estático',
@@ -44,10 +44,21 @@ const { formElement } = useFormFeedback(form);
             description="Datos de servicio, tecnología, estado y vencimientos."
             :back-href="editing ? route('websites.show', website.id) : route('websites.index')"
         />
+        <div v-if="!editing && !clients.length" class="glass-hero mb-6 p-6 sm:p-8">
+            <p class="webops-eyebrow">PRIMER PASO</p>
+            <h2 class="mt-3 text-xl font-semibold tracking-tight text-slate-900">
+                Prepara tu espacio antes de continuar
+            </h2>
+            <p class="mt-3 text-sm leading-7 text-slate-600">
+                Primero crea un cliente para poder trabajar con datos reales.
+            </p>
+            <Link :href="route('clients.create')" class="btn-primary mt-5">Crear cliente</Link>
+        </div>
         <form
+            v-if="editing || clients.length"
             ref="formElement"
             :aria-busy="form.processing"
-            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
+            class="editor-form glass-editor max-w-5xl rounded-[24px] border border-white/70 bg-white/40"
             @submit.prevent="submit"
         >
             <section class="form-section">

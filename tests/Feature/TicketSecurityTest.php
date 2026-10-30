@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Website;
+use Database\Seeders\DemoSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -17,7 +18,7 @@ class TicketSecurityTest extends TestCase
     {
         parent::setUp();
 
-        $this->seed();
+        $this->seed(DemoSeeder::class);
     }
 
     public function test_client_cannot_create_a_ticket_for_another_clients_website(): void
