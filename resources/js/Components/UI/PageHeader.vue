@@ -14,6 +14,7 @@ defineProps({ eyebrow: String, title: String, description: String, backHref: Str
                 <AppIcon name="arrow-left" :size="15" />
                 {{ eyebrow || 'Volver' }}
             </Link>
+            <p v-if="eyebrow && !backHref" class="webops-eyebrow mb-3">{{ eyebrow }}</p>
             <h1
                 class="font-display text-[2.1rem] font-semibold leading-[1.12] tracking-[-0.058em] text-slate-900 sm:text-[2.6rem]"
             >
