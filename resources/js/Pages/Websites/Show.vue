@@ -60,7 +60,7 @@ const categoryLabel = (value) =>
             <header class="section-topline">
                 <div class="flex min-w-0 items-center gap-3">
                     <span
-                        class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-indigo-50 text-indigo-700"
+                        class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-teal-50 text-teal-700"
                     >
                         <AppIcon name="websites" :size="20" />
                     </span>
@@ -70,7 +70,7 @@ const categoryLabel = (value) =>
                             :href="website.url"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="mt-0.5 block truncate text-xs text-slate-500 hover:text-indigo-700"
+                            class="mt-0.5 block truncate text-xs text-slate-500 hover:text-teal-700"
                         >
                             {{ website.url }}
                         </a>
@@ -84,7 +84,7 @@ const categoryLabel = (value) =>
                     <dd class="mt-2 text-sm font-medium">
                         <Link
                             :href="route('clients.show', website.client.id)"
-                            class="hover:text-indigo-700"
+                            class="hover:text-teal-700"
                         >
                             {{ website.client.company_name }}
                         </Link>
