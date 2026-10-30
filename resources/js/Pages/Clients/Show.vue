@@ -57,7 +57,7 @@ const months = [
                         <Link
                             v-if="user.role === 'admin'"
                             :href="route('websites.create', { client_id: client.id })"
-                            class="text-sm font-semibold text-indigo-600"
+                            class="text-sm font-semibold text-teal-600"
                         >
                             Añadir web →
                         </Link>
@@ -94,7 +94,7 @@ const months = [
                         <h2 class="section-heading">Tickets recientes</h2>
                         <Link
                             :href="route('tickets.index', { client_id: client.id })"
-                            class="text-sm font-semibold text-indigo-600"
+                            class="text-sm font-semibold text-teal-600"
                         >
                             Ver todos →
                         </Link>
@@ -164,7 +164,7 @@ const months = [
                             v-for="report in client.reports"
                             :key="report.id"
                             :href="route('reports.show', report.id)"
-                            class="flex items-center justify-between py-3 text-sm font-semibold transition hover:text-indigo-600"
+                            class="flex items-center justify-between py-3 text-sm font-semibold transition hover:text-teal-600"
                         >
                             <span>{{ months[report.month] }} {{ report.year }}</span>
                             <StatusBadge :status="report.general_status" />
