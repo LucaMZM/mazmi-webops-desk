@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\DemoSeeder;
+
 use App\Models\Client;
 use App\Models\MaintenanceTask;
 use App\Models\MonthlyReport;
@@ -19,7 +21,7 @@ class RoleAuthorizationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->seed();
+        $this->seed(DemoSeeder::class);
     }
 
     public function test_admin_can_open_operational_dashboard(): void
