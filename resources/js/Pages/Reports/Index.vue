@@ -129,7 +129,7 @@ const apply = () =>
                 </div>
                 <div class="min-w-0">
                     <h3
-                        class="font-sans text-sm font-medium text-slate-900 group-hover:text-indigo-600"
+                        class="font-sans text-sm font-medium text-slate-900 group-hover:text-teal-600"
                     >
                         {{ report.client.company_name }}
                     </h3>
@@ -159,7 +159,7 @@ const apply = () =>
                         <p class="text-xs text-slate-500">Pendientes</p>
                     </div>
                 </div>
-                <span class="text-right text-indigo-600">→</span>
+                <span class="text-right text-teal-600">→</span>
             </Link>
         </div>
         <div v-else class="panel">
