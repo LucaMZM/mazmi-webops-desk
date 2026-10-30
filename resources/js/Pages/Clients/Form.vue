@@ -22,7 +22,7 @@ const submit = () =>
         ? form.put(route('clients.update', props.client.id))
         : form.post(route('clients.store'));
 const input =
-    'w-full rounded-lg border-slate-300 text-sm focus:border-indigo-500 focus:ring-indigo-500';
+    'w-full rounded-lg border-slate-300 text-sm focus:border-teal-500 focus:ring-teal-500';
 const { formElement } = useFormFeedback(form);
 </script>
 <template>
@@ -37,7 +37,7 @@ const { formElement } = useFormFeedback(form);
         <form
             ref="formElement"
             :aria-busy="form.processing"
-            class="editor-form max-w-5xl rounded-xl border border-slate-200 bg-white"
+            class="editor-form glass-editor max-w-5xl rounded-[24px] border border-white/70 bg-white/40"
             @submit.prevent="submit"
         >
             <section class="form-section">
