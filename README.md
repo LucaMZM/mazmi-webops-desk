@@ -12,7 +12,7 @@ Mazmi WebOps Desk conecta el inventario técnico con las solicitudes de soporte,
 ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)
 ![PHPUnit](https://img.shields.io/badge/PHPUnit-12-366488)
-[![MIT](https://img.shields.io/badge/Licencia-MIT-344966)](LICENSE)
+[![All Rights Reserved](https://img.shields.io/badge/License-All_Rights_Reserved-344966)](LICENSE)
 
 > **Estado:** versión funcional de demostración, orientada a evaluación técnica. Todavía no está preparada para uso en producción.
 
@@ -189,7 +189,17 @@ DB_DATABASE=database/database.sqlite
 
 No conserves `DB_DATABASE=mazmi_webops_desk` al cambiar a SQLite. En Windows puedes crear un archivo vacío en esa misma ubicación desde el explorador o PowerShell.
 
-### 3. Crear el esquema y cargar la demo
+### 3. Crear el esquema desde cero (sin datos ficticios)
+
+Para una instalación limpia ejecuta **solo** `php artisan migrate`. El esquema se crea vacío: sin clientes, webs, tickets, tareas ni reportes de ejemplo. Registra después la primera cuenta autorizada con el flujo de alta existente. No ejecutes los seeders en tu instalación real.
+
+```bash
+php artisan migrate
+```
+
+**Solo en una base de pruebas desechable**, `php artisan migrate:fresh` elimina todas las tablas y datos y vuelve a crear el esquema. Haz una copia de seguridad y comprueba la conexión de `.env` antes de ejecutarlo. Este proyecto no borra datos de ninguna instancia automáticamente.
+
+### 3b. Cargar datos de demostración (opcional, solo entorno de pruebas)
 
 ```bash
 php artisan optimize:clear
@@ -303,4 +313,4 @@ Laravel concentra las reglas, la validación y la autorización en el servidor. 
 
 **Luca Mazmishvili** · Desarrollador web · Valencia, España.
 
-Código bajo [licencia MIT](LICENSE). Las fuentes conservan sus licencias en [resources/fonts](resources/fonts).
+Código original con **todos los derechos reservados** ([LICENSE](LICENSE)); únicamente para evaluación de portfolio. No se autoriza copiarlo, modificarlo, distribuirlo ni explotarlo sin permiso expreso. Las versiones anteriores publicadas bajo MIT conservan los permisos que ya les fueron concedidos. Las fuentes conservan sus licencias independientes en [resources/fonts](resources/fonts).
