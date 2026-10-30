@@ -261,8 +261,8 @@ const categoryLabel = {
         </div>
         <div v-else class="panel">
             <EmptyState
-                title="No hay tareas con estos filtros"
-                description="Prueba otra vista o programa una nueva tarea."
+                title="Sin tareas de mantenimiento" icon="maintenance"
+                description="Las revisiones que programes aparecerán aquí con su fecha y responsable."
             >
                 <Link
                     v-if="user.role === 'admin'"
