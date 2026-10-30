@@ -94,7 +94,7 @@ const user = usePage().props.auth.user;
                             <td class="table-cell text-right">
                                 <Link
                                     :href="route('clients.show', client.id)"
-                                    class="font-semibold text-indigo-600"
+                                    class="font-semibold text-teal-600"
                                 >
                                     Ver →
                                 </Link>
@@ -126,8 +126,9 @@ const user = usePage().props.auth.user;
             </div>
             <EmptyState
                 v-if="!clients.data.length"
-                title="No hay clientes con estos filtros"
-                description="Ajusta la búsqueda o crea el primer cliente."
+                icon="clients"
+                :title="Object.values(filters).some(Boolean) ? 'No se encontraron clientes' : 'Empieza con tu primer cliente'"
+                description="Guarda la primera ficha para organizar sus webs, solicitudes y reportes."
             >
                 <Link
                     v-if="user.role === 'admin'"
