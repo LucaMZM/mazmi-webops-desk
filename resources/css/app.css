@@ -219,3 +219,86 @@
         padding: 0 !important;
     }
 }
+
+
+/* ChargeOS-inspired glass foundation. CSS fallback is intentionally independent of WebGL. */
+@layer base {
+    :root {
+        --canvas: #e8ece7;
+        --paper: rgba(255, 255, 255, .53);
+        --ink: #182623;
+        --muted: #52635e;
+        --line: rgba(255, 255, 255, .61);
+        --accent: #196f66;
+        --glass-shadow: 0 12px 36px rgba(33, 48, 44, .10), inset 0 1px rgba(255,255,255,.76);
+        --motion-out: cubic-bezier(.22, 1, .36, 1);
+    }
+    html { background: var(--canvas); }
+    body {
+        background: radial-gradient(ellipse at 11% 14%, #fffaf0 0%, transparent 42%),
+                    radial-gradient(ellipse at 93% 85%, #cedfd8 0%, transparent 44%),
+                    linear-gradient(140deg, #e6ebe7, #dce5e0);
+        background-attachment: fixed;
+    }
+}
+@layer components {
+    .app-shell { min-height: 100vh; background: transparent !important; isolation: isolate; }
+    .app-navigation {
+        background: rgba(255,255,255,.49) !important;
+        border-color: rgba(255,255,255,.65) !important;
+        -webkit-backdrop-filter: blur(30px) saturate(145%);
+        backdrop-filter: blur(30px) saturate(145%);
+        box-shadow: 1px 0 0 rgba(255,255,255,.48), 12px 0 38px rgba(32,50,46,.045);
+    }
+    .app-header {
+        background: rgba(255,255,255,.31) !important;
+        border-color: rgba(255,255,255,.58) !important;
+        -webkit-backdrop-filter: blur(22px) saturate(150%);
+        backdrop-filter: blur(22px) saturate(150%);
+    }
+    .panel, .table-shell, .dossier, .filter-bar, .surface-muted {
+        border: 1px solid rgba(255,255,255,.68) !important;
+        background: rgba(255,255,255,.53) !important;
+        -webkit-backdrop-filter: blur(18px) saturate(135%);
+        backdrop-filter: blur(18px) saturate(135%);
+        border-radius: 20px !important;
+        box-shadow: var(--glass-shadow);
+    }
+    .nav-item {
+        border: 1px solid transparent;
+        border-radius: 14px !important;
+        transition: transform 280ms var(--motion-out), background 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
+    }
+    .nav-item:hover { transform: translateX(3px); background: rgba(255,255,255,.46) !important; }
+    .nav-item[aria-current="page"] {
+        background: rgba(255,255,255,.70) !important;
+        color: #17635b !important;
+        border-color: rgba(255,255,255,.85);
+        box-shadow: 0 5px 16px rgba(45,62,54,.065), inset 0 1px rgba(255,255,255,.8);
+    }
+    .btn-primary, .btn-secondary, .btn-danger, .btn-danger-solid {
+        border-radius: 13px !important;
+        transition: transform 250ms var(--motion-out), box-shadow 250ms ease, background 250ms ease, opacity 250ms ease;
+    }
+    .btn-primary { background: #206e64 !important; border-color: #206e64 !important; box-shadow: 0 7px 18px rgba(28,90,80,.16); }
+    .btn-secondary { background: rgba(255,255,255,.57) !important; border-color: rgba(255,255,255,.78) !important; }
+    .btn-primary:hover, .btn-secondary:hover { transform: translateY(-1px); }
+    .btn-primary:active, .btn-secondary:active { transform: scale(.985); }
+    .table-head { background: rgba(255,255,255,.31) !important; }
+    .form-footer { background: rgba(255,255,255,.28) !important; }
+    .app-content main > div { animation: webops-reveal 420ms var(--motion-out) both; }
+    @keyframes webops-reveal { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .app-navigation, .app-header, .panel, .table-shell, .dossier, .filter-bar, .surface-muted { background: #f5f8f5 !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .app-navigation, .app-header, .panel, .table-shell, .dossier, .filter-bar, .surface-muted { background: #f5f8f5 !important; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .app-content main > div { animation: none; }
+    .nav-item, .btn-primary, .btn-secondary { transform: none !important; }
+}
+@media print {
+    .panel, .table-shell, .dossier, .filter-bar, .surface-muted { background: white !important; box-shadow: none !important; backdrop-filter: none; }
+}
