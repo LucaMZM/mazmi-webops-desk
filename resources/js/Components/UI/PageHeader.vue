@@ -4,22 +4,22 @@ import AppIcon from '@/Components/UI/AppIcon.vue';
 defineProps({ eyebrow: String, title: String, description: String, backHref: String });
 </script>
 <template>
-    <div class="mb-7 flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+    <div class="mb-8 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
         <div class="min-w-0">
             <Link
                 v-if="backHref"
                 :href="backHref"
-                class="mb-3 inline-flex min-h-9 items-center gap-2 rounded-md text-sm text-slate-500 hover:text-indigo-700"
+                class="mb-3 inline-flex min-h-9 items-center gap-2 rounded-md text-sm text-slate-500 hover:text-teal-700"
             >
                 <AppIcon name="arrow-left" :size="15" />
                 {{ eyebrow || 'Volver' }}
             </Link>
             <h1
-                class="font-display text-[1.75rem] font-bold leading-tight tracking-[-0.045em] text-slate-900 sm:text-[2rem]"
+                class="font-display text-[2.1rem] font-semibold leading-[1.12] tracking-[-0.058em] text-slate-900 sm:text-[2.6rem]"
             >
                 {{ title }}
             </h1>
-            <p v-if="description" class="mt-2 max-w-[65ch] text-sm leading-6 text-slate-500">
+            <p v-if="description" class="mt-3 max-w-[65ch] text-sm leading-7 text-slate-600">
                 {{ description }}
             </p>
         </div>
