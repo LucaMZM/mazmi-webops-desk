@@ -3,7 +3,7 @@
     "name": "mazmi-webops-desk",
     "description": "Panel full-stack para gestionar mantenimiento web, soporte y reportes.",
     "author": "Luca Mazmishvili",
-    "license": "MIT",
+    "license": "UNLICENSED",
     "private": true,
     "type": "module",
     "engines": {
