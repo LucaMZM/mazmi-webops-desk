@@ -3,8 +3,14 @@
     "name": "lucamazmishvili/mazmi-webops-desk",
     "type": "project",
     "description": "Mazmi WebOps Desk, panel de gestión de mantenimiento web para agencias, freelancers y pymes.",
-    "keywords": ["laravel", "vue", "inertia", "web-maintenance", "help-desk"],
-    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "vue",
+        "inertia",
+        "web-maintenance",
+        "help-desk"
+    ],
+    "license": "proprietary",
     "authors": [
         {
             "name": "Luca Mazmishvili",
